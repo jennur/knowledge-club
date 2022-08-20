@@ -1,7 +1,12 @@
 <script setup>
+  import { ref } from "vue";
+  import { onMounted } from '@vue/runtime-core';
   import { RouterLink, RouterView } from 'vue-router'
   import IconLink from "./components/Links/IconLink.vue"
-  import { ref } from 'vue'
+  import store from "./store/index"
+
+  const user = ref(store.state.auth.user);
+
 </script>
 
 <template>

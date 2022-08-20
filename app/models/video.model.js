@@ -1,5 +1,3 @@
-// const Book = require("./book.model");
-
 module.exports = (sequelize, Sequelize) => {
     const Video = sequelize.define("video", {
       title: {
