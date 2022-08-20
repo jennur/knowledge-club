@@ -9,8 +9,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <RouterLink :to="this.path" class="flex flex-col justify-center p-2 hover:text-gray-900/90">
-        <font-awesome-icon :icon="this.iconClass" class="text-xl" />
-        <div class="text-xs mt-1">{{ this.linkText }}</div>
+    <RouterLink :to="props.path" class="flex flex-col justify-center p-2 hover:text-gray-900/90">
+        <font-awesome-icon :icon="props.iconClass" class="text-xl" />
+        <div class="text-xs mt-1">{{ props.linkText }}</div>
     </RouterLink>
 </template>
