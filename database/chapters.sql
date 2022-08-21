@@ -1,0 +1,9 @@
+CREATE TABLE Chapters (
+ChapterId INT NOT NULL AUTO_INCREMENT,
+BookUuid VARCHAR(255) NOT NULL,
+ChapterNumber INT NOT NULL,
+ChapterName VARCHAR(255),
+RawText MEDIUMTEXT,
+ProcessedText MEDIUMTEXT,
+PRIMARY KEY (ChapterId),
+FOREIGN KEY (BookUuid) REFERENCES Books(BookUuid));
