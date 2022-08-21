@@ -9,7 +9,7 @@ socket.on("connected", () => {
 } )
 
 socket.on("hei",(msg)=>{
-    var all_messages = document.getElementById("all_messages");c
+    var all_messages = document.getElementById("all_messages");
     console.log(msg);
     let new_child = document.createElement("li");
     new_child.textContent= msg;
