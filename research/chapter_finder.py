@@ -2,37 +2,63 @@ import logging
 import re
 import os
 from PyPDF2 import PdfReader
+from ebooklib import epub
+from utils import get_sections,flatten_xml
+from lxml import etree
+from itertools import chain
+
 
 logging.basicConfig(level=logging.INFO)
+
 class Book():
     def __init__(self, filename, nochapters, stats):
+        
         self.filename = filename
+        self.file_ext = os.path.splitext(filename)[1]
         self.nochapters = nochapters
-        self.contents = self.getContents()
-        self.lines = self.getLines()
-        self.headings = self.getHeadings()
-        # Alias for historical reasons. FIXME
-        self.headingLocations = self.headings
-        self.ignoreTOC()
-        logging.info('Heading locations: %s' % self.headingLocations)
-        headingsPlain = [self.lines[loc] for loc in self.headingLocations]
-        logging.info('Headings: %s' % headingsPlain)
-        self.chapters = self.getTextBetweenHeadings()
-        #logging.info('Chapters: %s' % self.chapters)
-        self.numChapters = len(self.chapters)
+        if self.isEPUB:
+            self.process_epub()
+        elif self.isPDF:
+            self.process_pdf()
 
-        if stats:
-            self.getStats()
-        else:
-            self.writeChapters()
+    def process_epub(self):
+        self.book_ = epub.read_epub(self.filename)
+        self.chapters = self.getHeadings() # The contents essentially
+        self.contents = self.getContents()
+        self.lines = -1 #Deal with this later
+        
+        self.numChapters = len(self.chapters)
+        self.stats = self.getStats()
+
+
+    @property
+    def isEPUB(self):
+        return self.file_ext in [".EPUB",".epub"]
+    
+    @property
+    def isPDF(self):
+        return self.file_ext in [".PDF",".pdf"]
 
     def getContents(self):
         """
         Reads the book into memory.
         """
-        logging.info("ska")
-        logging.info(os.path.splitext(self.filename))
-        if os.path.splitext(self.filename)[1] in ["pdf",".pdf","PDF",".PDF"]:
+        if self.isEPUB: 
+            
+            text = []
+            for i,x in enumerate(self.book_.items):
+                if isinstance(x,epub.EpubHtml):
+                    raw_string = str(x.get_body_content())
+                    processed_string = ""
+                    try:
+                        processed_string = flatten_xml(raw_string)
+                    except:
+                        logging.error(f"The chapter couldn't be processed: {i}")
+                    text.append({"raw":raw_string,"text-only":processed_string})
+            return text
+
+
+        if self.isPDF:
             reader =PdfReader(self.filename)
             text = ""
             for page in reader.pages:
@@ -41,7 +67,6 @@ class Book():
             return text
 
         else:
-
             with open(self.filename, errors='ignore') as f:
                 contents = f.read()
             return contents
@@ -52,92 +77,100 @@ class Book():
         """
         return self.contents.split('\n')
 
-    def getHeadings(self):
+    def getHeadings(self,flattened=True):
+        if self.isEPUB:
+            return get_sections(self.book_.toc,flattened=flattened)
+        elif self.isPDF:
+            # Form 1: Chapter I, Chapter 1, Chapter the First, CHAPTER 1
+            # Ways of enumerating chapters, e.g.
+            arabicNumerals = '\d+'
+            romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'
+            numberWordsByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty',
+                                'seventy', 'eighty', 'ninety']
+            numberWords = ['one', 'two', 'three', 'four', 'five', 'six',
+                        'seven', 'eight', 'nine', 'ten', 'eleven',
+                        'twelve', 'thirteen', 'fourteen', 'fifteen',
+                        'sixteen', 'seventeen', 'eighteen', 'nineteen'] + numberWordsByTens
+            numberWordsPat = '(' + '|'.join(numberWords) + ')'
+            ordinalNumberWordsByTens = ['twentieth', 'thirtieth', 'fortieth', 'fiftieth', 
+                                        'sixtieth', 'seventieth', 'eightieth', 'ninetieth'] + \
+                                        numberWordsByTens
+            ordinalNumberWords = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
+                                'seventh', 'eighth', 'ninth', 'twelfth', 'last'] + \
+                                [numberWord + 'th' for numberWord in numberWords] + ordinalNumberWordsByTens
+            ordinalsPat = '(the )?(' + '|'.join(ordinalNumberWords) + ')'
+            enumeratorsList = [arabicNumerals, romanNumerals, numberWordsPat, ordinalsPat] 
+            enumerators = '(' + '|'.join(enumeratorsList) + ')'
+            form1 = 'chapter ' + enumerators
 
-        # Form 1: Chapter I, Chapter 1, Chapter the First, CHAPTER 1
-        # Ways of enumerating chapters, e.g.
-        arabicNumerals = '\d+'
-        romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'
-        numberWordsByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty',
-                              'seventy', 'eighty', 'ninety']
-        numberWords = ['one', 'two', 'three', 'four', 'five', 'six',
-                       'seven', 'eight', 'nine', 'ten', 'eleven',
-                       'twelve', 'thirteen', 'fourteen', 'fifteen',
-                       'sixteen', 'seventeen', 'eighteen', 'nineteen'] + numberWordsByTens
-        numberWordsPat = '(' + '|'.join(numberWords) + ')'
-        ordinalNumberWordsByTens = ['twentieth', 'thirtieth', 'fortieth', 'fiftieth', 
-                                    'sixtieth', 'seventieth', 'eightieth', 'ninetieth'] + \
-                                    numberWordsByTens
-        ordinalNumberWords = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
-                              'seventh', 'eighth', 'ninth', 'twelfth', 'last'] + \
-                             [numberWord + 'th' for numberWord in numberWords] + ordinalNumberWordsByTens
-        ordinalsPat = '(the )?(' + '|'.join(ordinalNumberWords) + ')'
-        enumeratorsList = [arabicNumerals, romanNumerals, numberWordsPat, ordinalsPat] 
-        enumerators = '(' + '|'.join(enumeratorsList) + ')'
-        form1 = 'chapter ' + enumerators
+            # Form 2: II. The Mail
+            enumerators = romanNumerals
+            separators = '(\. | )'
+            titleCase = '[A-Z][a-z]'
+            form2 = enumerators + separators + titleCase
 
-        # Form 2: II. The Mail
-        enumerators = romanNumerals
-        separators = '(\. | )'
-        titleCase = '[A-Z][a-z]'
-        form2 = enumerators + separators + titleCase
+            # Form 3: II. THE OPEN ROAD
+            enumerators = romanNumerals
+            separators = '(\. )'
+            titleCase = '[A-Z][A-Z]'
+            form3 = enumerators + separators + titleCase
 
-        # Form 3: II. THE OPEN ROAD
-        enumerators = romanNumerals
-        separators = '(\. )'
-        titleCase = '[A-Z][A-Z]'
-        form3 = enumerators + separators + titleCase
+            # Form 4: a number on its own, e.g. 8, VIII
+            arabicNumerals = '^\d+\.?$'
+            romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\.?$'
+            enumeratorsList = [arabicNumerals, romanNumerals]
+            enumerators = '(' + '|'.join(enumeratorsList) + ')'
+            form4 = enumerators
 
-        # Form 4: a number on its own, e.g. 8, VIII
-        arabicNumerals = '^\d+\.?$'
-        romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\.?$'
-        enumeratorsList = [arabicNumerals, romanNumerals]
-        enumerators = '(' + '|'.join(enumeratorsList) + ')'
-        form4 = enumerators
+            pat = re.compile(form1, re.IGNORECASE)
+            # This one is case-sensitive.
+            pat2 = re.compile('(%s|%s|%s)' % (form2, form3, form4))
 
-        pat = re.compile(form1, re.IGNORECASE)
-        # This one is case-sensitive.
-        pat2 = re.compile('(%s|%s|%s)' % (form2, form3, form4))
+            # TODO: can't use .index() since not all lines are unique.
 
-        # TODO: can't use .index() since not all lines are unique.
+            headings = []
+            for i, line in enumerate(self.lines):
+                if pat.match(line) is not None:
+                    headings.append(i)
+                if pat2.match(line) is not None:
+                    headings.append(i)
 
-        headings = []
-        for i, line in enumerate(self.lines):
-            if pat.match(line) is not None:
-                headings.append(i)
-            if pat2.match(line) is not None:
-                headings.append(i)
+            if len(headings) < 3:
+                logging.info('Headings: %s' % headings)
+                logging.error("Detected fewer than three chapters. This probably means there's something wrong with chapter detection for this book.")
+                exit()
 
-        if len(headings) < 3:
-            logging.info('Headings: %s' % headings)
-            logging.error("Detected fewer than three chapters. This probably means there's something wrong with chapter detection for this book.")
-            exit()
+            self.endLocation = self.getEndLocation()
 
-        self.endLocation = self.getEndLocation()
+            # Treat the end location as a heading.
+            headings.append(self.endLocation)
 
-        # Treat the end location as a heading.
-        headings.append(self.endLocation)
-
-        return headings
+            return headings
+        else:
+            raise ValueError("The input is neither pdf nor epub.")
 
     def ignoreTOC(self):
         """
         Filters headings out that are too close together,
         since they probably belong to a table of contents.
         """
-        pairs = zip(self.headingLocations, self.headingLocations[1:])
-        toBeDeleted = []
-        for pair in pairs:
-            delta = pair[1] - pair[0]
-            if delta < 4:
-                if pair[0] not in toBeDeleted:
-                    toBeDeleted.append(pair[0])
-                if pair[1] not in toBeDeleted:
-                    toBeDeleted.append(pair[1])
-        logging.debug('TOC locations to be deleted: %s' % toBeDeleted)
-        for badLoc in toBeDeleted:
-            index = self.headingLocations.index(badLoc)
-            del self.headingLocations[index]
+        if self.isPDF:
+            pairs = zip(self.headingLocations, self.headingLocations[1:])
+            toBeDeleted = []
+            for pair in pairs:
+                delta = pair[1] - pair[0]
+                if delta < 4:
+                    if pair[0] not in toBeDeleted:
+                        toBeDeleted.append(pair[0])
+                    if pair[1] not in toBeDeleted:
+                        toBeDeleted.append(pair[1])
+            logging.debug('TOC locations to be deleted: %s' % toBeDeleted)
+            for badLoc in toBeDeleted:
+                index = self.headingLocations.index(badLoc)
+                del self.headingLocations[index]
+        else:
+            logging.info("The file is not a PDF so we won't ignore the TOC.")
+            return
 
     def getEndLocation(self):
         """
@@ -241,5 +274,6 @@ class Book():
                     f.write(chapter)
 
 if __name__=="__main__":
-    book = Book("/Users/galois/Documents/git/knowledge-club/research/data/29782-pdf.pdf",False,True)
-    print(book.numChapters)
+    book= Book("/Users/galois/Documents/git/knowledge-club/research/data/i_see_satan_falling_like_lightning.epub.epub",True,True)
+
+    print(book.chapters)
