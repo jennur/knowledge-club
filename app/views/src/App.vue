@@ -15,6 +15,7 @@
         <nav class="flex">
           <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" />
           <IconLink path="/account" linkText="Account" iconClass="fa-solid fa-user" />
+          <IconLink path="/chat" linkText="Chat" iconClass="fa-solid fa-user" />
         </nav>
 
       </div>

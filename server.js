@@ -1,3 +1,4 @@
+
 const express = require("express");
 const path = __dirname + '/app/views/dist/';
 const bodyParser = require("body-parser");
@@ -13,6 +14,7 @@ var corsOptions = {
   origin: "http://localhost:5173"
 };
 
+
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
@@ -20,6 +22,12 @@ app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+/*const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer,{
+  cors:{
+    origin:"http://localhost:8081"
+  }
+})*/
 
 // controllers
 const bookController = require("./app/controllers/book.controller");
@@ -68,6 +76,7 @@ db.sequelize.sync({ force: true }).then(() => {
 app.get("/", (req, res) => {
   res.sendFile(path + "index.html");
 });
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
