@@ -1,21 +1,34 @@
 <script setup>
+  import { ref } from "vue";
+  import { onMounted } from '@vue/runtime-core';
   import { RouterLink, RouterView } from 'vue-router'
   import IconLink from "./components/Links/IconLink.vue"
-  import { ref } from 'vue'
+  import IconButton from "./components/Buttons/IconButton.vue"
+  import store from "./store/index"
+
+  const user = ref(store.state.auth.user);
+
 </script>
 
 <template>
   <div>
-    <header class="text-gray-600 p-1 border-b-2">
+    <header class="text-gray-600 py-1 px-4 border-b-2">
       <div class="flex items-center justify-between container mx-auto">
-        <RouterLink to="/" class="text-xl">
-          Knowledge Club
-        </RouterLink>
+        <nav class="flex items-center">
+          <RouterLink to="/" class="text-xl mr-6">Knowledge Club</RouterLink>
+          <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" />
+        </nav>
 
         <nav class="flex">
-          <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" />
-          <IconLink path="/account" linkText="Account" iconClass="fa-solid fa-user" />
-          <IconLink path="/chat" linkText="Chat" iconClass="fa-solid fa-user" />
+          <div v-if="store.state.auth.user" class="flex items-center">
+            <IconLink path="/chat" linkText="Chat" iconClass="fa-solid fa-comment" />
+            <IconLink path="/account" linkText="Account" iconClass="fa-solid fa-user" />
+            <IconButton vertical @click="store.dispatch('auth/logout')" buttonText="Log out" iconClass="fa-solid fa-right-from-bracket" />
+          </div>
+          <div v-else class="flex">
+            <IconLink path="/signup" linkText="Sign up" iconClass="fa-solid fa-user-plus" />
+            <IconLink path="/login" linkText="Login" iconClass="fa-solid fa-right-to-bracket" />
+          </div>
         </nav>
 
       </div>
@@ -35,6 +48,3 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>
