@@ -1,28 +1,37 @@
 <script setup>
-  import blah from "./chat.js"
+  import { ref } from "vue"
+  import { sendMessage } from "./chat.js"
+  import CommentBox from "../../components/CommentBox/CommentBox.vue"
+  import IconButton from "../../components/Buttons/IconButton.vue"
+
+  const textInput = ref("");
+  function checkValue(value) {
+    console.log("Value:", value);
+
+  }
 </script>
+
 <template>
-  <body>
-    <h1 class="room-message"></h1>
-    <div class="window">
-        <div class="chat-message">
-            <div id="output"></div>
-            <div id="feedback"></div>
-        </div>
-        <div class='fields'>
-            <input type="text" id="message" placeholder="Enter message">
-            <button id="send" @click="blah">Send</button>
-        </div>
-        <div>
-            <ul id="all_messages"></ul>
-        </div>
+  <div>
+    <h1 class="text-lg mb-2">Chat room</h1>
+    <div id="chat-window" class="border p-4">
+      <div class="chat-message">
+        <div id="output"></div>
+        <div id="feedback"></div>
+      </div>
+
+      <div>
+        <ul id="all_messages"></ul>
+      </div>
+
+      <CommentBox @sendMessage="sendMessage"/>
     </div>
     <div class="online">
-        <p class="users-online">Users Online</p>
-        <div class="users">
-        </div>
+      <p class="users-online">Users Online</p>
+      <div class="users">
+      </div>
     </div>
-</body>
+</div>
 </template>
 
 <style>

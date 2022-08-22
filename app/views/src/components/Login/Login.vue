@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, defineEmits } from "vue";
 
 const props = defineProps(["msg"]);
 const emit = defineEmits(["sendForm"]);
