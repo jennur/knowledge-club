@@ -6,6 +6,8 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+const accessTokenCookie = "kc_access_token";
+
 exports.signup = (req, res) => {
   User.create({
     username: req.body.username,
@@ -70,7 +72,7 @@ exports.signin = (req, res) => {
         authorities.push("ROLE_" + roles[i].name.toUpperCase());
       }
       res
-        .cookie('token', token, { httpOnly: true })
+        .cookie(accessTokenCookie, token, { httpOnly: true })
         .status(200)
         .send({
           id: user.id,
@@ -84,4 +86,9 @@ exports.signin = (req, res) => {
   .catch(err => {
     res.status(500).send({ message: err.message });
   });
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie(accessTokenCookie);
+  res.send({ message: "User logged out" })
 };

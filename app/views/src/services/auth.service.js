@@ -24,17 +24,26 @@ class AuthService {
   }
   logout() {
     localStorage.removeItem("user");
+    return http.get("/auth/logout")
+      .then((response => {
+        console.log(response.data.message);
+        return response;
+      }))
+      .catch(err => {
+        console.log("AuthService logout error:", err.response);
+        return Promise.reject(err);
+      });
   }
   register(user) {
     return http.post("/auth/signup", { 
-        username: user.username, 
-        password: user.password,
-        email: user.email
-      })
-      .catch(err => {
-        console.log("AuthService register error:", err.response);
-        return Promise.reject(err);
-      });
+      username: user.username,
+      password: user.password,
+      email: user.email
+    })
+    .catch(err => {
+      console.log("AuthService register error:", err.response);
+      return Promise.reject(err);
+    });
   }
 }
 export default new AuthService();

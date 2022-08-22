@@ -1,5 +1,6 @@
 import AuthService from '../services/auth.service';
 import { userModel } from "../models/user";
+import router from "../router";
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = user
@@ -17,6 +18,7 @@ export const auth = {
           const userObj = JSON.stringify(userModel(user));
           localStorage.setItem("user", userObj);
           commit('loginSuccess', user);
+          router.push({ name: "account" });
           return Promise.resolve(user);
         },
         error => {
@@ -29,11 +31,16 @@ export const auth = {
     logout({ commit }) {
       AuthService.logout();
       commit('logout');
+      router.push({ name: "home" });
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
         response => {
           commit('registerSuccess');
+          router.push({ name: "login", params: { 
+              message: "You successfully registered, login with your credentials"
+            } 
+          });
           return Promise.resolve(response.data);
         },
         error => {

@@ -20,4 +20,5 @@ module.exports = function(app) {
   );
   
   app.post("/api/auth/signin", authController.signin);
+  app.get("/api/auth/logout", authController.logout);
 };

@@ -11,13 +11,25 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faBook, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
+import { 
+  faBook, 
+  faComment,
+  faLock, 
+  faRightFromBracket,
+  faRightToBracket, 
+  faUser, 
+  faUserPlus, 
+} from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
 library.add(
     faBook, 
+    faComment,
     faLock,
-    faUser
+    faRightFromBracket,
+    faRightToBracket,
+    faUser,
+    faUserPlus,
   )
 
 createApp(App)
