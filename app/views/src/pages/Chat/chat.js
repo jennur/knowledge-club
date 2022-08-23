@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-var socket = io("http://localhost:8080");
+var socket = io(import.meta.env.VITE_BASE_URL);
 
 socket.on("connected", () => {
   console.log("Connected");
