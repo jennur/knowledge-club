@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "npm run build-css --prefix ./app/views && npm run build --prefix ./app/views && node server.js",
+    "server": "npm run build --prefix ./app/views && npm run build-css --prefix ./app/views && node server.js",
     "server-only": "node server.js",
     "install-client": "npm i --prefix ./app/views",
     "client-only": "npm run dev --prefix ./app/views",
