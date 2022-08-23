@@ -1,5 +1,10 @@
 require('dotenv').config({ path: __dirname + "/./../../.env"})
 
+const ssl = process.env.NODE_ENV === "production" && { ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }} || {}
+    
 module.exports = {
   URL: process.env.DB_URL,
   HOST: process.env.DB_HOST,
@@ -8,10 +13,5 @@ module.exports = {
   DB: process.env.DB_NAME,
   dialect: process.env.DB_DIALECT,
   pool: {...process.env.DB_POOL},
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  },
+  dialectOptions: {...ssl},
 };
