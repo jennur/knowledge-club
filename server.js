@@ -48,17 +48,17 @@ const articleController = require("./app/controllers/article.controller");
 const userController = require("./app/controllers/user.controller");
 const roleController = require("./app/controllers/role.controller");
 
-const initDb = async () => {
-  roleController.create({ id: 1, name: "user" })
-  roleController.create({ id: 2, name: "moderator" })
-  roleController.create({ id: 3, name: "admin" })
-};
+// const initDb = async () => {
+//   roleController.create({ id: 1, name: "user" })
+//   roleController.create({ id: 2, name: "moderator" })
+//   roleController.create({ id: 3, name: "admin" })
+// };
 
-// database
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-  initDb();
-});
+// // database
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and re-sync db.");
+//   initDb();
+// });
 
 // simple route
 app.get("/", (req, res) => {
