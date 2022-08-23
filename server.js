@@ -2,9 +2,14 @@
 const express = require("express");
 const session = require('express-session');
 const path = __dirname + '/app/views/dist/';
-
 const cors = require("cors");
 const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http, {
+    cors:{
+        origin:"http://localhost:5173"
+    }
+});
 const db = require("./app/models");
 
 const history = require('connect-history-api-fallback');
@@ -69,6 +74,8 @@ app.get("/", (req, res) => {
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+require("./socket-server")(io);

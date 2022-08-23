@@ -1,12 +1,12 @@
 import { io } from "socket.io-client";
 
-var socket = io("http://localhost:3000");
+var socket = io("http://localhost:8080");
 
 socket.on("connected", () => {
   console.log("Connected");
 })
 
-socket.on("hei",(msg)=>{
+socket.on("message",(msg)=>{
   var all_messages = document.getElementById("all_messages");
   console.log(msg);
 
@@ -16,7 +16,7 @@ socket.on("hei",(msg)=>{
 })
 
 function sendMessage(message){
-  socket.emit("hei",message);
+  socket.emit("message",message);
 };
 
 export {
