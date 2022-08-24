@@ -14,7 +14,7 @@
 <template>
   <div>
     <h1 class="text-lg mb-2">Chat room</h1>
-    <div id="chat-window" class="border p-4">
+    <div id="chat-window" class="border border-slate-200 p-4">
       <div class="chat-message">
         <div id="output"></div>
         <div id="feedback"></div>

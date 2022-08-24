@@ -15,6 +15,7 @@ exports.create = (user) => {
   })
   .catch((err) => {
       console.log(">> Error while creating user: ", err);
+      res.send({ message: err.message});
   });
 };
 

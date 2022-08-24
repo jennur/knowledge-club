@@ -37,10 +37,7 @@ export const auth = {
       return AuthService.register(user).then(
         response => {
           commit('registerSuccess');
-          router.push({ name: "login", params: { 
-              message: "You successfully registered, login with your credentials"
-            } 
-          });
+          router.push({ path: "/login", query: { signup: "success" }});
           return Promise.resolve(response.data);
         },
         error => {

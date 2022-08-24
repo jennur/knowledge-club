@@ -8,7 +8,8 @@
   const route = useRoute();
   const msg = ref("")
 
-  const message = route.params.message;
+  const signupSuccess = route.query.signup === "success";
+  const message = signupSuccess && "You successfully registered, login with your credentials";
 
   async function login(username, password) {
     store.dispatch("auth/login", { username, password })

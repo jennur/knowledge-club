@@ -12,7 +12,7 @@
 
 <template>
   <div>
-    <header class="text-gray-600 py-1 px-4 border-b-2">
+    <header class="text-gray-600 py-1 px-4 border-slate-200 border-b">
       <div class="flex items-center justify-between container mx-auto">
         <nav class="flex items-center">
           <RouterLink to="/" class="text-xl mr-6">Knowledge Club</RouterLink>

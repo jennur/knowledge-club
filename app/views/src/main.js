@@ -19,7 +19,8 @@ import {
   faRightToBracket, 
   faUser, 
   faUserPlus,
-  faShareFromSquare
+  faShareFromSquare,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
@@ -31,7 +32,8 @@ library.add(
     faRightToBracket,
     faUser,
     faUserPlus,
-    faShareFromSquare
+    faShareFromSquare,
+    faEnvelope
   )
 
 createApp(App)
