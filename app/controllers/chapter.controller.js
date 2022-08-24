@@ -1,13 +1,13 @@
 const db = require("../models");
-const Book = db.books;
+const Chapter = db.chapters;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Book
-exports.create = (book) => {
-  return Book.create(book)
-    .then((book) => {
-      console.log(">> Created book: " + book.title);
-      return book;
+exports.create = (chapter) => {
+  return Chapter.create(chapter)
+    .then((chapter) => {
+      console.log(">> Created chapter: " + chapter.chapterName);
+      return chapter;
     })
     .catch((err) => {
       console.log(">> Error while creating book: ", err);
@@ -16,21 +16,19 @@ exports.create = (book) => {
 
 // Retrieve all Books from the database.
 exports.findAll = () => {
-  return Book.findAll({
-    include: ["videos", "articles"]
-  }).then((books) => {
-    return books;
+  return Chapter.findAll().then((chapters) => {
+    return chapters;
   });
 };
 
 // Find a single Book with an id
-exports.findById = (bookId) => {
-  return Book.findByPk(bookId, { include: ["videos", "articles"]})
-    .then((book) => {
-        return book;
+exports.findById = (chapterId) => {
+  return Chapter.findByPk(chapterId)
+    .then((chapter) => {
+        return chapter;
     })
     .catch((err) => {
-        console.log(">> Error while finding book: ", err);
+        console.log(">> Error while finding chapter: ", err);
     });
 };
 
@@ -45,9 +43,9 @@ exports.delete = () => {
 
 // Delete all Books from the database.
 exports.deleteAll = () => {
-  Book.destroy({where:{},
-  truncate:true}).then((book)=>{
-    console.log("destroyed book" + book.title)
+  Chapter.destroy({where:{},
+  truncate:true}).then((chapter)=>{
+    console.log("destroyed book" + chapter.chaptrName)
   })
 };
 
