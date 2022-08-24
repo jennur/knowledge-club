@@ -1,17 +1,62 @@
+var bcrypt = require("bcryptjs");
+
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define("user", {
     username: {
       type: Sequelize.STRING,
+      unique: true,
       allowNull: false,
-      unique: true
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "You must enter a username"
+        },
+        notNull: {
+          msg: "You must enter a username"
+        }
+      }
     },
     email: {
       type: Sequelize.STRING,
-      isEmail: true,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isEmail: {
+          args: true,
+          msg: "The e-mail address you entered is not valid"
+        },
+        notEmpty: {
+          args: true,
+          msg: "You must enter an e-mail address"
+        },
+        notNull: {
+          msg: "You must enter an e-mail address"
+        }
+      }
     },
     password: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "You must enter a password"
+        },
+        notNull: {
+          msg: "You must enter a password"
+        }
+      },
+      set (value) {
+        if(value.length >= 8 && value.length <= 15) {
+          this.setDataValue("password", bcrypt.hashSync(value, 8));
+        } else {
+          throw {
+            errors: [{ 
+              path: "password",
+              message: "Your password must be between 8 and 15 characters" 
+            }]
+          };
+        }
+      }
     }
   });
   return User;

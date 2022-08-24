@@ -1,22 +1,32 @@
 <script setup>
-  import { ref, defineEmits } from "vue";
+  import { ref, computed } from "vue";
   import TextInput from "../FormFields/TextInput.vue";
   import SimpleButton from "../Buttons/SimpleButton.vue";
 
-  const props = defineProps(["msg"]);
   const emit = defineEmits(["sendForm"]);
+  const props = defineProps({
+    fieldErrors: {
+      type: Array,
+      default: () => []
+    },
+    errorMsg: {
+      type: String,
+      default: ""
+    }
+  });
+
+  const errorFields = computed(() => props.fieldErrors && [...props.fieldErrors].map(error => {
+      return error.field;
+    })
+  );
 
   const username = ref("");
   const password = ref("");
 
-  function checkForm() {
-
-    emit("sendForm", username.value, password.value);
-  }
 </script>
 
 <template>
-  <form class="w-full sm:w-6/12 md:w-4/12 mx-auto" @submit.prevent="checkForm">
+  <form class="w-full sm:w-6/12 md:w-4/12 mx-auto" @submit.prevent="emit('sendForm', username, password)">
     <TextInput 
       @update:value="username=$event"
       type="text"
@@ -26,6 +36,7 @@
       iconClass="fas fa-user"
       required
       class="mb-4"
+      :hasError="errorFields.includes('username')"
     />
 
     <TextInput 
@@ -37,10 +48,13 @@
       iconClass="fas fa-lock"
       required
       class="mb-4"
+      :hasError="errorFields.includes('password')"
     />
 
     <SimpleButton type="submit" buttonText="Log in" fullWidth dark/>
-
-    <p v-if="msg" class="mt-2 text-red-500">{{ props.msg }}</p>
+    <p v-if="props.errorMsg" class="mt-2 text-left text-red-500">{{ errorMsg }}</p>
+    <p v-for="error in props.fieldErrors" :key="error.field || error.message" class="mt-2 text-left text-red-500">
+      {{ error.message }}
+    </p>
   </form>
 </template>

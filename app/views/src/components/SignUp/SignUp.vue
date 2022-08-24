@@ -1,31 +1,43 @@
 <script setup>
-import { ref, defineEmits } from "vue"
-import TextInput from "../FormFields/TextInput.vue"
-import SimpleButton from "../Buttons/SimpleButton.vue"
+  import { ref, computed } from "vue"
+  import TextInput from "../FormFields/TextInput.vue"
+  import SimpleButton from "../Buttons/SimpleButton.vue"
 
-const emit = defineEmits(['sendForm']);
-const props = defineProps(["msg"]);
-
-const username = ref("");
-const email = ref("");
-const password = ref("");
-const passwordCompare = ref("");
-
-const errMsg = ref("");
-
-function checkForm(){
-  console.log("Username:", username.value);
-  if(password.value !== passwordCompare.value) {
-    errMsg.value = "Passwords don't match";
-  } 
-  else {
-    emit("sendForm", {
-      username: username.value,
-      email: email.value,
-      password: password.value
+  const emit = defineEmits(['sendForm']);
+  const props = defineProps({
+    fieldErrors: {
+      type: Array,
+      default: () => []
+    },
+    errorMsg: {
+      type: String,
+      default: ""
+    }
+  });
+  const errorFields = computed(() => props.fieldErrors && [...props.fieldErrors].map(error => {
+      return error.field;
     })
+  )
+
+  const username = ref("");
+  const email = ref("");
+  const password = ref("");
+  const passwordCompare = ref("");
+
+  const passwordError = ref(false);
+
+  function checkForm(){
+    if(password.value !== passwordCompare.value) {
+      passwordError.value = true;
+    } 
+    else {
+      emit("sendForm", {
+        username: username.value,
+        email: email.value,
+        password: password.value
+      })
+    }
   }
-}
 </script>
 
 <template>
@@ -39,6 +51,7 @@ function checkForm(){
       iconClass="fas fa-user"
       required
       class="mb-4"
+      :hasError="errorFields.includes('username')"
     />
 
     <TextInput 
@@ -50,6 +63,7 @@ function checkForm(){
       iconClass="fas fa-envelope"
       required
       class="mb-4"
+      :hasError="errorFields.includes('email')"
     />
 
     <TextInput 
@@ -61,6 +75,7 @@ function checkForm(){
       iconClass="fas fa-lock"
       required
       class="mb-4"
+      :hasError="passwordError || errorFields.includes('password')"
     />
 
     <TextInput 
@@ -72,9 +87,17 @@ function checkForm(){
       iconClass="fas fa-lock"
       required
       class="mb-4"
+      :hasError="passwordError || errorFields.includes('password')"
     />
 
-    <SimpleButton type="submit" buttonText="Sign up" fullWidth dark />
-    <p v-if="props.msg || errMsg" class="mt-2 text-red-500">{{ props.msg || errMsg }}</p>
+    <SimpleButton type="submit" buttonText="Sign up" fullWidth dark class="mb-2" />
+
+    <div class="text-left text-sm text-red-500">
+      <p v-if="props.errorMsg">{{ errorMsg }}</p>
+      <p v-for="error in props.fieldErrors" :key="error.field" class="">
+        {{ error.message }}
+      </p>
+      <p v-if="passwordError" class="">Passwords don't match</p>
+    </div>
   </form>
 </template>

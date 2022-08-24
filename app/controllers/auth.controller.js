@@ -7,12 +7,15 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 const accessTokenCookie = "kc_access_token";
+const defaultError = {
+  message: "Something went wrong, please contact us if the issue persists."
+}
 
 exports.signup = (req, res) => {
   User.create({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: req.body.password
   })
   .then(user => {
     if (req.body.roles) {
@@ -34,7 +37,13 @@ exports.signup = (req, res) => {
     }
   })
   .catch(err => {
-    res.status(500).send({ message: err.message });
+    var errors = err?.errors?.map(error => {
+      return {
+        message: error.message,
+        field: error.path
+      }
+    });
+    res.status(500).send({ errors });
   });
 };
 
@@ -84,7 +93,13 @@ exports.signin = (req, res) => {
     });
   })
   .catch(err => {
-    res.status(500).send({ message: err.message });
+    const errors = err?.errors?.map(error => {
+      return {
+        message: error.message,
+        field: error.path
+      }
+    });
+    res.status(500).send({ errors });
   });
 };
 

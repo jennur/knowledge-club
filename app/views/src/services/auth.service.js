@@ -7,7 +7,6 @@ class AuthService {
         password: user.password
       })
       .then(response => {
-        console.log("User", response.data);
         const user = response.data;
         localStorage.setItem('user', JSON.stringify({
             id: user.id,

@@ -14,7 +14,6 @@ export const auth = {
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {
-          console.log("Success login:", user);
           const userObj = JSON.stringify(userModel(user));
           localStorage.setItem("user", userObj);
           commit('loginSuccess', user);

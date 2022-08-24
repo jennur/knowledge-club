@@ -13,7 +13,8 @@ const props = defineProps({
   iconClass: String,
   name: String,
   id: String,
-  required: Boolean
+  required: Boolean,
+  hasError: Boolean
 })
 
 const value = ref("");
@@ -30,7 +31,7 @@ const value = ref("");
       :placeholder="props.placeholder" 
       :id="props.id" 
       :required="required" 
-      class="w-full border-slate-200 border-b-4 border-r-4 p-1"
+      :class="`w-full ${props.hasError ? 'border-red-200':'border-slate-200'} border-b-4 border-r-4 p-1`"
       @input="emit('update:value', value)"
       >
   </label>
