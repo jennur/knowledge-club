@@ -51,6 +51,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/data.routes')(app);
 
 
 

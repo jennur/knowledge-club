@@ -15,11 +15,11 @@ exports.create = (book) => {
 };
 
 // Retrieve all Books from the database.
-exports.findAll = () => {
+exports.findAll = (req,res) => {
   return Book.findAll({
     include: ["videos", "articles"]
   }).then((books) => {
-    return books;
+    return res.send(books)
   });
 };
 

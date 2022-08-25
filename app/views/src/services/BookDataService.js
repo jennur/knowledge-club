@@ -2,7 +2,12 @@ import http from "../http-common";
 
 class BookDataService {
   getAll() {
-    return http.get("/books");
+    return http.get("/books").then((response)=>{
+      return response.data;
+    }
+    ).catch(err => {
+      console.log(err)
+    });
   }
   get(id) {
     return http.get(`/books/${id}`);
