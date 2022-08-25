@@ -21,13 +21,13 @@
 </script>
 
 <template>
-  <div class="flex w-full">
+  <form class="flex w-full" @submit.prevent="sendMessage">
     <div class="bg-slate-100 relative w-full h-10">
-      <textarea 
+      <input
+        type="text" 
         v-model="input"
-        class="w-full h-full bg-inherit p-2 resize-none text-md focus:outline-none"
-      >
-      </textarea>
+        class="w-full h-full bg-inherit pt-2 pl-2 pb-2 pr-10 resize-none text-md focus:outline-none"
+      />
 
       <DiscordPicker 
         class="emoji-picker absolute right-2 bottom-2" 
@@ -37,12 +37,12 @@
       />
     </div>
       <IconButton 
-          dark
-          @click="sendMessage" 
-          buttonText="Send" 
-          iconClass="fas fa-share-from-square"
-        />
-  </div>
+        type="submit"
+        dark
+        buttonText="Send" 
+        iconClass="fas fa-share-from-square"
+      />
+  </form>
 </template>
 
 <style scoped>

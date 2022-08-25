@@ -21,6 +21,11 @@ const router = createRouter({
       component: () => import("../pages/Books/_id.vue")
     },
     {
+      path: "/books/:id/chat",
+      name: "book-chat",
+      component: () => import("../pages/Chat/index.vue")
+    },
+    {
       path: "/books/add",
       name: "add",
       component: () => import("../pages/AddBook/index.vue")

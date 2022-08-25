@@ -8,6 +8,11 @@
       type: String,
       required: true
     },
+    type: {
+      type: String,
+      default: () => "button",
+      validator: (value) => ["button", "submit"].includes(value)
+    },
     vertical: Boolean,
     dark: Boolean
   });
@@ -17,7 +22,7 @@
 </script>
 
 <template>
-  <button :class="`flex ${flexDirClass} ${colorClass} transition-colors items-center p-2`">
+  <button :type="props.type" :class="`flex ${flexDirClass} ${colorClass} transition-colors items-center p-2`">
     <font-awesome-icon :icon="props.iconClass" :class="`${iconSize} ${vertical ? 'mb-1' : 'mr-1'}`" />
     <div class="text-xs">{{ props.buttonText }}</div>
   </button>
