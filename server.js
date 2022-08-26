@@ -52,6 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/data.routes')(app);
+require('./app/routes/chat.routes')(app);
 
 
 
@@ -62,6 +63,7 @@ const bookController = require("./app/controllers/book.controller");
 // const userController = require("./app/controllers/user.controller");
 const roleController = require("./app/controllers/role.controller");
 const chapterController = require("./app/controllers/chapter.controller");
+const chatController = require("./app/controllers/chat.controller");
 
 
 // DEVELOPMENT MODE

@@ -20,6 +20,7 @@ db.videos = require("./video.model.js")(sequelize, Sequelize);
 db.roles = require("../models/role.model.js")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.chapters = require("../models/chapter.model.js")(sequelize,Sequelize)
+db.chat = require("../models/chat.model.js")(sequelize,Sequelize)
 
 db.books.hasMany(db.videos, { as: "videos" });
 db.books.hasMany(db.articles, { as: "articles" });

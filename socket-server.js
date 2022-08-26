@@ -1,4 +1,6 @@
 
+const chatController = require("./app/controllers/chat.controller.js")
+
 module.exports = function(io) {
 
   var connectedCount = 0;
@@ -19,6 +21,7 @@ module.exports = function(io) {
 
     socket.on("message", (msg) => {
       io.emit("message", msg);
+      chatController.create(msg)
     });
 
     socket.on("private message", (toSocketId, msg) => {
