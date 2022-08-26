@@ -1,5 +1,6 @@
 <script setup>
    import store  from "../../store/index"
+   
    store.dispatch("books/getAllBooks")
 </script>
 <template>

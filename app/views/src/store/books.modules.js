@@ -6,6 +6,7 @@ export const books = {
     actions:{
         async getAllBooks({commit}){
             BookDataService.getAll().then(books=>{
+                commit("clearBooks");
                 commit('addBooks',books);
             }).catch(err=>{
                 console.log(err)
@@ -16,8 +17,13 @@ export const books = {
         addBook(state,book){
             state.books.push(book);
         },
+        
         addBooks(state,books){
             state.books = state.books.concat(books);
+        },
+        
+        clearBooks(state){
+            state.books = []
         }
     }
 }

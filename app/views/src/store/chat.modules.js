@@ -6,6 +6,7 @@ export const chat = {
     actions:{
         async getChatRoomMessages({commit}){
             ChatService.getChatRoomMessages().then(messages=>{
+                commit('clearMessages');
                 commit('addMessages',messages)
             }).catch((err)=>{
                     console.log(err);
@@ -21,6 +22,9 @@ export const chat = {
         },
         addMessages(state,messages){
             state.messages = state.messages.concat(messages);
+        },
+        clearMessages(state){
+            state.messages = [];
         }
     }
 }
