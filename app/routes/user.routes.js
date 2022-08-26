@@ -9,17 +9,34 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/test/all", controller.allAccess);
+  app.get("/api/user", 
+    [authJwt.verifyToken],
+    controller.findById
+  );
+
+  app.post("/api/user/update/username",
+    [authJwt.verifyToken],
+    controller.updateUsername
+  );
+
+  app.post("/api/user/update/biography", 
+    [authJwt.verifyToken],
+    controller.updateBiography
+  );
+
+  // Tests
   app.get(
     "/api/test/user",
     [authJwt.verifyToken],
     controller.userBoard
   );
+
   app.get(
     "/api/test/mod",
     [authJwt.verifyToken, authJwt.isModerator],
     controller.moderatorBoard
   );
+
   app.get(
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
