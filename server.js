@@ -7,10 +7,6 @@ const app = express();
 const http = require("http").createServer(app);
 const faker = require("faker");
 
-
-DEVELOPMENT_MODE = true;
-
-
 const io = require("socket.io")(http, {
     cors:{
         origin:"http://localhost:5173"

@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from "../store/index";
+import authService from "../services/auth.service";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,16 +33,6 @@ const router = createRouter({
       component: () => import("../pages/AddBook/index.vue")
     },
     {
-      path: "/login",
-      name: "login",
-      component: () => import("../pages/Login/index.vue")
-    },
-    {
-      path: "/signup",
-      name: "signup",
-      component: () => import("../pages/SignUp/index.vue")
-    },
-    {
       path: "/account",
       name: "account",
       component: () => import("../pages/Account/index.vue")
@@ -58,5 +50,27 @@ const router = createRouter({
 
   ]
 })
+
+function canUserAccess() {
+  if(!store?.state?.user?.accessToken){
+    return store.dispatch("auth/checkAccessToken")
+      .catch(error => {
+        console.log("Cannot access:", error);
+      })
+  } else {
+    return true;
+  }
+}
+
+router.beforeResolve(async (to, from) => {
+  store.dispatch("auth/checkAccessToken")
+  .then(() => {
+    return true;
+  })
+  .catch(error => {
+    console.log("Cannot access:", error?.response?.data?.message || error.message);
+    return { name: "home" };
+  })
+});
 
 export default router

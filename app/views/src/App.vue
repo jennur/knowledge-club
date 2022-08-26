@@ -15,19 +15,17 @@
     <header class="text-gray-600 py-1 px-4 border-slate-200 border-b">
       <div class="flex items-center justify-between container mx-auto">
         <nav class="flex items-center">
-          <RouterLink to="/" class="text-xl mr-6">Knowledge Club</RouterLink>
-          <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" />
+          <RouterLink to="/" class="text-xl text-rose-500 py-2 mr-6">
+            <font-awesome-icon icon="fas fa-spa" class="mr-2" />Pomme
+          </RouterLink>
         </nav>
 
         <nav class="flex">
           <div v-if="store.state.auth.user" class="flex items-center">
+            <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" />
             <IconLink path="/chat" linkText="Chat" iconClass="fa-solid fa-comment" />
             <IconLink path="/account" linkText="Account" iconClass="fa-solid fa-user" />
             <IconButton vertical @click="store.dispatch('auth/logout')" buttonText="Log out" iconClass="fa-solid fa-right-from-bracket" />
-          </div>
-          <div v-else class="flex">
-            <IconLink path="/signup" linkText="Sign up" iconClass="fa-solid fa-user-plus" />
-            <IconLink path="/login" linkText="Login" iconClass="fa-solid fa-right-to-bracket" />
           </div>
         </nav>
 

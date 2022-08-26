@@ -9,17 +9,19 @@
       default: () => "md",
       validator: (value) => ["xs", "sm", "md", "lg"].includes(value)
     },
-    fullWidth: Boolean,
-    dark: Boolean,
     type: {
       type: String,
-      default: () => "button",
+      default: () => null,
       validator: (value) => ["button", "submit"].includes(value)
-    }
+    },
+    fluid: Boolean,
+    dark: Boolean,
+    customColors: Boolean
   });
-  const colorClass = props.dark && "bg-gray-700 hover:bg-gray-900/90 text-slate-100" || "border border-slate-200 hover:bg-slate-200 text-gray-700 hover:text-gray-900/90";
-  const widthClass = props.fullWidth && "w-full" || "";
-  const sizeClass = `text-${props.size}`;
+  const { dark, fluid, size, customColors } = props;
+  const colorClass = customColors ? "" : (dark && "bg-gray-700 hover:bg-gray-900/90 text-slate-100" || "border border-slate-200 hover:bg-slate-200 text-gray-700 hover:text-gray-900/90");
+  const widthClass = fluid && "w-full" || "";
+  const sizeClass = `text-${size}`;
 </script>
 
 <template>
