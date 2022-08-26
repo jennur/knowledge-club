@@ -17,7 +17,7 @@ export const auth = {
           const userObj = JSON.stringify(userModel(user));
           localStorage.setItem("user", userObj);
           commit('loginSuccess', user);
-          router.push({ name: "account" });
+          router.push({ name: "books" });
           return Promise.resolve(user);
         },
         error => {
@@ -36,12 +36,26 @@ export const auth = {
       return AuthService.register(user).then(
         response => {
           commit('registerSuccess');
-          router.push({ path: "/login", query: { signup: "success" }});
           return Promise.resolve(response.data);
         },
         error => {
           commit('registerFailure');
           return Promise.reject(error);
+        }
+      );
+    },
+    checkAccessToken({ commit }) {
+      return AuthService.getAccessToken().then(
+        response => {
+          console.log("CheckAccessToken response:", response);
+          commit("setUserToken", response.accessToken);
+          return Promise.resolve(response.data);
+        },
+        error => {
+          console.log("CheckAccessToken error:", error);
+          commit('logout');
+          router.push({ name: "home" });
+          return Promise.reject(error)
         }
       );
     }
@@ -64,6 +78,9 @@ export const auth = {
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+    },
+    setUserToken(state, token) {
+      state.user.accessToken = token;
     }
   }
 };

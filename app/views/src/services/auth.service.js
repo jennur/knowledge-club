@@ -21,6 +21,7 @@ class AuthService {
         return Promise.reject(err);
       });
   }
+
   logout() {
     localStorage.removeItem("user");
     return http.get("/auth/logout")
@@ -33,6 +34,7 @@ class AuthService {
         return Promise.reject(err);
       });
   }
+
   register(user) {
     return http.post("/auth/signup", { 
       username: user.username,
@@ -43,6 +45,14 @@ class AuthService {
       console.log("AuthService register error:", err.response);
       return Promise.reject(err);
     });
+  }
+
+  getAccessToken() {
+    return http.get("/auth/verify-access-token")
+      .catch(err => {
+        console.log("AuthService get access token error:", err.response);
+        return Promise.reject(err);
+      })
   }
 }
 export default new AuthService();
