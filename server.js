@@ -86,7 +86,9 @@ for(book of fake_books){
       dateUploaded: new Date(),
       chapterContent: faker.lorem.paragraphs(5)
     })
+   
   }
+  book_number++;
 }
 const initDb = async () => {
   roleController.create({ id: 1, name: "user" })

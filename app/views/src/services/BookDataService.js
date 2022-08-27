@@ -9,6 +9,14 @@ class BookDataService {
       console.log(err)
     });
   }
+
+  getAllChapters(bookId){
+    return http.get(`/books/chapters?bookid=${bookId}`)
+  }
+  getChapter(id,chapter_num){
+    return http.get(`/books/${id}/chapters/${chapter_num}`)
+  }
+
   get(id) {
     return http.get(`/books/${id}`);
   }

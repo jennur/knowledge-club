@@ -15,8 +15,14 @@ exports.create = (chapter) => {
 };
 
 // Retrieve all Books from the database.
-exports.findAll = () => {
-  return Chapter.findAll().then((chapters) => {
+exports.findAll = (bookId) => {
+  return Chapter.findAll({
+    where:{
+      bookUUID:bookId,
+      
+  },
+  order:[['chapterNumber','ASC']]
+}).then((chapters) => {
     return chapters;
   });
 };

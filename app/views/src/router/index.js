@@ -42,6 +42,11 @@ const router = createRouter({
       name: "chat",
       component: () => import("../pages/Chat/index.vue")
     },
+    {
+      path: "/books/:id/chapters",
+      name: "chapters",
+      component: () => import("../pages/Books/Chapters/index.vue")
+    },
 
   ]
 })

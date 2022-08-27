@@ -27,3 +27,26 @@ export const books = {
         }
     }
 }
+
+export const chapters = {
+    namespaced:true,
+    state:{chapters:{},focusedbook:""},
+    actions:{
+        async getAllChapters({commit},bookid){
+            BookDataService.getAllChapters(bookid).then(chapters=>{
+                commit("addChapters",chapters);
+            }).catch(err=>{
+                console.log(err);
+            })
+        }
+
+    },
+    mutations:{
+        addChapters(state,chapters){
+            state.chapters= chapters.data
+        },
+        clearChapters(state){
+            state.chapters={}
+        }
+    }
+}
