@@ -10,7 +10,7 @@
   <div class="about">
     <h1>{{$route.params.id}}</h1>
     <div v-for="chapter in store.state.chapters.chapters" :key="chapter" class="mt-4">
-       {{chapter.chapterUUID}} : {{chapter.chapterName}}
+       {{chapter.chapterNumber}} : {{chapter.chapterName}}
       </div>
   </div>
 </template>

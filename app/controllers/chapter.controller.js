@@ -18,8 +18,11 @@ exports.create = (chapter) => {
 exports.findAll = (bookId) => {
   return Chapter.findAll({
     where:{
-      bookUUID:bookId
-  }}).then((chapters) => {
+      bookUUID:bookId,
+      
+  },
+  order:[['chapterNumber','ASC']]
+}).then((chapters) => {
     return chapters;
   });
 };
