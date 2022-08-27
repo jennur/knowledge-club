@@ -16,7 +16,7 @@
       <div class="flex items-center justify-between container mx-auto">
         <nav class="flex items-center">
           <RouterLink to="/" class="text-xl text-rose-500 py-2 mr-6">
-            <font-awesome-icon icon="fas fa-spa" class="mr-2" />Pomme
+            <font-awesome-icon icon="fas fa-spa" class="mr-2" />Knowledge Club
           </RouterLink>
         </nav>
 
