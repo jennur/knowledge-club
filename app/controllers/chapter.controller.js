@@ -27,6 +27,18 @@ exports.findAll = (bookId) => {
   });
 };
 
+exports.findOne = (bookId,chapterNum) => {
+  console.log(bookId,chapterNum)
+  return Chapter.findAll({
+    where:{
+      bookUUID:bookId,
+      chapterNumber:chapterNum
+  }
+}).then((chapters) => {
+    return chapters[0];
+  });
+};
+
 // Find a single Book with an id
 exports.findById = (chapterId) => {
   return Chapter.findByPk(chapterId)

@@ -30,7 +30,7 @@ export const books = {
 
 export const chapters = {
     namespaced:true,
-    state:{chapters:{},focusedbook:""},
+    state:{chapters:{},focusedbook:"",focusedChapter:{}},
     actions:{
         async getAllChapters({commit},bookid){
             BookDataService.getAllChapters(bookid).then(chapters=>{
@@ -38,6 +38,11 @@ export const chapters = {
             }).catch(err=>{
                 console.log(err);
             })
+        },
+        async getChapter({commit},payload){
+            BookDataService.getChapter(payload.bookId,payload.chapterNum).then(chapter=>{
+                commit("setFocusedChapter",chapter)
+            }).catch(err=>{console.log(err)})
         }
 
     },
@@ -47,6 +52,9 @@ export const chapters = {
         },
         clearChapters(state){
             state.chapters={}
+        },
+        setFocusedChapter(state,chapter){
+            state.focusedChapter = chapter
         }
     }
 }
