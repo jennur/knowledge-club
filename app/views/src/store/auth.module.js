@@ -48,7 +48,6 @@ export const auth = {
       return AuthService.getAccessToken().then(
         response => {
           console.log("CheckAccessToken response:", response);
-          commit("setUserToken", response.accessToken);
           return Promise.resolve(response.data);
         },
         error => {
@@ -78,9 +77,6 @@ export const auth = {
     },
     registerFailure(state) {
       state.status.loggedIn = false;
-    },
-    setUserToken(state, token) {
-      state.user.accessToken = token;
     }
   }
 };

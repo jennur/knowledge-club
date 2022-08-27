@@ -2,11 +2,11 @@ const db = require("../models");
 const Chat = db.chat;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Book
+// Create and Save a new Chat
 exports.create = (message) => {
   return Chat.create(message)
     .then((message) => {
-      console.log(">> Message added from: " + message.fromuser);
+      console.log(">> Message added from: " + message.fromUser);
       return message;
     })
     .catch((err) => {
@@ -14,39 +14,43 @@ exports.create = (message) => {
     });
 };
 
-// Retrieve all Books from the database.
+// Retrieve all messages from the database.
 exports.findAll = (req,res) => {
   return Chat.findAll().then((messages) => {
     res.send(messages);
   });
 };
 
-// Find a single Book with an id
+// Find a single Chat with a room id
 exports.findByRoomId = (RoomId) => {
-  return Chat.findAll({where:{roomid:RoomId}})
-    .then((messages) => {
-        return messages;
+  return Chat.findAll({
+      where: {
+        roomid:RoomId
+      }
     })
+    .then((messages) => messages)
     .catch((err) => {
         console.log(">> Error while finding messages: ", err);
     });
 };
 
-// Update a Book by the id in the request
+// Update a Chat by the id in the request
 exports.update = () => {
   
 };
 
-// Delete a Book with the specified id in the request
+// Delete a Chat with the specified id in the request
 exports.delete = () => {
 };
 
-// Delete all Books from the database.
+// Delete all Chats from the database.
 exports.deleteAll = () => {
-  Chat.destroy({where:{},truncate:true});
+  Chat.destroy({
+    where: {},
+    truncate: true
+  });
 };
 
-// Find all published Books
+// Find all published Chats
 exports.findAllPublished = () => {
-  
 };

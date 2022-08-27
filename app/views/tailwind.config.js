@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    fontSize: {
+      '2xs': '.6rem'
+    }
   },
   plugins: [],
   important: "#app"

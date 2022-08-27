@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
         type:Sequelize.DATE,
         allowNull:false
       },
-      fromuser:{
+      fromUser:{
         type:Sequelize.STRING,
         allowNull:false
       }

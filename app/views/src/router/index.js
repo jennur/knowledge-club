@@ -46,18 +46,7 @@ const router = createRouter({
   ]
 })
 
-function canUserAccess() {
-  if(!store?.state?.user?.accessToken){
-    return store.dispatch("auth/checkAccessToken")
-      .catch(error => {
-        console.log("Cannot access:", error);
-      })
-  } else {
-    return true;
-  }
-}
-
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from, next) => {
   store.dispatch("auth/checkAccessToken")
   .then(() => {
     return true;
@@ -66,6 +55,7 @@ router.beforeEach(async (to, from) => {
     console.log("Cannot access:", error?.response?.data?.message || error.message);
     return { name: "home" };
   })
+  next();
 });
 
 export default router
