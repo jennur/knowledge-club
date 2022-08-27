@@ -17,5 +17,12 @@ module.exports = function(app) {
       res.send(chapters);
     })    
   })
+
+  app.get("/api/books/chapters/text",(req,res)=>{
+    console.log(req.query)
+    let chapters = chapterController.findOne(req.query.bookid,req.query.chapterNum).then((chapter)=>{ 
+      res.send(chapter);
+    })    
+  })
   
 };
