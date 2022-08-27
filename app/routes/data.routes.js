@@ -10,5 +10,10 @@ module.exports = function(app) {
   });
 
   app.get("/api/books",bookController.findAll);
+
+  app.get("/api/books/chapters",(req,res)=>{
+    console.log("kleem");
+    console.log(req.params);
+  })
   
 };
