@@ -1,8 +1,8 @@
 <script setup>
-  import { ref, computed } from "vue"
-  import store from "../../store/index";
-  import TextInput from "../FormFields/TextInput.vue"
-  import SimpleButton from "../Buttons/SimpleButton.vue"
+  import { ref, computed } from "vue";
+  import store from "../../../store/index";
+  import TextInput from "../../FormFields/TextInput.vue";
+  import SimpleButton from "../../Buttons/SimpleButton.vue";
 
   const emit = defineEmits(["signinSuccess"]);
   const username = ref("");
@@ -20,6 +20,8 @@
   )
 
   async function checkForm() {
+    fieldErrors.value = [];
+    
     if(password.value !== passwordCompare.value) {
       passwordError.value = true;
     } 

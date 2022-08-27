@@ -1,8 +1,8 @@
 <script setup>
   import { ref, computed } from "vue";
-  import store from "../../store/index";
-  import TextInput from "../FormFields/TextInput.vue";
-  import SimpleButton from "../Buttons/SimpleButton.vue";
+  import store from "../../../store/index";
+  import TextInput from "../../FormFields/TextInput.vue";
+  import SimpleButton from "../../Buttons/SimpleButton.vue";
 
   const username = ref("");
   const password = ref("");
@@ -15,6 +15,8 @@
   );
 
   async function login() {
+    fieldErrors.value = [];
+    
     store.dispatch("auth/login", { username: username.value, password: password.value })
       .catch(err => {
         console.log("Login.vue error:", err);

@@ -57,7 +57,7 @@ function canUserAccess() {
   }
 }
 
-router.beforeResolve(async (to, from) => {
+router.beforeEach(async (to, from) => {
   store.dispatch("auth/checkAccessToken")
   .then(() => {
     return true;
