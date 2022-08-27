@@ -34,7 +34,7 @@ export const chapters = {
     actions:{
         async getAllChapters({commit},bookid){
             BookDataService.getAllChapters(bookid).then(chapters=>{
-                commit("addChapters");
+                commit("addChapters",chapters);
             }).catch(err=>{
                 console.log(err);
             })
@@ -43,7 +43,7 @@ export const chapters = {
     },
     mutations:{
         addChapters(state,chapters){
-            state.chapters = state.books.concat(chapters);
+            state.chapters= chapters.data
         },
         clearChapters(state){
             state.chapters={}

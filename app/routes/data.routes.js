@@ -1,4 +1,5 @@
 const bookController = require("../controllers/book.controller");
+const chapterController = require("../controllers/chapter.controller")
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -12,8 +13,9 @@ module.exports = function(app) {
   app.get("/api/books",bookController.findAll);
 
   app.get("/api/books/chapters",(req,res)=>{
-    console.log("kleem");
-    console.log(req.params);
+    let chapters = chapterController.findAll(req.query.bookid).then((chapters)=>{ 
+      res.send(chapters);
+    })    
   })
   
 };
