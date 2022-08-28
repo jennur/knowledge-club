@@ -60,6 +60,7 @@ const bookController = require("./app/controllers/book.controller");
 const roleController = require("./app/controllers/role.controller");
 const chapterController = require("./app/controllers/chapter.controller");
 const chatController = require("./app/controllers/chat.controller");
+const highlightController = require("./app/controllers/highlight.controller")
 
 
 // DEVELOPMENT MODE
@@ -100,6 +101,15 @@ const initDb = async () => {
   for(chapter of chapters){
     chapterController.create(chapter);
   }
+  highlightController.create({
+    bookUUID:0,
+    chapterUUID:0,
+    startloc:0,
+    endloc:10,
+    timesent:Date(),
+    fromUser:"Steve",
+    content:"hello"
+  })
 };
 // database
 db.sequelize.sync({ force: true }).then(() => {
