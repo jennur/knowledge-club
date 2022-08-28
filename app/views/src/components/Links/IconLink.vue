@@ -9,8 +9,8 @@
 </script>
 
 <template>
-  <RouterLink :to="props.path" class="flex flex-col items-center p-2 text-gray-700 hover:text-gray-900/90 transition-colors">
-    <font-awesome-icon :icon="props.iconClass" class="text-xl mb-1" />
-    <div class="text-xs">{{ props.linkText }}</div>
+  <RouterLink :to="props.path" class="icon-link">
+    <font-awesome-icon :icon="props.iconClass" class="icon" />
+    <div class="text">{{ props.linkText }}</div>
   </RouterLink>
 </template>

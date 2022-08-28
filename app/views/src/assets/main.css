@@ -1,3 +1,113 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/************************/
+/******** Input *********/
+/************************/
+
+.input-label {
+  @apply flex items-center;
+}
+
+.input-label .text-input {
+  @apply w-full box-border border-slate-200 border-b-4 border-r-4 px-2 py-1;
+}
+
+.input-label.error .text-input {
+  @apply border-red-200;
+}
+
+.input-label .icon-wrapper {
+  @apply border-slate-200 bg-slate-200 text-gray-400 border-2 py-1 px-2;
+}
+
+.input-label.error .icon-wrapper {
+  @apply border-red-200 bg-red-200 text-red-400;
+}
+
+/************************/
+/******** Links *********/
+/************************/
+
+.icon-link {
+  @apply flex flex-col items-center p-2 text-gray-700 hover:text-gray-900/90 transition-colors;
+}
+
+.icon-link .icon {
+  @apply text-xl mb-1;
+}
+
+.icon-link .text {
+  @apply text-xs;
+}
+
+/************************/
+/******* Buttons ********/
+/************************/
+
+.icon-button {
+  @apply flex items-center justify-center transition-colors py-2 px-4;
+}
+
+.icon-button.basic {
+  @apply text-gray-700 hover:text-gray-900/90;
+}
+
+/* Sizes */
+
+.icon-button.xs {
+  @apply text-xs;
+}
+
+.icon-button.xs .icon {
+  @apply text-xs mr-2;
+}
+
+.icon-button.sm {
+  @apply text-sm;
+}
+
+.icon-button.xs .icon {
+  @apply text-sm mr-2;
+}
+
+.icon-button.md {
+  @apply text-base;
+}
+
+.icon-button.md .icon {
+  @apply text-base mr-2;
+}
+
+.icon-button.lg {
+  @apply text-lg;
+}
+
+.icon-button.lg .icon {
+  @apply text-lg mr-2;
+}
+
+/* Vertical */
+.icon-button.vertical {
+  @apply flex-col p-2;
+}
+
+.icon-button.vertical .icon {
+  @apply text-xl mb-1;
+}
+
+.icon-button.vertical .text {
+  @apply text-xs;
+}
+
+/* Fluid */
+.icon-button.fluid {
+  @apply w-full;
+}
+
+/* Dark */
+.icon-button.dark {
+  @apply bg-gray-700 hover:bg-gray-900/90 text-slate-100;
+}
