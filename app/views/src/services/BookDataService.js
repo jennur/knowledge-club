@@ -13,8 +13,8 @@ class BookDataService {
   getAllChapters(bookId){
     return http.get(`/books/chapters?bookId=${bookId}`)
   }
-  getChapter(id,chapter_num){
-    return http.get(`/books/${id}/chapters/${chapter_num}`)
+  getChapter(bookId, chapterNum){
+    return http.get(`/books/chapters/text?bookId=${bookId}&chapterNum=${chapterNum}`)
   }
 
   get(id) {

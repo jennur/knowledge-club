@@ -15,23 +15,35 @@ exports.create = (chapter) => {
 };
 
 // Retrieve all Chapters from the database.
-exports.findAll = (req, res) => {
+exports.findAll = (bookId) => {
   return Chapter.findAll({
     where:{
-      bookUUID: req.query.bookId,
+      bookUUID: bookId,
     },
     order:[['chapterNumber','ASC']]
   })
   .then(chapters => {
     console.log(">> Found chapters: " + chapters);
-    res.status(200).send({ chapters });
+    return chapters;
   })
   .catch(err => {
     console.log(">> Error while finding all chapters: ", err);
   });
 };
 
-// Find a single Chapter with an id
+exports.findOne = (bookId,chapterNum) => {
+  console.log(bookId, chapterNum)
+  return Chapter.findAll({
+    where: {
+      bookUUID:bookId,
+      chapterNumber:chapterNum
+    }
+  }).then((chapters) => {
+    return chapters[0];
+  });
+};
+
+// Find a single Book with an id
 exports.findById = (chapterId) => {
   return Chapter.findByPk(chapterId)
     .then((chapter) => {

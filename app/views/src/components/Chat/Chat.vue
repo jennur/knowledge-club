@@ -4,13 +4,13 @@
     // import faker from "faker"
   import CommentBox from "../../components/CommentBox/CommentBox.vue"
   import IconButton from "../../components/Buttons/IconButton.vue"
+  import Message from "./Message.vue"
   import store from "../../store/index"
 
   const props = defineProps({
     isRoom: Boolean
   })
   const messages = ref([]);
-
   // messages.value = store.state.
   store.dispatch("chat/getChatRoomMessages");
 
@@ -62,7 +62,7 @@
         >
           <div :class="`text-2xs uppercase ${message.fromUser === username ? 'text-blue-500': 'text-slate-500' }`">{{message.fromUser}}</div>
           <div class="">
-            {{message.message}}
+            <Message :message="`${message.message}`"/>
           </div>
         </div>
       </div>

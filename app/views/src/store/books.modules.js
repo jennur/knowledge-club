@@ -32,27 +32,38 @@ export const books = {
 
 export const chapters = {
   namespaced:true,
-  state: {
-    chapters: {},
-    focusedbook:""
+  state:{
+    chapters:{},
+    focusedbook:"",
+    focusedChapter:{}
   },
-  actions: {
-    async getAllChapters({ commit }, bookId) {
-      BookDataService.getAllChapters(bookId)
-        .then(response => {
-          commit("addChapters", response.data.chapters);
-        })
-        .catch(err => {
-          console.log("Error getting chapters:", err);
-        })
-    }
+  actions:{
+      async getAllChapters({ commit }, bookId) {
+          BookDataService.getAllChapters(bookId)
+            .then(chapters => {
+              commit("addChapters", chapters.data);
+            }).catch(err=>{
+              console.log(err);
+            })
+      },
+      async getChapter({commit}, payload){
+        BookDataService.getChapter(payload.bookId, payload.chapterNum)
+          .then(chapter => {
+            commit("setFocusedChapter",chapter)
+          })
+          .catch(err=>{console.log(err)})
+      }
+
   },
-  mutations: {
-    addChapters(state, chapters) {
-      state.chapters = chapters
-    },
-    clearChapters(state){
-      state.chapters = {}
-    }
+  mutations:{
+      addChapters(state,chapters){
+          state.chapters= chapters
+      },
+      clearChapters(state){
+          state.chapters={}
+      },
+      setFocusedChapter(state,chapter){
+          state.focusedChapter = chapter
+      }
   }
 }

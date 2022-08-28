@@ -12,6 +12,17 @@ module.exports = function(app) {
 
   app.get("/api/books", bookController.findAll);
 
-  app.get("/api/books/chapters", chapterController.findAll)
+  app.get("/api/books/chapters", (req, res) => {
+    chapterController.findAll(req.query.bookId).then((chapters) => { 
+      res.send(chapters);
+    })    
+  })
+
+  app.get("/api/books/chapters/text",(req,res)=>{
+    console.log(req.query)
+    chapterController.findOne(req.query.bookId,req.query.chapterNum).then((chapter)=>{ 
+      res.send(chapter);
+    })    
+  })
   
 };

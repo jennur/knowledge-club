@@ -274,6 +274,6 @@ class Book():
                     f.write(chapter)
 
 if __name__=="__main__":
-    book= Book("/Users/galois/Documents/git/knowledge-club/research/data/i_see_satan_falling_like_lightning.epub.epub",True,True)
+    book= Book("/Users/galois/Documents/git/knowledge-club/research/data/ray_dalio.epub",True,True)
 
     print(book.chapters)

@@ -52,6 +52,11 @@ const router = createRouter({
       name: "chapters",
       component: () => import("../pages/Books/Chapters/index.vue")
     },
+    {
+      path: "/books/:id/chapters/:chapternum",
+      name: "chapterText",
+      component: () => import("../pages/Books/Chapters/Text/index.vue")
+    },
 
   ]
 })
