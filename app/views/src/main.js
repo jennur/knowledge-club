@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from "./store"
 import './assets/main.css'
+import VueMathjax from 'vue-mathjax-next';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -40,8 +41,9 @@ library.add(
     faXmark
   )
 
-createApp(App)
+const app = createApp(App)
   .use(router)
   .use(store)
+  .use(VueMathjax)
   .component('font-awesome-icon', FontAwesomeIcon)
   .mount('#app')
