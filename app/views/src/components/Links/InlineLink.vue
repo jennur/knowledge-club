@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <RouterLink :to="props.path" class="text-gray-600 underline hover:text-gray-900/90 transition-colors">
+  <RouterLink :to="props.path" class="text-rose-500 underline hover:text-rose-700/90 transition-colors">
     {{ props.linkText }}
   </RouterLink>
 </template>

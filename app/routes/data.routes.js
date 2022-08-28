@@ -10,12 +10,8 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/books",bookController.findAll);
+  app.get("/api/books", bookController.findAll);
 
-  app.get("/api/books/chapters",(req,res)=>{
-    let chapters = chapterController.findAll(req.query.bookid).then((chapters)=>{ 
-      res.send(chapters);
-    })    
-  })
+  app.get("/api/books/chapters", chapterController.findAll)
   
 };

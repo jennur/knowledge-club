@@ -3,7 +3,9 @@
   import store from "../../../store/index";
   import TextInput from "../../FormFields/TextInput.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
+  import InlineLink from "../../Links/InlineLink.vue";
 
+  const props = defineProps(["headline", "hasSignUpLink"])
   const username = ref("");
   const password = ref("");
 
@@ -28,6 +30,9 @@
 
 <template>
   <form @submit.prevent="login">
+    <h2 v-if="props.headline" class="text-lg mb-4">
+      {{ props.headline }}
+    </h2>
     <TextInput 
       @update:value="username=$event"
       type="text"
@@ -57,5 +62,7 @@
     <p v-for="error in fieldErrors" :key="error.field || error.message" class="mt-2 text-left text-red-500">
       {{ error.message }}
     </p>
+
+    <p v-if="props.hasSignUpLink" class="text-sm mt-4">If you don't have an account yet, <InlineLink :to="{ name: 'signup' }" linkText="sign up!"/></p>
   </form>
 </template>

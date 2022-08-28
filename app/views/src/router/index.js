@@ -12,6 +12,11 @@ const router = createRouter({
       component: () => import("../pages/HomeView.vue")
     },
     {
+      path: "/signup",
+      name: "signup",
+      component: () => import("../pages/Signup/index.vue")
+    },
+    {
       path: "/books",
       alias: "/books",
       name: "books",
@@ -52,14 +57,18 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  store.dispatch("auth/checkAccessToken")
-  .then(() => {
-    return true;
-  })
-  .catch(error => {
-    console.log("Cannot access:", error?.response?.data?.message || error.message);
-    return { name: "home" };
-  })
+  const safeList = ["home", "signup", "about"];
+
+  if(!safeList.includes(to.name)) {
+    store.dispatch("auth/checkAccessToken")
+    .then(() => {
+      return true;
+    })
+    .catch(error => {
+      console.log("Cannot access:", error?.response?.data?.message || error.message);
+      return { name: "home" };
+    })
+  }
   next();
 });
 

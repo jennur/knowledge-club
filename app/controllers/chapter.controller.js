@@ -2,7 +2,7 @@ const db = require("../models");
 const Chapter = db.chapters;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Book
+// Create and Save a new Chapter
 exports.create = (chapter) => {
   return Chapter.create(chapter)
     .then((chapter) => {
@@ -10,24 +10,28 @@ exports.create = (chapter) => {
       return chapter;
     })
     .catch((err) => {
-      console.log(">> Error while creating book: ", err);
+      console.log(">> Error while creating chapter: ", err);
     });
 };
 
-// Retrieve all Books from the database.
-exports.findAll = (bookId) => {
+// Retrieve all Chapters from the database.
+exports.findAll = (req, res) => {
   return Chapter.findAll({
     where:{
-      bookUUID:bookId,
-      
-  },
-  order:[['chapterNumber','ASC']]
-}).then((chapters) => {
-    return chapters;
+      bookUUID: req.query.bookId,
+    },
+    order:[['chapterNumber','ASC']]
+  })
+  .then(chapters => {
+    console.log(">> Found chapters: " + chapters);
+    res.status(200).send({ chapters });
+  })
+  .catch(err => {
+    console.log(">> Error while finding all chapters: ", err);
   });
 };
 
-// Find a single Book with an id
+// Find a single Chapter with an id
 exports.findById = (chapterId) => {
   return Chapter.findByPk(chapterId)
     .then((chapter) => {
@@ -38,16 +42,16 @@ exports.findById = (chapterId) => {
     });
 };
 
-// Update a Book by the id in the request
+// Update a Chapter by the id in the request
 exports.update = () => {
   
 };
 
-// Delete a Book with the specified id in the request
+// Delete a Chapter with the specified id in the request
 exports.delete = () => {
 };
 
-// Delete all Books from the database.
+// Delete all Chapters from the database.
 exports.deleteAll = () => {
   Chapter.destroy({where:{},
   truncate:true}).then((chapter)=>{
@@ -55,7 +59,7 @@ exports.deleteAll = () => {
   })
 };
 
-// Find all published Books
+// Find all published Chapters
 exports.findAllPublished = () => {
   
 };

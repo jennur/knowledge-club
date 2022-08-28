@@ -17,7 +17,6 @@ export const auth = {
           const userObj = JSON.stringify(userModel(user));
           localStorage.setItem("user", userObj);
           commit('loginSuccess', user);
-          router.push({ name: "books" });
           return Promise.resolve(user);
         },
         error => {

@@ -4,7 +4,7 @@
   import TextInput from "../../FormFields/TextInput.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
 
-  const emit = defineEmits(["signinSuccess"]);
+  const emit = defineEmits(["signupSuccess"]);
   const username = ref("");
   const email = ref("");
   const password = ref("");
@@ -33,7 +33,7 @@
           email: email.value 
         })
         .then(() => {
-          emit("signinSuccess", successMsg);
+          emit("signupSuccess", successMsg);
         })
         .catch(err => {
           console.log("SignUp.vue error:", err);
