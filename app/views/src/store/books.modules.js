@@ -1,4 +1,5 @@
-import BookDataService from "../services/BookDataService"
+import BookDataService from "../services/book.service"
+import HighlightService from "../services/highlight.service";
 
 export const books = {
   namespaced:true,
@@ -49,9 +50,24 @@ export const chapters = {
       async getChapter({commit}, payload){
         BookDataService.getChapter(payload.bookId, payload.chapterNum)
           .then(chapter => {
-            commit("setFocusedChapter",chapter)
+            HighlightService.getAllHighlights(payload.bookId,payload.chapterNum)
+            .then((highlights)=>{
+              commit("setFocusedChapter",chapter,highlights);
+            })})
+            .catch(err=>{console.log(err)})
+      },
+      async postHighlight({ commit },payload){
+        HighlightService.postNewHighlight(
+          payload.bookId,
+          payload.chapterNum,
+          payload.startloc,
+          payload.endloc,
+          payload.fromUser,
+          payload.content
+          ).then((highlight)=>{
+            commit("addHighlight",highlight);
           })
-          .catch(err=>{console.log(err)})
+          .catch((err)=>{console.log(err)});
       }
 
   },
@@ -62,8 +78,12 @@ export const chapters = {
       clearChapters(state){
           state.chapters={}
       },
-      setFocusedChapter(state,chapter){
+      setFocusedChapter(state,chapter,highlights=[]){
           state.focusedChapter = chapter
+          state.focusedChapter["highlights"] = highlights
+      },
+      addHighlight(state,highlight){
+        state.focusedChapter["highlights"].push(highlight)
       }
   }
 }

@@ -9,19 +9,19 @@ exports.create = (highlight) => {
       return highlight;
     })
     .catch((err) => {
-      console.log(">> Error while creating book: ", err);
+      console.log(">> Error while creating highlight: ", err);
     });
 };
 
 // Retrieve all messages from the database.
-exports.findAll = (bookId,ChapterId) => {
+exports.findAll = (bookId,ChapterNum) => {
   return Highlight.findAll({
     where:{
-        bookUUID:bookId,
-        chapterUUID:ChapterId
+        bookId:bookId,
+        chapterNum:ChapterNum
     }
-  }).then((messages) => {
-    res.send(messages);
+  }).then((highlights) => {
+    return highlights;
   });
 };
 

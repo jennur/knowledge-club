@@ -1,16 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
     const Highlight = sequelize.define("highlight", {
-      highlightuuid: {
+      highlightId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement:true,
         allowNull:false
       },
-      bookUUID:{
+      bookId:{
         type:Sequelize.INTEGER,
         allowNull:false
       },
-      chapterUUID: {
+      chapterNum: {
         type: Sequelize.INTEGER,
         allowNull:false
       },
@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
       content:{
         type:Sequelize.STRING
       },
-      timesent:{
+      timeSent:{
         type:Sequelize.DATE,
         allowNull:false
       },

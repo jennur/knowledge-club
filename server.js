@@ -102,11 +102,11 @@ const initDb = async () => {
     chapterController.create(chapter);
   }
   highlightController.create({
-    bookUUID:0,
-    chapterUUID:0,
+    bookId:0,
+    chapterNum:0,
     startloc:0,
     endloc:10,
-    timesent:Date(),
+    timeSent:Date(),
     fromUser:"Steve",
     content:"hello"
   })
