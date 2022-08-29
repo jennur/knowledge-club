@@ -52,7 +52,7 @@ export const chapters = {
           .then(chapter => {
             HighlightService.getAllHighlights(payload.bookId,payload.chapterNum)
             .then((highlights)=>{
-              commit("setFocusedChapter",chapter,highlights);
+              commit("setFocusedChapter",{chapter:chapter,highlights:highlights});
             })})
             .catch(err=>{console.log(err)})
       },
@@ -78,9 +78,9 @@ export const chapters = {
       clearChapters(state){
           state.chapters={}
       },
-      setFocusedChapter(state,chapter,highlights=[]){
-          state.focusedChapter = chapter
-          state.focusedChapter["highlights"] = highlights
+      setFocusedChapter(state,payload){
+          state.focusedChapter = payload.chapter
+          state.focusedChapter["highlights"] = payload.highlights
       },
       addHighlight(state,highlight){
         state.focusedChapter["highlights"].push(highlight)
