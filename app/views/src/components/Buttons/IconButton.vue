@@ -10,7 +10,7 @@
     },
     size: {
       type: String,
-      default: () => null,
+      default: () => "md",
       validator: (value) => ["xs", "sm", "md", "lg"].includes(value)
     },
     type: {

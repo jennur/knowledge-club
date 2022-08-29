@@ -13,7 +13,6 @@
   const messages = ref([]);
   store.dispatch("chat/getChatRoomMessages");
 
-  const username = ref(store.state.auth.user.username);
   const usersOnline = ref(0);
   const chatMessages = ref(null);
 
@@ -37,7 +36,7 @@
       roomid: "1",
       message: msg,
       timesent: Date(),
-      fromUser: username?.value
+      fromUser: store.state.auth.user.username
     };
     socket.emit("message", message_out);
   };
@@ -59,7 +58,7 @@
           :key="message"
           class="mb-2"
         >
-          <div :class="`text-2xs uppercase ${message.fromUser === username ? 'text-blue-500': 'text-slate-500' }`">{{message.fromUser}}</div>
+          <div :class="`text-2xs uppercase ${message.fromUser === store.state.auth.user.username ? 'text-blue-500': 'text-slate-500' }`">{{message.fromUser}}</div>
           <div class="">
             <Message :message="`${message.message}`"/>
           </div>
