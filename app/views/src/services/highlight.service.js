@@ -2,7 +2,6 @@ import http from "../http-common";
 
 class HighlightService {
     getAllHighlights(bookId,chapterNum){
-        console.log(bookId)
         return http.get(`/books/chapters/text/highlights?bookId=${bookId}&chapterNum=${chapterNum}`).then((response)=>{
             return response.data})
     }
