@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "vite --port 5173",
     "build": "npm install && vite build",
-    "css": "npx tailwindcss -i ./src/assets/main.css -o ./dist/output.css --watch",
-    "build-css": "npx tailwindcss -o ./dist/build.css --minify",
+    "css": "tailwindcss -i ./src/assets/main.css -o ./dist/output.css --watch",
+    "build-css": "tailwindcss -o ./dist/build.css --minify",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
