@@ -2,6 +2,7 @@
   import { ref } from "vue";
   import Authenticate from "../components/Authenticate/Authenticate.vue";
   import BookList from "../components/Books/BooksList/BooksList.vue";
+  import NumberedList from "../components/List/NumberedList/NumberedList.vue";
   import store from "../store/index";
 
   if(!store?.state?.books?.books[0]) store.dispatch("books/getAllBooks");
@@ -27,9 +28,34 @@
           </div>
         </div>
       </div>
-      <div v-if="store?.state?.books?.books" class="bg-slate-50 p-4">
+
+      <div v-if="!store.state?.auth?.user" class="bg-blue-200 px-4">
+        <div class="flex flex-wrap container mx-auto py-16">
+          <div class="basis-full md:basis-1/2">
+            <div class="h-96 bg-slate-100 md:mr-16">
+              <p class="text-xs text-slate-400 p-8">Illustraton</p>
+            </div>
+          </div>
+          <div class="basis-full flex items-center justify-center mt-16 md:basis-1/2 md:mt-0">
+            <div>
+              <h2 class="text-3xl text-slate-800 mb-8">Lorem ipsum</h2>
+              <NumberedList :listItems="[
+                  'Dolor sit amet',
+                  'Consectetur adipiscing elit',
+                  'Vivamus auctor velit',
+                  'Nec mattis suscipit'
+                ]"
+                fontSize="xxl"
+                numberColor="blue"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="store?.state?.books?.books" class="bg-slate-50 py-16">
         <BookList
-          class="container mx-auto"
+          class="container mx-auto px-2 xl:px-0"
           :books="store.state.books.books" 
           headline="Newly added books"
         />

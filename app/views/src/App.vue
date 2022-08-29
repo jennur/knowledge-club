@@ -14,13 +14,13 @@
   <div>
     <header class="text-gray-600 py-1 px-4">
       <div class="flex items-center justify-between container mx-auto">
-        <nav class="flex items-center">
+        <nav class="flex flex-1 items-center">
           <RouterLink to="/" class="text-xl text-rose-500 py-2 mr-6">
             <font-awesome-icon icon="fas fa-spa" class="mr-2" />Knowledge Club
           </RouterLink>
         </nav>
 
-        <nav class="flex">
+        <nav class="flex flex-1 justify-end">
           <div v-if="store.state.auth.user" class="flex items-center">
             <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" />
             <IconLink path="/chat" linkText="Chat" iconClass="fa-solid fa-comment" />
