@@ -13,7 +13,6 @@
   })
   const modalOpen = ref(false);
   const bookAccessModalId = "book-access-modal";
-  const isButton = ref(!store?.state?.auth?.user);
 
   const { book } = props;
 
@@ -38,9 +37,9 @@
       />
     </Modal>
 
-    <component :is="isButton && 'span' || 'RouterLink'"
+    <component :is="!store?.state?.auth?.user && 'span' || 'RouterLink'"
       :to="`/books/${book.bookUUID}/chapters`"
-      :role="isButton ? 'button' : ''"
+      :role="!store?.state?.auth?.user ? 'button' : ''"
       :aria-label="`Book title: ${book.title}`"
       :aria-expanded="modalOpen"
       :aria-controls="bookAccessModalId"

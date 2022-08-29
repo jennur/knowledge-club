@@ -10,8 +10,8 @@
 <template>
   <div>
     <div>
-      <div v-if="!store.state?.auth?.user" class="bg-slate-100 cta-section">
-        <div class="flex flex-wrap container mx-auto py-16 px-4">
+      <div v-if="!store.state?.auth?.user" class="bg-slate-100 cta-section px-4">
+        <div class="flex flex-wrap container mx-auto py-16">
           <div class="basis-full md:basis-1/2 flex flex-col justify-center text-center md:text-left md:pr-8 pb-16 lg:p-16">
             <h1 class="text-4xl text-slate-700 mb-6">Learn anything, anytime</h1>
             <p class="text-xl">

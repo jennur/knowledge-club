@@ -38,7 +38,11 @@
       Awesome!
     </div>
 
-    <div class="rounded-3xl bg-white p-16">
+    <div :class="`rounded-3xl bg-white p-16 ${signedUp ? 'pt-8' : ''}`">
+      <p v-if="signedUp" class="text-center text-sm text-green-800 mb-6">
+        You successfully signed up, you can now login with your credentials
+      </p>
+
       <Login />
 
       <div class="relative py-6">
@@ -58,10 +62,6 @@
         :aria-controls="signUpModalId"
         :aria-expanded="modalOpen"
       />
-
-      <p v-if="signedUp" class="text-center text-sm text-green-800 mt-2">
-        You successfully signed up, you can now login with your credentials
-      </p>
     </div>
   </div>
 </template>
