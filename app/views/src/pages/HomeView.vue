@@ -1,11 +1,9 @@
 <script setup>
   import { ref } from "vue";
-  import { useRoute } from "vue-router";
   import Authenticate from "../components/Authenticate/Authenticate.vue";
   import BookList from "../components/Books/BooksList/BooksList.vue";
   import store from "../store/index";
-  const route = useRoute();
-  const signupMessage = route.query.signupSuccess && "You successfully signed up, you can now login with your credentials" || null;
+
   if(!store?.state?.books?.books[0]) store.dispatch("books/getAllBooks");
 </script>
 
@@ -23,14 +21,7 @@
             </p>
           </div>
           <div class="basis-full md:basis-1/2">
-            <div 
-              v-if="route.query.signupSuccess" 
-              class="w-2/3  lg:w-1/3 text-center mx-auto text-2xl text-emerald-500 px-4 py-3 bg-emerald-100 rounded-tl-3xl rounded-tr-3xl"
-            >
-              Awesome!
-            </div>
             <Authenticate
-              :signupMessage="signupMessage" 
               class="w-full sm:w-4/5 md:w-full lg:w-3/4 xl:w-2/3 2xl:w-1/2 mx-auto" 
             />
           </div>

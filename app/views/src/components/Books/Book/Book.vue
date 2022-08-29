@@ -12,6 +12,9 @@
     }
   })
   const modalOpen = ref(false);
+  const bookAccessModalId = "book-access-modal";
+  const isButton = ref(!store?.state?.auth?.user);
+
   const { book } = props;
 
   function toggleModal() {
@@ -27,7 +30,7 @@
 
 <template>
   <div>
-    <Modal modalId="book-access-modal" :modalOpen="modalOpen" @close="toggleModal">
+    <Modal :modalId="bookAccessModalId" :modalOpen="modalOpen" @close="toggleModal">
       <Login 
         class="bg-white rounded-3xl p-16" 
         headline="Login to access this book"
@@ -35,13 +38,18 @@
       />
     </Modal>
 
-    <component :is="store?.state?.auth?.user && 'RouterLink' || 'button'"
-      :to="`/books/${book.bookUUID}/chapters`" 
-      class="block box-border text-gray-600 text-sm m-2"
+    <component :is="isButton && 'span' || 'RouterLink'"
+      :to="`/books/${book.bookUUID}/chapters`"
+      :role="isButton ? 'button' : ''"
+      :aria-label="`Book title: ${book.title}`"
+      :aria-expanded="modalOpen"
+      :aria-controls="bookAccessModalId"
+      aria-haspopup="dialog"
+      class="block box-border text-gray-600 text-sm m-2 cursor-pointer"
       @click.stop="authenticate"
     >
 
-      <div class="h-40 sm:h-60 md:h-60 lg:h-70 bg-slate-200 text-2xs text-slate-400 p-2 mb-2">
+      <div class="h-40 sm:h-60 md:h-60 lg:h-70 xl:h-80 bg-slate-200 text-2xs text-slate-400 p-2 mb-2">
         Book cover
       </div>
       <div>{{book.title}}</div>

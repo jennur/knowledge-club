@@ -10,7 +10,6 @@
   const password = ref("");
   const passwordCompare = ref("");
 
-  const successMsg = "You successfully signed up, you can now login with your credentials";
   const passwordError = ref(false);
   const fieldErrors = ref([]);
   const errorMsg = ref("");
@@ -33,7 +32,7 @@
           email: email.value 
         })
         .then(() => {
-          emit("signupSuccess", successMsg);
+          emit("signupSuccess");
         })
         .catch(err => {
           console.log("SignUp.vue error:", err);

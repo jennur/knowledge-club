@@ -11,10 +11,9 @@
     isRoom: Boolean
   })
   const messages = ref([]);
-  // messages.value = store.state.
   store.dispatch("chat/getChatRoomMessages");
 
-  const username = store.state.auth.user.username;
+  const username = ref(store.state.auth.user.username);
   const usersOnline = ref(0);
   const chatMessages = ref(null);
 
@@ -38,7 +37,7 @@
       roomid: "1",
       message: msg,
       timesent: Date(),
-      fromUser: username
+      fromUser: username?.value
     };
     socket.emit("message", message_out);
   };

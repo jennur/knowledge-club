@@ -1,30 +1,42 @@
 <script setup>
   import { ref } from "vue";
+  import { useRoute } from "vue-router";
   import SignUp from "./SignUp/SignUp.vue";
   import Login from "./Login/Login.vue";
   import IconButton from "../Buttons/IconButton.vue";
   import Modal from "../Modal/Modal.vue";
+
+  const route = useRoute();
   const props = defineProps({
     signupMessage: String
   })
   const message = ref(props.signupMessage);
   const modalOpen = ref(false);
+  const signedUp = ref(route.query.signupSuccess)
+  const signUpModalId = "sign-up-modal";
 
   function toggleModal() {
     modalOpen.value = !modalOpen.value;
   }
 
-  function signupSuccess(msg) {
-    message.value = msg;
+  function signupSuccess() {
+    signedUp.value = true;
     toggleModal();
   }
 </script>
 
 <template>
   <div>
-    <Modal id="signp-modal" :modalOpen="modalOpen" @close="toggleModal">
+    <Modal :modalId="signUpModalId" :modalOpen="modalOpen" @close="toggleModal">
       <SignUp @signupSuccess="signupSuccess" class="bg-white rounded-3xl p-16" />
     </Modal>
+
+    <div 
+      v-if="signedUp"
+      class="w-2/3 text-center mx-auto text-2xl text-emerald-500 px-4 py-3 bg-emerald-100 rounded-tl-3xl rounded-tr-3xl"
+    >
+      Awesome!
+    </div>
 
     <div class="rounded-3xl bg-white p-16">
       <Login />
@@ -43,12 +55,12 @@
         size="md"
         class="bg-emerald-600 text-white mx-auto"
         aria-haspopup="dialog"
-        aria-controls="signup-modal"
+        :aria-controls="signUpModalId"
         :aria-expanded="modalOpen"
       />
 
-      <p v-if="message" class="text-center text-sm text-green-800 mt-2">
-        {{ message }}
+      <p v-if="signedUp" class="text-center text-sm text-green-800 mt-2">
+        You successfully signed up, you can now login with your credentials
       </p>
     </div>
   </div>

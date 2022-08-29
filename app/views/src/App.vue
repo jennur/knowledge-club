@@ -48,7 +48,7 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/about">About</RouterLink>
+              <RouterLink :to="{ name: 'about' }">About</RouterLink>
             </li>
           </ul>
         </footer>
