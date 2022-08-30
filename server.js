@@ -29,9 +29,17 @@ app.use(session({
 // views
 app.use(express.static(path));
 
+var whitelist = ["http://localhost:5173","http://localhost:5000"]
 //cors
 var corsOptions = {
-  origin: "http://localhost:5173",
+  origin: function(origin,callback){
+    if(whitelist.indexOf(origin)!=-1){
+      callback(null,true);
+    }
+    else{
+      callback(new Error("CORs policy violated"));
+    }
+  },
   credentials: true
 };
 

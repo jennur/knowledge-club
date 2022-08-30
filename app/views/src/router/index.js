@@ -40,7 +40,7 @@ const router = createRouter({
     {
       path: "/books/add",
       name: "add",
-      component: () => import("../pages/AddBook/index.vue")
+      component: () => import("../pages/Books/addBooks.vue")
     },
     {
       path: "/account",
