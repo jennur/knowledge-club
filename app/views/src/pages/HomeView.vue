@@ -11,8 +11,8 @@
 <template>
   <div>
     <div>
-      <div v-if="!store.state?.auth?.user" class="bg-slate-100 cta-section px-4">
-        <div class="flex flex-wrap container mx-auto py-16">
+      <div v-if="!store.state?.auth?.user" class="bg-slate-100 cta-section px-4 py-16">
+        <div class="flex flex-wrap container mx-auto">
           <div class="basis-full md:basis-1/2 flex flex-col justify-center text-center md:text-left md:pr-8 pb-16 lg:p-16">
             <h1 class="text-4xl text-slate-700 mb-6">Learn anything, anytime</h1>
             <p class="text-xl">
@@ -29,8 +29,8 @@
         </div>
       </div>
 
-      <div v-if="!store.state?.auth?.user" class="bg-blue-200 px-4">
-        <div class="flex flex-wrap container mx-auto py-16">
+      <div v-if="!store.state?.auth?.user" class="bg-blue-200 py-16">
+        <div class="outer-content-wrapper flex flex-wrap">
           <div class="basis-full md:basis-1/2">
             <div class="h-96 bg-slate-100 md:mr-16">
               <p class="text-xs text-slate-400 p-8">Illustraton</p>
@@ -55,7 +55,7 @@
 
       <div v-if="store?.state?.books?.books" class="bg-slate-50 py-16">
         <BookList
-          class="container mx-auto px-2 xl:px-0"
+          class="outer-content-wrapper px-2 xl:px-0"
           :books="store.state.books.books" 
           headline="Newly added books"
         />

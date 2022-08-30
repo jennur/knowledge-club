@@ -12,8 +12,8 @@
 
 <template>
   <div>
-    <header class="text-gray-600 py-1 px-4">
-      <div class="flex items-center justify-between container mx-auto">
+    <header class="outer-content-wrapper text-gray-600 py-1">
+      <div class="flex items-center justify-between">
         <nav class="flex flex-1 items-center">
           <RouterLink to="/" class="text-xl text-rose-500 py-2 mr-6">
             <font-awesome-icon icon="fas fa-spa" class="mr-2" />Knowledge Club
@@ -38,8 +38,8 @@
       </main>
     </div>
 
-    <div class="bg-blue-500 p-4">
-      <div class="container mx-auto">
+    <div class="bg-blue-500 py-4">
+      <div class="outer-content-wrapper">
         <footer class="text-sm text-white">
           <ul class="flex flex-wrap items-center">
             <li>
