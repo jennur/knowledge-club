@@ -11,18 +11,21 @@ export const books = {
       BookDataService.getAll()
         .then(books => {
           commit("clearBooks");
-          commit('addBooks',books);
+          commit('retreiveBooks',books);
         })
         .catch(err => {
           console.log(err)
         });
+    },
+    async addBook({ commit },book){
+      BookDataService.rawCreate(book)
     }
   },
   mutations:{
-    addBook(state,book) {
+    retreiveBook(state,book) {
       state.books.push(book);
     },
-    addBooks(state,books) {
+    retreiveBooks(state,books) {
       state.books = state.books.concat(books);
     },
     clearBooks(state) {
