@@ -118,7 +118,6 @@ const initDb = async () => {
 
   userController.setRole(adminUser.id, adminRole.id);
 
-  adminUser.setRoles([adminRole]);
   for(book of fake_books){
     bookController.create(book);
   }
