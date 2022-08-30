@@ -16,11 +16,10 @@ exports.create = (book) => {
 
 // Retrieve all Books from the database.
 exports.findAll = (req,res) => {
-  return Book.findAll({
-    include: ["videos", "articles"]
-  }).then((books) => {
-    return res.send(books)
-  });
+  return Book.findAll()
+    .then((books) => {
+      return res.send(books)
+    });
 };
 
 // Find a single Book with an id
