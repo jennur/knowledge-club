@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import re
 import os
@@ -15,6 +16,10 @@ class Book():
         
         self.filename = filename
         self.file_ext = os.path.splitext(filename)[1]
+        self.date_uploaded = datetime.today()
+        self.created_at = datetime.today()
+        self.updated_at = datetime.today()
+        self.published = True
         self.nochapters = nochapters
         if self.isEPUB:
             self.process_epub()
@@ -26,8 +31,9 @@ class Book():
         self.chapters = self.getHeadings() # The contents essentially
         self.contents = self.getContents()
         self.lines = -1 #Deal with this later
+        self.title = self.book_.title
         
-        self.numChapters = len(self.chapters)
+        self.num_chapters = len(self.chapters)
         self.stats = self.getStats()
 
 
@@ -48,7 +54,7 @@ class Book():
             text = []
             for i,x in enumerate(self.book_.items):
                 if isinstance(x,epub.EpubHtml):
-                    raw_string = str(x.get_body_content())
+                    raw_string = x.get_body_content()
                     processed_string = ""
                     try:
                         processed_string = flatten_xml(raw_string)
@@ -222,7 +228,7 @@ class Book():
         """
         # TODO: Check to see if there's a log file. If not, make one.
         # Write headings to file.
-        numChapters = self.numChapters
+        numChapters = self.num_chapters
         averageChapterLength = sum([len(chapter) for chapter in self.chapters])/numChapters
         headings = ['Filename', 'Average chapter length', 'Number of chapters']
         stats = ['"' + self.filename + '"', averageChapterLength, numChapters]
@@ -274,6 +280,6 @@ class Book():
                     f.write(chapter)
 
 if __name__=="__main__":
-    book= Book("/Users/galois/Documents/git/knowledge-club/research/data/ray_dalio.epub",True,True)
-
-    print(book.chapters)
+    import sql_transmitter
+    book= Book("/Users/galois/Documents/git/knowledge-club/research/data/i_see_satan_falling_like_lightning.epub",True,True)
+    sql_transmitter.transmit_book(book)
