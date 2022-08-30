@@ -29,7 +29,12 @@ app.use(session({
 // views
 app.use(express.static(path));
 
-var allowList = ["http://localhost:5173","http://localhost:5000"]
+var allowList = [
+  "http://localhost:5173",
+  "http://localhost:5000",
+  "https://knowledge-club.herokuapp.com"
+]
+
 //cors
 var corsOptions =  {
   credentials: true
