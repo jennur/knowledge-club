@@ -1,4 +1,4 @@
-
+require('dotenv').config({ path: "./.env"})
 const express = require("express");
 const session = require('express-session');
 const path = __dirname + '/app/views/dist/';
@@ -29,22 +29,29 @@ app.use(session({
 // views
 app.use(express.static(path));
 
-var whitelist = ["http://localhost:5173","http://localhost:5000"]
+var allowList = ["http://localhost:5173","http://localhost:5000"]
 //cors
-var corsOptions = {
-  origin: function(origin,callback){
-    if(whitelist.indexOf(origin)!=-1){
-      callback(null,true);
-    }
-    else{
-      callback(new Error("CORs policy violated"));
-    }
-  },
+var corsOptions =  {
   credentials: true
+};
+var corsOptionsDelegate = function (req, callback) {
+    if(allowList.indexOf(req.header("Origin")) > -1){
+      corsOptions = {
+        ...corsOptions,
+        origin: true 
+      };
+    }
+    else {
+      corsOptions = { 
+        ...corsOptions,
+        origin: false 
+      }
+    }
+    callback(null, corsOptions);
 };
 
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptionsDelegate));
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -64,7 +71,7 @@ require('./app/routes/chat.routes')(app);
 const bookController = require("./app/controllers/book.controller");
 // const videoController = require("./app/controllers/video.controller");
 // const articleController = require("./app/controllers/article.controller");
-// const userController = require("./app/controllers/user.controller");
+const userController = require("./app/controllers/user.controller");
 const roleController = require("./app/controllers/role.controller");
 const chapterController = require("./app/controllers/chapter.controller");
 const chatController = require("./app/controllers/chat.controller");
@@ -100,9 +107,18 @@ for(book of fake_books){
   }
 }
 const initDb = async () => {
-  roleController.create({ id: 1, name: "user" })
-  roleController.create({ id: 2, name: "moderator" })
-  roleController.create({ id: 3, name: "admin" })
+  const userRole = await roleController.create({ id: 1, name: "user" })
+  const moderatorRole = await roleController.create({ id: 2, name: "moderator" })
+  const adminRole = await roleController.create({ id: 3, name: "admin" })
+  const adminUser = await userController.create({
+    username: process.env.ADMIN_USERNAME,
+    password: process.env.ADMIN_PASSWORD,
+    email: process.env.ADMIN_EMAIL
+  })
+
+  userController.setRole(adminUser.id, adminRole.id);
+
+  adminUser.setRoles([adminRole]);
   for(book of fake_books){
     bookController.create(book);
   }

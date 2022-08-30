@@ -3,12 +3,13 @@ import http_py from "../http-py"
 
 class BookDataService {
   getAll() {
-    return http.get("/books").then((response)=>{
-      return response.data;
-    }
-    ).catch(err => {
-      console.log(err)
-    });
+    return http.get("/books")
+      .then((response) => {
+        return response.data;
+      }
+      ).catch(err => {
+        console.log("Error getting all books:", err);
+      });
   }
   rawCreate(file){
     return http_py.post("/books",file,{"Content-Type": 'multipar/form-data'})

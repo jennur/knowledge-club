@@ -56,6 +56,18 @@ export const auth = {
           return Promise.reject(error)
         }
       );
+    },
+    checkAdminAccess({ commit }) {
+      return AuthService.checkAdminAccess().then(
+        response => {
+          console.log("CheckAdminAccess response:", response);
+          return Promise.resolve(response.data);
+        },
+        error => {
+          console.log("CheckAdminAccess error:", error);
+          return Promise.reject(error)
+        }
+      )
     }
   },
   mutations: {

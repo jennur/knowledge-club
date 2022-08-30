@@ -29,4 +29,10 @@ module.exports = function(app) {
       accessToken: req.cookies["kc_access_token"]
     });
   })
+
+  app.get("/api/auth/verify-admin-access", [authJwt.verifyToken, authJwt.isAdmin], (req, res) => {
+    res.status(200).send({ 
+      message: `User was verified with admin access ${req.userId}`
+    });
+  })
 };

@@ -54,5 +54,13 @@ class AuthService {
         return Promise.reject(err);
       })
   }
+
+  checkAdminAccess() {
+    return http.get("/auth/verify-admin-access")
+      .catch(err => {
+        console.log("AuthService verify admin access error:", err.response);
+        return Promise.reject(err);
+      })
+  }
 }
 export default new AuthService();

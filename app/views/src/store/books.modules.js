@@ -11,7 +11,7 @@ export const books = {
       BookDataService.getAll()
         .then(books => {
           commit("clearBooks");
-          commit('retreiveBooks',books);
+          commit('setBooks', books);
         })
         .catch(err => {
           console.log(err)
@@ -22,10 +22,10 @@ export const books = {
     }
   },
   mutations:{
-    retreiveBook(state,book) {
+    setBook(state,book) {
       state.books.push(book);
     },
-    retreiveBooks(state,books) {
+    setBooks(state,books) {
       state.books = state.books.concat(books);
     },
     clearBooks(state) {

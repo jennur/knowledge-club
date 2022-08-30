@@ -4,18 +4,14 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new User
 exports.create = (user) => {
-  return User.create({
-    username: user.username,
-    password: user.password,
-    email: user.email
-  })
+  return User.create(user)
   .then((user) => {
       console.log(">> Created user: " + JSON.stringify(user, null, 4));
-      return res.status(200).send(user);
+      return user;
   })
   .catch((err) => {
       console.log(">> Error while creating user: ", err);
-      return res.status(500).send({ message: err.message});
+      return err;
   });
 };
 
@@ -24,7 +20,11 @@ exports.findById = (req, res) => {
   return User.findOne({
     where: {
       id: req.userId
-    }
+    },
+    include: [{
+      model: db.roles,
+      as: "roles"
+    }]
   })
   .then((user) => {
     console.log(">> Found user: " + JSON.stringify(user, null, 4));
@@ -80,6 +80,29 @@ exports.updateBiography = (req, res) => {
 // Delete a User with the specified id in the request
 exports.delete = (id) => {
   
+};
+
+
+exports.setRole = (userId, roleId) => {
+  return User.findByPk(userId)
+    .then((user) => {
+      if (!user) {
+        console.log("Error setting role: User not found!");
+        return null;
+      }
+      return db.roles.findByPk(roleId).then((role) => {
+        if (!role) {
+          console.log("Error setting role: Role not found!");
+          return null;
+        }
+        user.setRoles(role);
+        console.log(`>> added Role id=${role.id} to User id=${user.id}`);
+        return user;
+      });
+    })
+    .catch((err) => {
+      console.log(">> Error while adding Role to User: ", err);
+    });
 };
 
 // Tests

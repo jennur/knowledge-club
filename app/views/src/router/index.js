@@ -38,11 +38,6 @@ const router = createRouter({
       component: () => import("../pages/Chat/index.vue")
     },
     {
-      path: "/books/add",
-      name: "add",
-      component: () => import("../pages/Books/addBooks.vue")
-    },
-    {
       path: "/account",
       name: "account",
       component: () => import("../pages/Account/index.vue")
@@ -62,23 +57,42 @@ const router = createRouter({
       name: "chapterText",
       component: () => import("../pages/Books/Chapters/Text/index.vue")
     },
+    {
+      path: "/admin/books/add",
+      name: "admin-add",
+      component: () => import("../pages/Books/addBooks.vue")
+    }
 
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
   const safeList = ["home", "signup", "about"];
+  const adminList = ["admin-add"];
 
-  if(!safeList.includes(to.name)) {
+  if(!safeList.includes(to.name) && !adminList.includes(to.name)) {
     store.dispatch("auth/checkAccessToken")
-    .then(() => {
-      return true;
-    })
-    .catch(error => {
-      console.log("Cannot access:", error?.response?.data?.message || error.message);
-      return { name: "home" };
-    })
+      .then(() => {
+        return true;
+      })
+      .catch(error => {
+        console.log("Cannot access:", error?.response?.data?.message || error.message);
+        return router.push({ name: "home" });
+      })
   }
+
+  if(adminList.includes(to.name)) {
+    store.dispatch("auth/checkAdminAccess")
+      .then((response) => {
+        console.log("Response:", response);
+        return true;
+      })
+      .catch(error => {
+        console.log("Cannot access admin page:", error?.response?.data?.message || error.message);
+        return router.push({ name: from.name || "home" });
+      })
+  }
+
   next();
 });
 
