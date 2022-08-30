@@ -3,12 +3,8 @@ const Article = db.articles;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Article
-exports.create = (bookId, article) => {
-  return Article.create({
-      title: article.title,
-      description: article.description,
-      bookId: bookId
-    })
+exports.create = (article) => {
+  return Article.create(article)
     .then((article) => {
         console.log(">> Created article: " + JSON.stringify(article, null, 4));
         return article;

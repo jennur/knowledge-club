@@ -18,11 +18,11 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         allowNull:false
       },
-      FileType:{
+      fileType:{
         type:Sequelize.STRING,
         allowNull:false
       },
-      NumChapters:{
+      numChapters:{
         type:Sequelize.INTEGER
       }
     });

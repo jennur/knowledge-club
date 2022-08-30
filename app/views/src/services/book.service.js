@@ -17,8 +17,8 @@ class BookDataService {
     return http.get(`/books/chapters/text?bookId=${bookId}&chapterNum=${chapterNum}`)
   }
 
-  get(id) {
-    return http.get(`/books/${id}`);
+  getBookById(bookId) {
+    return http.get(`/book?bookId=${bookId}`);
   }
   create(data) {
     return http.post("/books", data);

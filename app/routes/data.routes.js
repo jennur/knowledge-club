@@ -13,6 +13,12 @@ module.exports = function(app) {
 
   app.get("/api/books", bookController.findAll);
 
+  app.get("/api/book", (req, res) => {
+    bookController.findById(req.query.bookId).then((book) => {
+      res.send(book);
+    })
+  });
+
   app.get("/api/books/chapters", (req, res) => {
     chapterController.findAll(req.query.bookId).then((chapters) => { 
       res.send(chapters);

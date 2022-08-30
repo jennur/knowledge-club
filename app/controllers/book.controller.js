@@ -25,7 +25,7 @@ exports.findAll = (req,res) => {
 
 // Find a single Book with an id
 exports.findById = (bookId) => {
-  return Book.findByPk(bookId, { include: ["videos", "articles"]})
+  return Book.findByPk(bookId)
     .then((book) => {
         return book;
     })

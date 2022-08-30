@@ -33,30 +33,50 @@ export const books = {
 
 export const chapters = {
   namespaced:true,
-  state:{
-    chapters:{},
-    focusedbook:"",
-    focusedChapter:{}
+  state: {
+    chapters: {},
+    focusedbook: {},
+    focusedChapter: {}
   },
   actions:{
-      async getAllChapters({ commit }, bookId) {
-          BookDataService.getAllChapters(bookId)
-            .then(chapters => {
-              commit("addChapters", chapters.data);
-            }).catch(err=>{
-              console.log(err);
-            })
+      getAllChapters({ commit }, bookId) {
+        BookDataService.getAllChapters(bookId)
+          .then(chapters => {
+            commit("setChapters", chapters.data);
+            return chapters;
+          })
+          .catch(err=>{
+            console.log(err);
+            return err;
+          })
       },
-      async getChapter({commit}, payload){
+
+      getFocusedBook({ commit }, bookId) {
+        BookDataService.getBookById(bookId)
+          .then(book => {
+            console.log("Book", book);
+            commit("setFocusedBook", book.data);
+            return book;
+          })
+          .catch(err=>{
+            console.log(err);
+            return err;
+          })
+      },
+
+      getChapter({ commit }, payload){
         BookDataService.getChapter(payload.bookId, payload.chapterNum)
           .then(chapter => {
-            HighlightService.getAllHighlights(payload.bookId,payload.chapterNum)
+            HighlightService.getAllHighlights(payload.bookId, payload.chapterNum)
             .then((highlights)=>{
-              commit("setFocusedChapter",{chapter:chapter,highlights:highlights});
+              commit("setFocusedChapter", {
+                chapter,
+                highlights
+              });
             })})
             .catch(err=>{console.log(err)})
       },
-      async postHighlight({ commit },payload){
+      postHighlight({ commit },payload){
         HighlightService.postNewHighlight(
           payload.bookId,
           payload.chapterNum,
@@ -65,25 +85,28 @@ export const chapters = {
           payload.fromUser,
           payload.content
           ).then((highlight)=>{
-            commit("addHighlight",highlight);
+            commit("setHighlight",highlight);
           })
           .catch((err)=>{console.log(err)});
       }
 
   },
   mutations:{
-      addChapters(state,chapters){
-          state.chapters= chapters
+      setChapters(state,chapters){
+          state.chapters= chapters;
       },
       clearChapters(state){
-          state.chapters={}
+          state.chapters={};
+      },
+      setFocusedBook(state, payload) {
+        state.focusedBook = payload;
       },
       setFocusedChapter(state,payload){
-          state.focusedChapter = payload.chapter
-          state.focusedChapter["highlights"] = payload.highlights
+          state.focusedChapter = payload.chapter;
+          state.focusedChapter["highlights"] = payload.highlights;
       },
-      addHighlight(state,highlight){
-        state.focusedChapter["highlights"].push(highlight)
+      setHighlight(state,highlight){
+        state.focusedChapter["highlights"].push(highlight);
       }
   }
 }

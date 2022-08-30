@@ -66,30 +66,30 @@ const highlightController = require("./app/controllers/highlight.controller")
 // DEVELOPMENT MODE
 
 //For generating fake data
-var fake_books = [...Array(10)].map((user) => (
+var fake_books = [...Array(10)].map((book, index) => {
+  return (
   {
+    bookUUID: index,
     title:faker.commerce.productName(),
     dateUploaded: new Date(),
     published: true,
-    FileType:".epub",
-    NumChapters:faker.mersenne.rand(20,5)
-  }
+    fileType:".epub",
+    numChapters:faker.mersenne.rand(20,5)
+  })
 
-));
+});
 var chapters = Array();
-book_number = 0;
+
 for(book of fake_books){
-  for(chapter_num of Array(book.NumChapters).keys()){
+  for(chapter_num of Array(book.numChapters).keys()){
     chapters.push({
-      bookUUID:book_number,
+      bookUUID: book.bookUUID,
       chapterName: faker.name.firstName(),
-      chapterNumber:chapter_num,
+      chapterNumber: chapter_num,
       dateUploaded: new Date(),
       chapterContent: faker.lorem.paragraphs(5)
     })
-   
   }
-  book_number++;
 }
 const initDb = async () => {
   roleController.create({ id: 1, name: "user" })
