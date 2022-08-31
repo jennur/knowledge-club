@@ -10,7 +10,7 @@ module.exports = function(app) {
     next();
   });
   app.get("/api/user", [authJwt.verifyToken], (req, res) => {
-    controller.findById(req.query.userId)
+    controller.findById(req.userId)
       .then((user) => {
         res.status(200).send(user);
       })
