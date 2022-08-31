@@ -9,9 +9,15 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/user", 
-    [authJwt.verifyToken],
-    controller.findById
+  app.get("/api/user", [authJwt.verifyToken], (req, res) => {
+    controller.findById(req.query.userId)
+      .then((user) => {
+        res.status(200).send(user);
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      })
+  }
   );
 
   app.post("/api/user/update/username",

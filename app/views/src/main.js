@@ -15,7 +15,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { 
   faBook, 
   faComment,
-  faLock, 
+  faEye,
+  faEyeSlash,
+  faLock,
+  faNoteSticky,
   faRightFromBracket,
   faRightToBracket, 
   faUser, 
@@ -30,7 +33,10 @@ import {
 library.add(
     faBook, 
     faComment,
+    faEye,
+    faEyeSlash,
     faLock,
+    faNoteSticky,
     faRightFromBracket,
     faRightToBracket,
     faUser,

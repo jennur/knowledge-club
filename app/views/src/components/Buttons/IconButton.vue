@@ -5,8 +5,10 @@
       required: true 
     },
     buttonText: {
-      type: String,
-      required: true
+      type: String
+    },
+    ariaLabel: {
+      type: String
     },
     size: {
       type: String,
@@ -23,20 +25,23 @@
     dark: Boolean,
     customColors: Boolean
   });
-  const { vertical, customColors, dark, size, fluid, iconClass, buttonText, type } = props;
+  const { vertical, customColors, dark, size, fluid, iconClass, buttonText, type, ariaLabel } = props;
 
   const fluidClass = fluid && "fluid" || ""
   const verticalClass = vertical && "vertical" || "";
   const colorClass = customColors ? "" : (dark && "dark" || "basic");
   const sizeClass = size && size || ""
+  const hasText = buttonText && "has-text" || ""
 </script>
 
 <template>
   <button 
     :type="type" 
-    :class="`icon-button ${sizeClass} ${verticalClass} ${fluidClass} ${colorClass}`">
+    :class="`icon-button ${hasText} ${sizeClass} ${verticalClass} ${fluidClass} ${colorClass}`"
+    :aria-label="ariaLabel"
+  >
     <font-awesome-icon :icon="iconClass" class="icon" />
-    <div class="text">{{ buttonText }}</div>
+    <div v-if="buttonText" class="text">{{ buttonText }}</div>
   </button>
 </template>
 
@@ -88,12 +93,12 @@
     @apply flex-col p-2;
   }
 
-  .icon-button.vertical .icon {
-    @apply text-xl mb-1;
+  .icon-button.vertical.has-text .icon {
+    @apply text-xl;
   }
 
   .icon-button.vertical .text {
-    @apply text-xs;
+    @apply text-xs mt-1;
   }
 
   /* Fluid */
@@ -104,5 +109,9 @@
   /* Dark */
   .icon-button.dark {
     @apply bg-gray-700 hover:bg-gray-900/90 text-slate-100;
+  }
+
+  .icon-button.vertical .icon {
+    @apply mr-0;
   }
 </style>

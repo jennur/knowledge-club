@@ -16,10 +16,10 @@ exports.create = (user) => {
 };
 
 // Get a User by the id in the request
-exports.findById = (req, res) => {
+exports.findById = (userId) => {
   return User.findOne({
     where: {
-      id: req.userId
+      id: userId
     },
     include: [{
       model: db.roles,
@@ -29,15 +29,15 @@ exports.findById = (req, res) => {
   .then((user) => {
     console.log(">> Found user: " + JSON.stringify(user, null, 4));
 
-    return res.status(200).send({
+    return {
       id: user.id,
       username: user.username,
       email: user.email
-    });
+    };
   })
   .catch((err) => {
       console.log(">> Error finding user: ", err);
-      return res.status(500).send({ message: err.message});
+      return err;
   });
 };
 

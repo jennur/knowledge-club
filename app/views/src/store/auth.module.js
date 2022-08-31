@@ -1,6 +1,7 @@
 import AuthService from '../services/auth.service';
 import { userModel } from "../models/user";
 import router from "../router";
+import store from '.';
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = user
@@ -47,6 +48,9 @@ export const auth = {
       return AuthService.getAccessToken().then(
         response => {
           console.log("CheckAccessToken response:", response);
+          if(!store.state.auth.user) {
+            commit("loginSuccess", response.data.user);
+          }
           return Promise.resolve(response.data);
         },
         error => {
