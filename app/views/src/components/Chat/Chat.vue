@@ -46,28 +46,25 @@
 </script>
 
 <template>
-  <div>
+  <div id="chat-window" :class="`flex flex-col flex-grow justify-end border border-slate-200 p-2 ${heightClass}`">
     <div v-if="usersOnline" class="text-xs text-slate-500 mb-1 h">
       Users online: {{usersOnline}}
     </div>
-
-    <div id="chat-window" :class="`flex flex-col justify-end border border-slate-200 p-2 ${heightClass}`">
-
-      <div ref="chatMessages" id="chat-messages" class="flex flex-col overflow-scroll m-2">
-        <div 
-          v-for="message in store.state.chat.messages" 
-          :key="message"
-          class="mb-2"
-        >
-          <div :class="`text-2xs uppercase ${message.fromUser === store.state.auth.user.username ? 'text-blue-500': 'text-slate-500' }`">{{message.fromUser}}</div>
-          <div class="">
-            <Message :message="`${message.message}`"/>
-          </div>
+    <div ref="chatMessages" id="chat-messages" class="flex flex-col overflow-scroll m-2">
+      <div 
+        v-for="message in store.state.chat.messages" 
+        :key="message"
+        class="mb-2"
+      >
+        <div :class="`text-2xs uppercase ${message.fromUser === store.state.auth.user.username ? 'text-blue-500': 'text-slate-500' }`">
+          {{message.fromUser}}
+        </div>
+        <div class="">
+          <Message :message="`${message.message}`"/>
         </div>
       </div>
-
-      <CommentBox class="" @sendMessage="sendMessage"/>
     </div>
 
-</div>
+    <CommentBox class="" @sendMessage="sendMessage"/>
+  </div>
 </template>

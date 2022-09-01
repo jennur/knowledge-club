@@ -12,11 +12,14 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { 
-  faBook, 
+import {
+  faBars,
+  faBook,
   faComment,
   faEye,
   faEyeSlash,
+  faFileCirclePlus,
+  faFolderOpen,
   faLock,
   faNoteSticky,
   faRightFromBracket,
@@ -31,10 +34,13 @@ import {
 
 /* add icons to the library */
 library.add(
+    faBars,
     faBook, 
     faComment,
     faEye,
     faEyeSlash,
+    faFileCirclePlus,
+    faFolderOpen,
     faLock,
     faNoteSticky,
     faRightFromBracket,

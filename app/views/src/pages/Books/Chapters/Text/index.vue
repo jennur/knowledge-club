@@ -18,6 +18,7 @@ const chapterContentElem = ref(null);
 const textWithHighlights = ref(null);
 const user = computed(() => store.state.auth.user);
 const chapterData = computed(() => store.state.chapters.focusedChapter);
+const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
 const bookData = computed(() => store.state.chapters.focusedBook);
 
 
@@ -65,42 +66,47 @@ function showHighlights () {
   }
 }
 
-function toggleHighlights () {
-  if(!textWithHighlights.value) showHighlights();
-  else textWithHighlights.value = null;
+function hideHighlights() {
+  textWithHighlights.value = null;
 }
 
+watch(allHighlightsVisible, (newVal, oldVal) => {
+  if(newVal) showHighlights();
+  else hideHighlights();
+})
 
+const sliderOpen = ref(false);
+
+function setSliderStatus(value) {
+  sliderOpen.value = value;
+}
 </script>
+
 <template>
-  <div class="outer-content-wrapper mt-8 mb-16">
-    <Slideover :bookId="`${bookId}`" :chapterId="`${chapterNum}`"/>
-    <div class="flex flex-col md:flex-row">
-      <div class="my-4 md:mr-4">
-        <ChapterToolBar 
-          @toggleHighlights="toggleHighlights"
-          @addNote="addChapterNote"
-        />
-      </div>
-      <div>
-        <span class="text-xs uppercase text-gray-400">{{ bookData?.title }}</span>
-        <h1 class="mt-2">{{ chapterData?.chapterName }}</h1>
-        <div 
-          ref="chapterContentElem" 
-          @mouseup="storeSelectedText" 
-          @keyup="storeSelectedText"
-          v-html="textWithHighlights || chapterData?.chapterContent"
-        >
-        </div>
+  <div :class="`outer-content-wrapper mb-16 ${sliderOpen ? 'static' : 'relative'}`">
+    <div class="pr-16">
+      <span class="text-xs uppercase text-gray-400">{{ bookData?.title }}</span>
+      <h1 class="mt-2">{{ chapterData?.chapterName }}</h1>
+      <div 
+        ref="chapterContentElem" 
+        @mouseup="storeSelectedText"
+        @keyup="storeSelectedText"
+        v-html="textWithHighlights || chapterData?.chapterContent"
+      >
       </div>
     </div>
+    <Slideover
+      :bookId="bookId" 
+      :chapterId="chapterNum"
+      @sliderStatus="setSliderStatus"
+    />
   </div>
   
 </template>
 
 <style>
 .highlight{
-  background-color: aqua;
+  @apply bg-emerald-300;
 }
 
 </style>

@@ -39,7 +39,16 @@ export const chapters = {
   state: {
     chapters: {},
     focusedbook: {},
-    focusedChapter: {}
+    focusedChapter: {
+      highlights: null,
+      visibleHighlights: {
+        all: false,
+        fromUser: {
+          userId: null,
+          visible: false
+        }
+      }
+    },
   },
   actions:{
       getAllChapters({ commit }, bookId) {
@@ -98,11 +107,19 @@ export const chapters = {
           .catch((err) => {
             console.log("postHighLight():", err);
           });
-      }
+      },
+
+      toggleAllHighlights({ commit }, visible) {
+        commit("setAllHighlightsVisibility", visible);
+      },
+
+      toggleHighlightsFromUser({ commit }, payload) {
+        commit("setHighlightsVisibilityFromUser", payload);
+      },
 
   },
   mutations:{
-      setChapters(state, chapters){
+      setChapters(state, chapters) {
           state.chapters= chapters;
       },
       clearChapters(state){
@@ -115,8 +132,21 @@ export const chapters = {
           state.focusedChapter = payload.chapter;
           state.focusedChapter["highlights"] = payload.highlights;
       },
-      setHighlight(state, highlight){
-        state.focusedChapter["highlights"].push(highlight);
+      setHighlight(state, highlight) {
+        state.focusedChapter.highlights.push(highlight);
+      },
+      setAllHighlightsVisibility(state, visible) {
+        state.focusedChapter["visibleHighlights"] = {
+          all: visible
+        };
+      },
+      setHighlightsVisibilityFromUser(state, payload) {
+        state.focusedChapter["visibleHighlights"] = {
+          fromUser: {
+            userId: payload.userId,
+            visible: payload.visible
+          }
+        }
       }
   }
 }

@@ -1,47 +1,93 @@
 <script setup>
-import filterTool from "./filterTool.vue"
-import chatTool from "../Chat/Chat.vue"
+  import { ref } from "vue";
+  import ChapterToolBar from "../ChapterToolBar/ChapterToolBar.vue";
+  import HighlightFilter from "../HighlightFilter/HighlightFilter.vue";
+  import NoteList from "../Notes/NoteList/NoteList.vue";
+  import NewNote from "../Notes/NewNote/NewNote.vue";
+  import Chat from "../Chat/Chat.vue"
+  import { chapterRoomId } from "../../helpers/chatRoomIds";
 
+  const emit = defineEmits(["sliderStatus", "toggleHighlights"]);
   const props = defineProps({
     bookId: String,
-    chapterId:String
+    chapterId: String
   })
 
-function toggleSlideover(){
-    document.getElementById('slideover').classList.toggle('translate-x-full');
-}
+  const { bookId, chapterId } = props;
+
+  const open = ref(false);
+  const sliderTab = ref(null);
+
+  const defaultTab = 'notes';
+
+  function openSlider(tab) {
+    open.value = true;
+    sliderTab.value = tab || defaultTab;
+    emit("sliderStatus", true);
+  }
+
+  function toggleSlider() {
+    open.value = !open.value;
+    if(!sliderTab.value) sliderTab.value = defaultTab;
+    emit("sliderStatus", open.value);
+  }
+
 </script>
 
 <template>
 <div>
-    <div class="h-full w-96 bg-slate-200 absolute right-0 duration-300 ease-out transition-all translate-x-full flex-col" id="slideover" >
-        <div id="interaction-menu" class="flex flex-row" role="tablist">
-            <font-awesome-icon icon="fa-solid fa-xmark justify-center" class="flex-1/12 text-2xl mt-2 ml-2" @click="toggleSlideover"/>
-            <ul class="flex flex-wrap grow flex-row text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 -mb-px" data-tabs-toggle="#tab-content" id="my-tab" role="tablist">
-                
-                <li class="mr-2" role="presentation">
-                    <button id="chat-tab" class="inline-block p-4 text-red-600 rounded-t-lg bg-gray-50 hover:bg-gray-100" role="tab" aria-selected="false" aria-controls="chat-tool" data-tabs-target="#chat-tool">Chat</button>
-                </li>
-                <li class="mr-2" role="presentation">
-                    <button id="article-tab" class="inline-block p-4 text-red-600 rounded-t-lg bg-gray-50 hover:bg-gray-100" role="tab" aria-selected="false" aria-controls="#article-tool" data-tabs-target="#article-tool">Article</button>
-                </li>
-                <li class="mr-2" role="presentation">
-                    <button id="filter-tab" class="inline-block p-4 text-red-600 rounded-t-lg bg-gray-50 hover:bg-gray-100" role="tab" aria-controls="filter-tool" data-tabs-target="#filter-tool">Filter</button>
-                </li>
-            </ul>
-        </div>
-        
-        <div id="tab-content">
-            <div class= "hidden" id="filter-tool" role="tabpanel" aria-labelledby="filter-tab">
-                <filterTool />
-            </div>
-            <div id="chat-tool" role = "tabpanel" aria-labelledby="chat-tab">
-               <chatTool :roomId="`${props.bookId}-${props.chapterId}`"/>
-            </div>
-            <div class= "hidden" id="article-tool" role = "tabpanel" aria-labelledby="article-tab">
-               Article
-            </div>
-        </div>
+  <div ref="slideOver" :class="`slider-container ${open ? 'right-0' : 'closed right-4'}`" id="slider">
+    <ChapterToolBar 
+      @openSlider="openSlider"
+      @toggleSlider="toggleSlider"
+      :class="`${open ? 'rounded-tl-3xl rounded-bl-3xl' : 'rounded-3xl'} py-4`" 
+    />
+
+    <div :class="`${open ? 'opacity-1': 'opacity-0'} slider-content`">
+
+      <div v-if="sliderTab === 'notes'">
+        <h2>Notes</h2>
+
+        <NoteList />
+      </div>
+
+      <div v-if="sliderTab === 'highlights'">
+        <h2>Highlights</h2>
+
+        <HighlightFilter />
+      </div>
+
+      <div v-if="sliderTab === 'add-note'">
+        <h2>New note</h2>
+
+        <NewNote />
+      </div>
+
+      <div v-if="sliderTab === 'chat'" class="flex flex-col h-full">
+        <h2>Chat room</h2>
+
+        <Chat :roomId="chapterRoomId(bookId, chapterId)" />
+      </div>
     </div>
+  </div>
 </div>
 </template>
+
+<style lang="postcss" scoped>
+
+  .slider-container {
+    @apply h-5/6 min-h-max flex absolute top-16
+      duration-200 ease-out transition-all;
+  }
+  .slider-content {
+    @apply w-72 sm:w-96 md:w-[34rem] bg-slate-200 p-4;
+  }
+
+  .slider-container.closed {
+    @apply translate-x-72 sm:translate-x-96 md:translate-x-[34rem];
+  }
+
+  h2 {
+    @apply text-xs uppercase text-gray-600 font-medium mb-4;
+  }
+</style>
