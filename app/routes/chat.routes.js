@@ -9,15 +9,21 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/chat/all",((req,res)=>{
-    let messages = chatController.findByRoomId(req.query.roomid).then((messages)=>{
-      res.send(messages)
-    })
-  })
-  );
+  app.get("/api/chat/all", (req,res) => {
+    chatController.findByRoomId(req.query.roomid)
+      .then((messages) => {
+        res.status(200).send(messages);
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
+  });
 
   app.post("/api/chat",(req,res) =>{
     chatController.create(req.body.message)
-  })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
+  });
   
 };

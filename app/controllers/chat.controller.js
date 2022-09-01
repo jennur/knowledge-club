@@ -11,6 +11,7 @@ exports.create = (message) => {
     })
     .catch((err) => {
       console.log(">> Error while creating message: ", err);
+      return err;
     });
 };
 

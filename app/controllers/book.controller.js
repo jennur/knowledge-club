@@ -11,6 +11,7 @@ exports.create = (book) => {
     })
     .catch((err) => {
       console.log(">> Error while creating book: ", err);
+      return err;
     });
 };
 
@@ -18,18 +19,23 @@ exports.create = (book) => {
 exports.findAll = (req,res) => {
   return Book.findAll()
     .then((books) => {
-      return res.send(books)
-    });
+      return books
+    })
+    .catch((err) => {
+      console.log(">> Error while finding all books: ", err);
+      return err;
+    })
 };
 
 // Find a single Book with an id
 exports.findById = (bookId) => {
   return Book.findByPk(bookId)
     .then((book) => {
-        return book;
+      return book;
     })
     .catch((err) => {
-        console.log(">> Error while finding book: ", err);
+      console.log(">> Error while finding book: ", err);
+      return err;
     });
 };
 
@@ -44,9 +50,16 @@ exports.delete = () => {
 
 // Delete all Books from the database.
 exports.deleteAll = () => {
-  Book.destroy({where:{},
-  truncate:true}).then((book)=>{
+  Book.destroy({
+    where: {},
+    truncate: true
+  })
+  .then((book)=>{
     console.log("destroyed book" + book.title)
+  })
+  .catch((err) => {
+    console.log(">> Error while destroying books: ", err);
+    return err;
   })
 };
 
