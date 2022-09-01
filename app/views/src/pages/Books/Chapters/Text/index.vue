@@ -74,7 +74,7 @@ function toggleHighlights () {
 </script>
 <template>
   <div class="outer-content-wrapper mt-8 mb-16">
-    <Slideover />
+    <Slideover :bookId="`${bookId}`" :chapterId="`${chapterNum}`"/>
     <div class="flex flex-col md:flex-row">
       <div class="my-4 md:mr-4">
         <ChapterToolBar 

@@ -9,7 +9,12 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/chat/all",chatController.findAll);
+  app.get("/api/chat/all",((req,res)=>{
+    let messages = chatController.findByRoomId(req.query.roomid).then((messages)=>{
+      res.send(messages)
+    })
+  })
+  );
 
   app.post("/api/chat",(req,res) =>{
     chatController.create(req.body.message)

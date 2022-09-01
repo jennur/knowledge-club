@@ -1,8 +1,8 @@
 import http from '../http-common';
 
 class ChatService {
-  getChatRoomMessages() {
-    return http.get("/chat/all").then((response)=>{
+  getChatRoomMessages(roomid) {
+    return http.get(`/chat/all?roomid=${roomid}`).then((response)=>{
         return response.data
     }).catch((err)=>{
         console.log(err);

@@ -10,14 +10,16 @@ exports.create = (message) => {
       return message;
     })
     .catch((err) => {
-      console.log(">> Error while creating book: ", err);
+      console.log(">> Error while creating message: ", err);
     });
 };
 
 // Retrieve all messages from the database.
-exports.findAll = (req,res) => {
+exports.findAll = () => {
   return Chat.findAll().then((messages) => {
-    res.send(messages);
+    return(messages)
+  }).catch(err=>{
+    console.log(err)
   });
 };
 
@@ -28,7 +30,9 @@ exports.findByRoomId = (RoomId) => {
         roomid:RoomId
       }
     })
-    .then((messages) => messages)
+    .then((messages) => {
+      return messages
+    })
     .catch((err) => {
         console.log(">> Error while finding messages: ", err);
     });
