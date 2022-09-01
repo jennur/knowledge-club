@@ -8,10 +8,11 @@
   import store from "../../store/index"
 
   const props = defineProps({
-    isRoom: Boolean
+    isRoom: Boolean,
+    roomId: String
   })
   const messages = ref([]);
-  store.dispatch("chat/getChatRoomMessages");
+  store.dispatch("chat/getChatRoomMessages",props.roomId);
 
   const usersOnline = ref(0);
   const chatMessages = ref(null);
@@ -33,7 +34,7 @@
 
   function sendMessage(msg){
     let message_out = {
-      roomid: "1",
+      roomid: props.roomId,
       message: msg,
       timesent: Date(),
       fromUser: store.state.auth.user.username

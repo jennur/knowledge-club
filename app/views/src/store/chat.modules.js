@@ -6,8 +6,8 @@ export const chat = {
     messages:[] 
   },
   actions:{
-    async getChatRoomMessages({commit}){
-      ChatService.getChatRoomMessages().then(messages=>{
+    async getChatRoomMessages({commit},roomid){
+      ChatService.getChatRoomMessages(roomid).then(messages=>{
         commit('clearMessages');
         commit('addMessages',messages)
       }).catch((err)=>{
