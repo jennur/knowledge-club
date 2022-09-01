@@ -34,6 +34,7 @@
         class="bg-white rounded-3xl p-16" 
         headline="Login to access this book"
         :hasSignUpLink="true"
+        @success="toggleModal"
       />
     </Modal>
 

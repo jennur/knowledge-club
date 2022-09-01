@@ -4,7 +4,7 @@
   import TextInput from "../../FormFields/TextInput.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
   import InlineLink from "../../Links/InlineLink.vue";
-
+  const emit = defineEmits(["success"]);
   const props = defineProps(["headline", "hasSignUpLink"])
   const username = ref("");
   const password = ref("");
@@ -20,6 +20,9 @@
     fieldErrors.value = [];
     
     store.dispatch("auth/login", { username: username.value, password: password.value })
+      .then(() => {
+        emit("success");
+      })
       .catch(err => {
         console.log("Login.vue error:", err);
         fieldErrors.value = err?.response?.data?.errors;
