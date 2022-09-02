@@ -14,37 +14,19 @@
   })
 
   const { bookId, chapterId } = props;
-
-  const open = ref(false);
-  const sliderTab = ref(null);
+  const sliderTab = ref('notes');
 
   const defaultTab = 'notes';
 
-  function openSlider(tab) {
-    open.value = true;
-    sliderTab.value = tab || defaultTab;
-    emit("sliderStatus", true);
-  }
-
-  function toggleSlider() {
-    open.value = !open.value;
-    if(!sliderTab.value) sliderTab.value = defaultTab;
-    emit("sliderStatus", open.value);
+  function setActiveTab(tab) {
+    sliderTab.value = tab;
   }
 
 </script>
 
 <template>
-<div>
-  <div ref="slideOver" :class="`slider-container ${open ? 'right-0' : 'closed right-4'}`" id="slider">
-    <ChapterToolBar 
-      @openSlider="openSlider"
-      @toggleSlider="toggleSlider"
-      :class="`${open ? 'rounded-tl-3xl rounded-bl-3xl' : 'rounded-3xl'} py-4`" 
-    />
-
-    <div :class="`${open ? 'opacity-1': 'opacity-0'} slider-content`">
-
+  <div class="flex justify-between" id="slider">
+    <div id="slider-content" class="basis-11/12">
       <div v-if="sliderTab === 'notes'">
         <h2>Notes</h2>
 
@@ -69,18 +51,16 @@
         <Chat :roomId="chapterRoomId(bookId, chapterId)" />
       </div>
     </div>
+
+    <ChapterToolBar 
+      @switchTab="setActiveTab"
+      class="basis-1/12py-4 border-l border-slate-200" 
+    />
   </div>
-</div>
 </template>
 
 <style lang="postcss" scoped>
-
-  .slider-container {
-    @apply h-5/6 min-h-max flex absolute top-16
-      duration-200 ease-out transition-all;
-  }
   .slider-content {
-    @apply w-72 sm:w-96 md:w-[34rem] bg-slate-200 p-4;
   }
 
   .slider-container.closed {

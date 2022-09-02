@@ -1,55 +1,45 @@
 <script setup>
 import { ref } from 'vue'
 import IconButton from "../Buttons/IconButton.vue";
-const emit = defineEmits(["openSlider", "toggleSlider"]);
-const props = defineProps({})
+const emit = defineEmits(["switchTab"]);
 </script>
 
 <template>
   <div class="toolbar">
       <IconButton
         vertical
-        size="md"
-        class="tool-button"
-        iconClass="fas fa-bars"
-        ariaLabel="Open menu"
-        @click="emit('toggleSlider')"
-      />
-
-      <IconButton
-        vertical
-        size="md"
+        size="lg"
         class="tool-button"
         iconClass="fas fa-folder-open"
         ariaLabel="Open menu at notes tab"
-        @click="emit('openSlider', 'notes')"
+        @click="emit('switchTab', 'notes')"
       />
 
       <IconButton
         vertical
-        size="md"
+        size="lg"
         class="tool-button"
         iconClass="fas fa-eye"
         ariaLabel="Open menu at highlights tab"
-        @click="emit('openSlider', 'highlights')"
+        @click="emit('switchTab', 'highlights')"
       />
 
       <IconButton
         vertical
-        size="md"
+        size="lg"
         class="tool-button"
         iconClass="fas fa-file-circle-plus"
         ariaLabel="Open menu at notes tab"
-        @click="emit('openSlider', 'add-note')"
+        @click="emit('switchTab', 'add-note')"
       />
 
       <IconButton
         vertical
-        size="md"
+        size="lg"
         class="tool-button"
         iconClass="fas fa-comment"
         ariaLabel="Open menu at notes tab"
-        @click="emit('openSlider', 'chat')"
+        @click="emit('switchTab', 'chat')"
       />
   </div>
 </template>
@@ -57,7 +47,7 @@ const props = defineProps({})
 <style lang="postcss" scoped>
 
   .toolbar {
-    @apply flex flex-col w-16 bg-slate-300;
+    @apply flex flex-col w-16;
   }
 
   .toolbar .tool-button {

@@ -53,9 +53,10 @@ const router = createRouter({
       component: () => import("../pages/Books/Chapters/index.vue")
     },
     {
-      path: "/books/:id/chapters/:chapternum",
-      name: "chapterText",
-      component: () => import("../pages/Books/Chapters/Text/index.vue")
+      path: "/books/:id/chapters/:chapterNum",
+      name: "chapter",
+      meta: { layout: "CustomLayout" },
+      component: () => import("../pages/Books/Chapters/Chapter/index.vue")
     },
     {
       path: "/admin/books/add",

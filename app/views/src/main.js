@@ -4,6 +4,9 @@ import router from './router'
 import store from "./store"
 import './assets/main.css'
 import VueMathjax from 'vue-mathjax-next';
+import DefaultLayout from "./layouts/DefaultLayout.vue";
+import ChapterLayout from "./layouts/ChapterLayout.vue";
+
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -58,4 +61,6 @@ const app = createApp(App)
   .use(store)
   .use(VueMathjax)
   .component('font-awesome-icon', FontAwesomeIcon)
+  .component('default-layout', DefaultLayout)
+  .component('chapter-layout', ChapterLayout)
   .mount('#app')
