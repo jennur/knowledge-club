@@ -1,10 +1,9 @@
 <script setup>
 import store from "../../../../store/index"
 import { useRoute } from "vue-router";
-import { onMounted, computed, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import ChapterLayout from "../../../../layouts/ChapterLayout.vue";
 import Slideover from "../../../../components/Slideover/Slideover.vue";
-import ChapterToolBar from "../../../../components/ChapterToolBar/ChapterToolBar.vue";
 
 import getHighlightedText from "./highlightFunctions/getHighlightedText";
 import addChapterNote from "./noteFunctions/addChapterNote";
@@ -12,7 +11,7 @@ import addChapterNote from "./noteFunctions/addChapterNote";
 const route = useRoute();
 const { id: bookId, chapterNum } = route.params;
 
-store.dispatch("chapters/getChapter", { bookId, chapterNum })
+store.dispatch("chapters/getChapter", { bookId, chapterNum });
 store.dispatch("chapters/getFocusedBook", bookId);
 
 const chapterContentElem = ref(null);
@@ -24,38 +23,38 @@ const bookData = computed(() => store.state.chapters.focusedBook);
 
 
 function getSelectedText() {
-    var text = "";
-    var text_range = { startloc: 0, endloc: 0 };
-    
-    if(!window.getSelection().focusNode.previousSibling){
-      text = window.getSelection();
-      text_range = { startloc: text.anchorOffset, endloc: text.focusOffset };
-    }
-    else if (typeof window.getSelection != "undefined") {
-        let last_loc= parseInt(window.getSelection().focusNode.previousSibling.attributes.loc.value);
-        text = window.getSelection();
-        text_range = {startloc:last_loc + text.anchorOffset,endloc:last_loc + text.focusOffset}
+  var text = "";
+  var text_range = { startloc: 0, endloc: 0 };
+  
+  if(!window.getSelection().focusNode.previousSibling){
+    text = window.getSelection();
+    text_range = { startloc: text.anchorOffset, endloc: text.focusOffset };
+  }
+  else if (typeof window.getSelection != "undefined") {
+    let last_loc= parseInt(window.getSelection().focusNode.previousSibling.attributes.loc.value);
+    text = window.getSelection();
+    text_range = {startloc:last_loc + text.anchorOffset,endloc:last_loc + text.focusOffset}
 
-    } else if (typeof document.selection != "undefined" && document.selection.type == "Text") {
-        text = document.selection.createRange();
-    }
-    return text_range;
+  } else if (typeof document.selection != "undefined" && document.selection.type == "Text") {
+    text = document.selection.createRange();
+  }
+  return text_range;
 }
 
 const storeSelectedText = () => {
-    var selectedText = getSelectedText();
-    const { startloc, endloc } = selectedText;
-    
-    if(startloc !== endloc) {
-      store.dispatch("chapters/postHighlight", {
-        bookId,
-        chapterNum,
-        startloc,
-        endloc,
-        fromUser: user.value.username,
-        content: ""
-      })
-    }
+  var selectedText = getSelectedText();
+  const { startloc, endloc } = selectedText;
+  
+  if(startloc !== endloc) {
+    store.dispatch("chapters/postHighlight", {
+      bookId,
+      chapterNum,
+      startloc,
+      endloc,
+      fromUser: user.value.username,
+      content: ""
+    })
+  }
 }
 
 function showHighlights () {
@@ -101,9 +100,10 @@ watch(allHighlightsVisible, (newVal, oldVal) => {
   </ChapterLayout>
 </template>
 
-<style>
-.highlight{
-  @apply bg-emerald-200;
-}
 
+<style lang="postcss">
+
+  .highlight{
+    @apply bg-emerald-200;
+  }
 </style>

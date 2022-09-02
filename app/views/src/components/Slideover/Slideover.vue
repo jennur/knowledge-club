@@ -54,7 +54,7 @@
 
     <ChapterToolBar 
       @switchTab="setActiveTab"
-      class="basis-1/12py-4 border-l border-slate-200" 
+      class="py-4 border-l border-slate-200 mt-8 ml-1" 
     />
   </div>
 </template>

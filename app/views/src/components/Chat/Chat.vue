@@ -12,7 +12,7 @@
     roomId: String
   })
   const messages = ref([]);
-  store.dispatch("chat/getChatRoomMessages",props.roomId);
+  store.dispatch("chat/getChatRoomMessages", props.roomId);
 
   const usersOnline = ref(0);
   const chatMessages = ref(null);
@@ -42,24 +42,34 @@
     socket.emit("message", message_out);
   };
 
+  function isDifferentUser(index, message) {
+    if(index > 0) {
+      return message.fromUser !== store.state.chat.messages[index - 1].fromUser;
+    }
+    return true;
+  }
+
+  function isCurrentUser(message) {
+    return message.fromUser === store.state.auth.user.username;
+  }
+
   const heightClass = props.isRoom ? "h-96" : "h-80";
+
 </script>
 
 <template>
-  <div id="chat-window" :class="`flex flex-col flex-grow justify-end border border-slate-200 p-2 ${heightClass}`">
-    <div v-if="usersOnline" class="text-xs text-slate-500 mb-1 h">
+  <div id="chat-window" :class="`flex flex-col flex-grow justify-end bg-slate-200 p-2 ${heightClass}`">
+    <div v-if="usersOnline" class="text-xs text-gray-600 mb-1 h">
       Users online: {{usersOnline}}
     </div>
     <div ref="chatMessages" id="chat-messages" class="flex flex-col overflow-scroll m-2">
-      <div 
-        v-for="message in store.state.chat.messages" 
-        :key="message"
-        class="mb-2"
-      >
-        <div :class="`text-2xs uppercase ${message.fromUser === store.state.auth.user.username ? 'text-blue-500': 'text-slate-500' }`">
+      <div v-for="(message, index) in store.state.chat.messages" :key="message" class="">
+        <div v-if="isDifferentUser(index, message)" 
+          :class="`mt-3 text-2xs uppercase ${isCurrentUser(message) ? 'text-blue-500': 'text-gray-600' }`"
+        >
           {{message.fromUser}}
         </div>
-        <div class="">
+        <div class="text-sm text-gray-800">
           <Message :message="`${message.message}`"/>
         </div>
       </div>

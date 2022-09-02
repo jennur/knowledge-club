@@ -22,11 +22,11 @@
 
 <template>
   <form class="flex w-full" @submit.prevent="sendMessage">
-    <div class="bg-gray-700 relative w-full h-10">
+    <div class="bg-slate-100 relative w-full h-10">
       <input
         type="text" 
         v-model="input"
-        class="w-full text-white bg-inherit pt-2 pl-2 pb-2 pr-10 text-md focus:outline-none"
+        class="w-full text-gray-800 bg-inherit pt-2 pl-2 pb-2 pr-10 text-sm focus:outline-none"
       />
 
       <DiscordPicker 
@@ -36,12 +36,12 @@
         @update:value="value = $event"
       />
     </div>
-      <IconButton 
+      <IconButton
         type="submit"
         dark
-        buttonText="Send" 
-        iconClass="fas fa-share-from-square"
-        class="border-l border-white"
+        ariaLabel="Send message" 
+        iconClass="fas fa-paper-plane"
+        class="border-l border-white pl-3 pr-2"
       />
   </form>
 </template>

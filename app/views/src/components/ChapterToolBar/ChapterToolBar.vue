@@ -51,7 +51,7 @@ const emit = defineEmits(["switchTab"]);
   }
 
   .toolbar .tool-button {
-    @apply hover:text-black overflow-hidden;
+    @apply hover:text-black overflow-hidden z-30;
   }
 
 </style>
