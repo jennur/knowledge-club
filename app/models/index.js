@@ -26,7 +26,7 @@ db.raw = require("../models/raw.model.js")(sequelize, Sequelize)
 
 db.books.hasMany(db.videos, { as: "videos" });
 db.books.hasMany(db.articles, { as: "articles" });
-db.books.hasMany(db.chapters, { as: "chapters" });
+// db.books.hasMany(db.chapters, { as: "chapters" });
 
 db.articles.belongsTo(db.books, {
   foreignKey: "bookUUID",
@@ -38,13 +38,12 @@ db.videos.belongsTo(db.books, {
   as: "book",
 });
 
-db.chapters.belongsTo(db.books, {
-  foreignKey: {
-    name: "bookUUID",
-    allowNull: false
-  },
-  as: "book"
-});
+// db.chapters.belongsTo(db.books, {
+//   foreignKey: {
+//     name: "chapterUUID",
+//     allowNull: false
+//   }
+// });
 
 db.roles.belongsToMany(db.users, {
   through: "user_roles",

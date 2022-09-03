@@ -5,8 +5,6 @@ const path = __dirname + '/app/views/dist/';
 const cors = require("cors");
 const app = express();
 const http = require("http").createServer(app);
-const faker = require("faker");
-
 const io = require("socket.io")(http, {
     cors:{
         origin:"http://localhost:5173"
@@ -70,47 +68,12 @@ require('./app/routes/user.routes')(app);
 require('./app/routes/data.routes')(app);
 require('./app/routes/chat.routes')(app);
 
-
-
 // controllers
-const bookController = require("./app/controllers/book.controller");
-// const videoController = require("./app/controllers/video.controller");
-// const articleController = require("./app/controllers/article.controller");
 const userController = require("./app/controllers/user.controller");
 const roleController = require("./app/controllers/role.controller");
-const chapterController = require("./app/controllers/chapter.controller");
-const chatController = require("./app/controllers/chat.controller");
-const highlightController = require("./app/controllers/highlight.controller")
-
 
 // DEVELOPMENT MODE
 
-//For generating fake data
-var fake_books = [...Array(10)].map((book, index) => {
-  return (
-  {
-    bookUUID: index,
-    title:faker.commerce.productName(),
-    dateUploaded: new Date(),
-    published: true,
-    fileType:".epub",
-    numChapters:faker.mersenne.rand(20,5)
-  })
-
-});
-var chapters = Array();
-
-for(book of fake_books){
-  for(chapter_num of Array(book.numChapters).keys()){
-    chapters.push({
-      bookUUID: book.bookUUID,
-      chapterName: faker.name.firstName(),
-      chapterNumber: chapter_num,
-      dateUploaded: new Date(),
-      chapterContent: faker.lorem.paragraphs(5)
-    })
-  }
-}
 const initDb = async () => {
   const userRole = await roleController.create({ id: 1, name: "user" })
   const moderatorRole = await roleController.create({ id: 2, name: "moderator" })
@@ -122,28 +85,12 @@ const initDb = async () => {
   })
 
   userController.setRole(adminUser.id, adminRole.id);
-
-  for(book of fake_books){
-    bookController.create(book);
-  }
-  for(chapter of chapters){
-    chapterController.create(chapter);
-  }
-  highlightController.create({
-    bookId:0,
-    chapterNum:0,
-    startloc:0,
-    endloc:10,
-    timeSent:Date(),
-    fromUser:"Steve",
-    content:"hello"
-  })
 };
-// database
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-  initDb();
-});
+//database
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and re-sync db.");
+//   initDb();
+// });
 
 //END OF DEVELOPMENT MODE
 

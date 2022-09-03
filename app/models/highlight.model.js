@@ -1,3 +1,4 @@
+const { DataTypes } = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
     const Highlight = sequelize.define("highlight", {
       highlightId: {
@@ -33,9 +34,11 @@ module.exports = (sequelize, Sequelize) => {
         type:Sequelize.STRING,
         allowNull:false
       },
-      content:{
-        type:Sequelize.STRING
+      createdAt:{
+        type:Sequelize.DATE,
+        default: DataTypes.NOW
       }
-    });
+    },
+    {timestamps:false});
     return Highlight;
   };

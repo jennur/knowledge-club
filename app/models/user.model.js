@@ -61,6 +61,7 @@ module.exports = (sequelize, Sequelize) => {
     biography: {
       type: Sequelize.STRING
     }
-  });
+  },
+  {timestamps:false});
   return User;
 };

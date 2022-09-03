@@ -3,6 +3,7 @@
   import {useRoute} from "vue-router";
   const route = useRoute();
   const bookId = route.params.id;
+
   store.dispatch("chapters/getAllChapters", bookId);
   store.dispatch("chapters/getFocusedBook", bookId);
 
@@ -20,7 +21,7 @@
         <div class="ml-4 mt-4">
           <RouterLink 
             v-for="chapter in store.state.chapters.chapters" :key="chapter"
-            :to="`/books/${chapter.bookUUID}/chapters/${chapter.chapterNumber}`"
+            :to="`/books/${bookId}/chapters/${chapter.chapterNumber}`"
             class="flex items-center max-w-max text-black-500 group mb-4"
             >
             <span class="w-12 text-3xl font-thin group-hover:font-bold">

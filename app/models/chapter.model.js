@@ -1,3 +1,4 @@
+const { DataTypes } = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
     const Chapter = sequelize.define("chapter", {
         chapterUUID:{
@@ -12,14 +13,16 @@ module.exports = (sequelize, Sequelize) => {
         chapterNumber:{
             type: Sequelize.STRING
         },
-        dateUploaded: {
+        createdAt: {
             type: Sequelize.DATE,
-            allowNull:false
+            allowNull:false,
+            defaultValue: DataTypes.NOW
         },
         chapterContent:{
             type: Sequelize.TEXT,
         }
-    });
+    },
+    {timestamps:false});
 
     return Chapter;
   };

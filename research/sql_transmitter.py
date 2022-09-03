@@ -4,9 +4,9 @@ import re
 
 dotenv_re = re.compile("(.*)=(.*)|")
 
-book_insert_query ="INSERT INTO \"books\" (\"bookUUID\",\"title\",\"dateUploaded\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"bookUUID\",\"title\",\"dateUploaded\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\"";
+book_insert_query ="INSERT INTO \"books\" (\"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\"";
 
-chapter_insert_query ="INSERT INTO \"chapters\" (\"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"dateUploaded\",\"chapterContent\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"dateUploaded\",\"chapterContent\",\"createdAt\",\"updatedAt\";"
+chapter_insert_query ="INSERT INTO \"chapters\" (\"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"createdAt\",\"chapterContent\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"createdAt\",\"chapterContent\",\"createdAt\",\"updatedAt\";"
 
 def read_dotenv(path):
     env_vars = {}
