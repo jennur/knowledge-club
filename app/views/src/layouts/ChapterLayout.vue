@@ -3,6 +3,7 @@
   import LeftMenu from "./Header/LeftMenu.vue";
   import RightMenu from "./Header/RightMenu.vue";
   import Footer from "./Footer/Footer.vue";
+  import Switch from "../components/FormFields/Switch.vue";
 
   const isDragging = ref(false);
   const sidebarBasis = ref({ flexBasis: "25%" });
@@ -29,11 +30,16 @@
     window.removeEventListener("mouseup", endSidebarResize);
   }
 
+  const colorTheme = ref("day");
+
+  function toggleDarkMode(value) {
+    colorTheme.value = value ? "night" : "day";
+  }
 
 </script>
 
 <template>
-  <div id="chapter-layout">
+  <div id="chapter-layout" :class="colorTheme">
     <div class="flex justify-between w-full md:hidden py-1 px-4">
       <LeftMenu />
       <RightMenu />
@@ -42,7 +48,7 @@
     <div class="flex w-full justify-between relative">
       <section 
         id="interaction-board"
-        class="h-screen bg-slate-100 overflow-y-scroll sticky top-0 left-0 md:pt-2 pl-4"
+        class="interaction-board sticky top-0 left-0 md:pt-2 pl-4"
         :style="sidebarBasis"
       >
         <LeftMenu class="hidden md:block" />
@@ -57,8 +63,13 @@
       </section>
 
       <div ref="mainContent" :style="mainContentBasis">
-        <RightMenu class="hidden md:flex py-1 px-4" />
-
+        <div class="flex items-center">
+          <label class="flex items-center text-xs ml-4">
+            <Switch @switch="toggleDarkMode" />
+            <span>Dark mode</span>
+          </label>
+          <RightMenu class="hidden md:flex py-1 px-4" />
+        </div>
         <main class="px-4">
           <slot name="main"></slot>
         </main>
@@ -71,7 +82,7 @@
 </template>
 
 
-<style lang="postcss" scoped>
+<style lang="postcss">
   .sidebar-handle {
     @apply absolute top-0 right-0 
       w-[.2rem] h-full px-3 focus:outline-none cursor-ew-resize;
@@ -79,5 +90,42 @@
   .sidebar-handle::before {
     content: "";
     @apply absolute top-1/2 -translate-y-1/2 right-2 bg-slate-400 w-[.2rem] h-8;
+  }
+
+  .interaction-board {
+    @apply h-screen bg-slate-100 overflow-y-scroll text-black;
+  }
+
+  .night .interaction-board {
+    @apply bg-slate-800 text-slate-100;
+  }
+
+  .night #slider {
+    @apply text-slate-200;
+  }
+
+  .night #slider .c-toolbar {
+    @apply bg-slate-700;
+  }
+
+  .night #slider #slider-content {
+    @apply border-slate-700 text-slate-200;
+  }
+  .night #slider #slider-content h2 {
+    @apply text-slate-200;
+  }
+
+  .night {
+    @apply bg-slate-900 text-slate-200;
+  }
+
+  .night .highlight {
+    @apply bg-emerald-800;
+  }
+
+  .night .icon-button .icon,
+  .night .icon-button .text,
+  .night .icon-link {
+    @apply text-slate-200 hover:text-slate-400;
   }
 </style>

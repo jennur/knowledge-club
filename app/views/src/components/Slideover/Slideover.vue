@@ -28,7 +28,7 @@
   <div class="flex justify-between" id="slider">
     <ChapterToolBar
       @switchTab="setActiveTab"
-      class="toolbar bg-slate-200 py-4 -ml-4"
+      class="c-toolbar bg-slate-200 py-4 -ml-4"
     />
     <div id="slider-content" class="basis-full md:border-t md:border-slate-200 pt-5 px-4">
       <div v-if="sliderTab === 'notes'">
@@ -70,7 +70,7 @@
     @apply text-xs uppercase text-gray-600 font-medium mb-4;
   }
 
-  .toolbar {
+  .c-toolbar {
     height: calc(100vh - 4.2rem);
   }
 </style>
