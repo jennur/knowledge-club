@@ -1,17 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import IconButton from "../Buttons/IconButton.vue";
-const emit = defineEmits(["toggleHighlights", "addNote"]);
-const props = defineProps({
-  hlVisible: {
-    type: Boolean,
-    default: false
-  }
-})
-const { hlVisible } = props;
-const hlBtnClass = hlVisible ? "visible" : "";
-const hlIconClass = hlVisible ? "fa-eye-slash" : "fa-eye";
-const hlAriaLabel = hlVisible ? "Hide highlights" : "Show highlights";
+const emit = defineEmits(["saveHighlight", "addNote"]);
+const props = defineProps({})
 </script>
 
 <template>
@@ -19,12 +10,11 @@ const hlAriaLabel = hlVisible ? "Hide highlights" : "Show highlights";
 
       <IconButton
         vertical
-        size="sm"
-        id="btn-show-highlights"
-        :class="`tool-button ${hlBtnClass}`"
-        :iconClass="`fas ${hlIconClass}`"
-        :ariaLabel="hlAriaLabel"
-        @click="emit('toggleHighlights')"
+        id="btn-save-highlights"
+        class="tool-button"
+        iconClass="fas fa-floppy-disk"
+        ariaLabel="Save highlight"
+        @click="emit('saveHighlight')"
       />
 
       <IconButton
@@ -42,8 +32,7 @@ const hlAriaLabel = hlVisible ? "Hide highlights" : "Show highlights";
 <style lang="postcss" scoped>
 
   .toolbar {
-    @apply flex max-w-max rounded-3xl bg-slate-300 px-2 
-      md:flex-col md:max-w-min md:px-0 md:py-1;
+    @apply flex max-w-max rounded-3xl bg-slate-300 px-2 mt-1 shadow-md;
   }
 
   .toolbar .tool-button {
@@ -55,15 +44,12 @@ const hlAriaLabel = hlVisible ? "Hide highlights" : "Show highlights";
   }
 
   .toolbar .tool-button:hover::after {
-    @apply opacity-100 absolute translate-y-9 left-0 w-max text-xs bg-gray-600 text-white py-1 px-2
-      md:translate-y-1 md:translate-x-8;
+    @apply opacity-100 absolute translate-y-9 left-0 w-max
+      text-xs bg-gray-600 text-white py-1 px-2 z-30;
   }
 
-  .toolbar #btn-show-highlights.tool-button:hover::after {
-    content: "Show highlights";
-  }
-  .toolbar #btn-show-highlights.tool-button.visible:hover::after {
-    content: "Hide highlights";
+  .toolbar #btn-save-highlights.tool-button:hover::after {
+    content: "Save highlight";
   }
   .toolbar #btn-add-note.tool-button:hover::after {
     content: "Add note";
