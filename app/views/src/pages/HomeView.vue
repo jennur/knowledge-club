@@ -16,9 +16,7 @@
           <div class="basis-full md:basis-1/2 flex flex-col justify-center text-center md:text-left md:pr-8 pb-16 lg:p-16">
             <h1 class="text-4xl text-slate-700 mb-6">Learn anything, anytime</h1>
             <p class="text-xl">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-              Suspendisse vestibulum faucibus purus nec auctor. Cras feugiat 
-              viverra blandit. 
+              Collaborate on learning documents with people who are interested in the same topics you are. Learn faster with algorithms that learn how you learn.
             </p>
           </div>
           <div class="basis-full md:basis-1/2">
@@ -38,12 +36,12 @@
           </div>
           <div class="basis-full flex items-center justify-center mt-16 md:basis-1/2 md:mt-0">
             <div>
-              <h2 class="text-3xl text-slate-800 mb-8">Lorem ipsum</h2>
+              <h2 class="text-3xl text-slate-800 mb-8">Ways to Learn</h2>
               <NumberedList :listItems="[
-                  'Dolor sit amet',
-                  'Consectetur adipiscing elit',
-                  'Vivamus auctor velit',
-                  'Nec mattis suscipit'
+                  'Use community documents',
+                  'Upload your own private documents and share with friends',
+                  'Use high quality personalized reference material',
+                  'Learn by helping others and earn money'
                 ]"
                 fontSize="xxl"
                 numberColor="blue"
