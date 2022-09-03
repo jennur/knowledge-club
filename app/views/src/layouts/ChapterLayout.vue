@@ -42,10 +42,10 @@
     <div class="flex w-full justify-between relative">
       <section 
         id="interaction-board"
-        class="h-screen bg-slate-100 overflow-y-hidden sticky top-0 left-0 p-4"
+        class="h-screen bg-slate-100 overflow-y-scroll sticky top-0 left-0 md:pt-2 pl-4"
         :style="sidebarBasis"
       >
-        <LeftMenu class="hidden md:block pb-8" />
+        <LeftMenu class="hidden md:block" />
 
         <slot name="sidebar"></slot>
 

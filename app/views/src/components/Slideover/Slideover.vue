@@ -26,7 +26,11 @@
 
 <template>
   <div class="flex justify-between" id="slider">
-    <div id="slider-content" class="basis-11/12">
+    <ChapterToolBar
+      @switchTab="setActiveTab"
+      class="toolbar bg-slate-200 py-4 -ml-4"
+    />
+    <div id="slider-content" class="basis-full md:border-t md:border-slate-200 pt-5 px-4">
       <div v-if="sliderTab === 'notes'">
         <h2>Notes</h2>
 
@@ -51,11 +55,6 @@
         <Chat :roomId="chapterRoomId(bookId, chapterId)" />
       </div>
     </div>
-
-    <ChapterToolBar 
-      @switchTab="setActiveTab"
-      class="py-4 border-l border-slate-200 mt-8 ml-1" 
-    />
   </div>
 </template>
 
@@ -69,5 +68,9 @@
 
   h2 {
     @apply text-xs uppercase text-gray-600 font-medium mb-4;
+  }
+
+  .toolbar {
+    height: calc(100vh - 4.2rem);
   }
 </style>

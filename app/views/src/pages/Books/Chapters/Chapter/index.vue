@@ -80,7 +80,7 @@ watch(allHighlightsVisible, (newVal, oldVal) => {
 <template>
   <ChapterLayout>
     <template #sidebar>
-      <Slideover class="-mr-4" />
+      <Slideover class="md:mt-2" />
     </template>
 
     <template #main>
