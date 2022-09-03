@@ -1,4 +1,4 @@
-require('dotenv').config({ path: __dirname + "/./../../.env"})
+require('dotenv').config()
 
 const ssl = process.env.NODE_ENV === "production" && { ssl: {
       require: true,
@@ -11,7 +11,7 @@ module.exports = {
   USER: process.env.DB_USER,
   PASSWORD: process.env.DB_PASSWORD,
   DB: process.env.DB_NAME,
-  dialect: "postgres",
+  dialect: process.env.DB_DIALECT,
   pool: {...process.env.DB_POOL},
   dialectOptions: {...ssl},
 };
