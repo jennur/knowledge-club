@@ -5,7 +5,7 @@ CREATE TABLE Books (
 BookUuid VARCHAR(255) NOT NULL,
 PublishedDate DATE,
 Title VARCHAR(255) NOT NULL,
-DateUploaded DATE NOT NULL,
+createdAt DATE NOT NULL,
 FileType VARCHAR(10) NOT NULL,
 NumChapters INT,
 PRIMARY KEY (BookUuid)

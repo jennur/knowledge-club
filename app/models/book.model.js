@@ -1,3 +1,4 @@
+const { DataTypes } = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
     const Book = sequelize.define("book", {
       bookUUID: {
@@ -10,9 +11,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull:false
       },
-      dateUploaded: {
+      createdAt: {
         type: Sequelize.DATE,
-        allowNull:false
+        allowNull:false,
+        defaultValue: DataTypes.NOW
       },
       published: {
         type: Sequelize.BOOLEAN,
@@ -25,7 +27,8 @@ module.exports = (sequelize, Sequelize) => {
       numChapters:{
         type:Sequelize.INTEGER
       }
-    });
+    },
+    {timestamps:false});
 
     return Book;
   };
