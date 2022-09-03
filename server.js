@@ -30,6 +30,7 @@ app.use(express.static(path));
 var allowList = [
   "http://localhost:5173",
   "http://localhost:5000",
+  "http://localhost:8080",
   "https://knowledge-club.herokuapp.com"
 ]
 

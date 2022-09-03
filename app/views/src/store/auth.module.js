@@ -47,7 +47,7 @@ export const auth = {
     checkAccessToken({ commit }) {
       return AuthService.getAccessToken().then(
         response => {
-          console.log("CheckAccessToken response:", response);
+          console.log("[Y]", response.data.message);
           if(!store.state.auth.user) {
             commit("loginSuccess", response.data.user);
           }
@@ -64,7 +64,7 @@ export const auth = {
     checkAdminAccess({ commit }) {
       return AuthService.checkAdminAccess().then(
         response => {
-          console.log("CheckAdminAccess response:", response);
+          console.log("[Y]", response.data.message);
           return Promise.resolve(response.data);
         },
         error => {

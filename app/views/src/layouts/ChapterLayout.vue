@@ -128,4 +128,8 @@
   .night .icon-link {
     @apply text-slate-200 hover:text-slate-400;
   }
+  .night .h-toolbar .icon-button .icon,
+  .night .h-toolbar .icon-button .text {
+    @apply text-gray-700 hover:text-gray-900;
+  }
 </style>

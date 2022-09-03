@@ -16,7 +16,7 @@
       </div>
 
       <div class="basis-full md:basis-1/2 lg:basis-2/3 px-16 pt-16 md:pt-0">
-        <h1 class="">{{ store.state.chapters.focusedBook.title }}</h1>
+        <h1 class="">{{ store.state?.chapters?.focusedBook?.title }}</h1>
         <h2 class="mt-6 uppercase text-sm text-gray-400">Chapters</h2>
         <div class="ml-4 mt-4">
           <RouterLink 

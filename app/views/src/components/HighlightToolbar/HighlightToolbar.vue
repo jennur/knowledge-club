@@ -6,7 +6,7 @@ const props = defineProps({})
 </script>
 
 <template>
-  <div class="toolbar">
+  <div class="h-toolbar">
 
       <IconButton
         vertical
@@ -31,27 +31,27 @@ const props = defineProps({})
 
 <style lang="postcss" scoped>
 
-  .toolbar {
+  .h-toolbar {
     @apply flex max-w-max rounded-3xl bg-slate-300 px-2 mt-1 shadow-md;
   }
 
-  .toolbar .tool-button {
+  .h-toolbar .tool-button {
     @apply relative px-2;
   }
 
-  .toolbar .tool-button::after {
+  .h-toolbar .tool-button::after {
     @apply opacity-0 top-0 translate-y-0 transition-opacity duration-500;
   }
 
-  .toolbar .tool-button:hover::after {
+  .h-toolbar .tool-button:hover::after {
     @apply opacity-100 absolute translate-y-9 left-0 w-max
       text-xs bg-gray-600 text-white py-1 px-2 z-30;
   }
 
-  .toolbar #btn-save-highlights.tool-button:hover::after {
+  .h-toolbar #btn-save-highlights.tool-button:hover::after {
     content: "Save highlight";
   }
-  .toolbar #btn-add-note.tool-button:hover::after {
+  .h-toolbar #btn-add-note.tool-button:hover::after {
     content: "Add note";
   }
 </style>
