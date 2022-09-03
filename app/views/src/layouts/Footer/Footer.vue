@@ -8,8 +8,9 @@
       <footer class="text-sm text-white">
         <ul class="flex flex-wrap items-center">
           <li>
-            <RouterLink to="/" class="py-2 mr-6">
-              <font-awesome-icon icon="fas fa-spa" class="mr-2" />Knowledge Club
+            <RouterLink to="/" class="flex flex-1 items-end pr-6">
+              <img src="/yedia-logo_white.svg" class="logo m-[.15rem] mr-1"/>
+              <span class="title text-lg text-white">Yedia</span>
             </RouterLink>
           </li>
           <li>
@@ -20,3 +21,12 @@
     </div>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+  .logo {
+    height: 1.7rem;
+  }
+  .title {
+    font-family: "Baloo 2";
+  }
+</style>
