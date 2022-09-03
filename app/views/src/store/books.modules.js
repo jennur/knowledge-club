@@ -51,102 +51,102 @@ export const chapters = {
     },
   },
   actions:{
-      getAllChapters({ commit }, bookId) {
-        BookDataService.getAllChapters(bookId)
-          .then(chapters => {
-            commit("setChapters", chapters.data);
-            return chapters;
-          })
-          .catch(err=>{
-            console.log("getAllChapters:", err);
-            return err;
-          })
-      },
+    getAllChapters({ commit }, bookId) {
+      BookDataService.getAllChapters(bookId)
+        .then(chapters => {
+          commit("setChapters", chapters.data);
+          return chapters;
+        })
+        .catch(err=>{
+          console.log("getAllChapters:", err);
+          return err;
+        })
+    },
 
-      getFocusedBook({ commit }, bookId) {
-        BookDataService.getBookById(bookId)
-          .then(book => {
-            commit("setFocusedBook", book.data);
-          })
-          .catch(err => {
-            console.log("getFocusedBook():", err);
-          })
-      },
+    getFocusedBook({ commit }, bookId) {
+      BookDataService.getBookById(bookId)
+        .then(book => {
+          commit("setFocusedBook", book.data);
+        })
+        .catch(err => {
+          console.log("getFocusedBook():", err);
+        })
+    },
 
-      async getChapter({ commit }, payload){
-        const { bookId, chapterNum } = payload;
+    async getChapter({ commit }, payload){
+      const { bookId, chapterNum } = payload;
 
-        try {
-          const chapter = await BookDataService.getChapter(bookId, chapterNum);
-          const highlights = await HighlightService.getAllHighlights(bookId, chapterNum);
+      try {
+        const chapter = await BookDataService.getChapter(bookId, chapterNum);
+        const highlights = await HighlightService.getAllHighlights(bookId, chapterNum);
 
-          commit("setFocusedChapter", {
-            chapter: chapter.data,
-            highlights
-          });
+        commit("setFocusedChapter", {
+          chapter: chapter.data,
+          highlights
+        });
 
-          return { chapter: chapter.data, highlights };
-        } 
-        catch (err) {
-          console.log("Error in getChapter():", err);
-          return { error: err.message };
-        }
-      },
-      postHighlight({ commit }, payload){
-        HighlightService.postNewHighlight(
-            payload.bookId,
-            payload.chapterNum,
-            payload.startloc,
-            payload.endloc,
-            payload.fromUser,
-            payload.content
-          )
-          .then((highlight) => {
-            commit("setHighlight", highlight.data);
-          })
-          .catch((err) => {
-            console.log("postHighLight():", err);
-          });
-      },
+        return { chapter: chapter.data, highlights };
+      } 
+      catch (err) {
+        console.log("Error in getChapter():", err);
+        return { error: err.message };
+      }
+    },
+    postHighlight({ commit }, payload){
+      HighlightService.postNewHighlight(
+          payload.bookId,
+          payload.chapterNum,
+          payload.startloc,
+          payload.endloc,
+          payload.fromUser,
+          payload.content
+        )
+        .then((highlight) => {
+          commit("setHighlight", highlight);
+        })
+        .catch((err) => {
+          console.log("postHighLight():", err);
+        });
+    },
 
-      toggleAllHighlights({ commit }, visible) {
-        commit("setAllHighlightsVisibility", visible);
-      },
+    toggleAllHighlights({ commit }, visible) {
+      commit("setAllHighlightsVisibility", visible);
+    },
 
-      toggleHighlightsFromUser({ commit }, payload) {
-        commit("setHighlightsVisibilityFromUser", payload);
-      },
+    toggleHighlightsFromUser({ commit }, payload) {
+      commit("setHighlightsVisibilityFromUser", payload);
+    },
+},
 
-  },
-  mutations:{
-      setChapters(state, chapters) {
-          state.chapters= chapters;
-      },
-      clearChapters(state){
-          state.chapters={};
-      },
-      setFocusedBook(state, payload) {
-        state.focusedBook = payload;
-      },
-      setFocusedChapter(state, payload){
-          state.focusedChapter = payload.chapter;
-          state.focusedChapter["highlights"] = payload.highlights;
-      },
-      setHighlight(state, highlight) {
-        state.focusedChapter.highlights.push(highlight);
-      },
-      setAllHighlightsVisibility(state, visible) {
-        state.focusedChapter["visibleHighlights"] = {
-          all: visible
-        };
-      },
-      setHighlightsVisibilityFromUser(state, payload) {
-        state.focusedChapter["visibleHighlights"] = {
-          fromUser: {
-            userId: payload.userId,
-            visible: payload.visible
-          }
+mutations:{
+    setChapters(state, chapters) {
+        state.chapters= chapters;
+    },
+    clearChapters(state){
+        state.chapters={};
+    },
+    setFocusedBook(state, payload) {
+      state.focusedBook = payload;
+    },
+    setFocusedChapter(state, payload){
+        state.focusedChapter = payload.chapter;
+        state.focusedChapter["highlights"] = payload.highlights;
+    },
+    setHighlight(state, highlight) {
+      state.focusedChapter.highlights.push(highlight);
+    },
+    setAllHighlightsVisibility(state, visible) {
+      state.focusedChapter["visibleHighlights"] = {
+        all: visible
+      };
+    },
+    setHighlightsVisibilityFromUser(state, payload) {
+      state.focusedChapter["visibleHighlights"] = {
+        fromUser: {
+          userId: payload.userId,
+          visible: payload.visible
         }
       }
+    }
   }
 }

@@ -3,7 +3,7 @@ const Article = db.articles;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Article
-exports.create = (article) => {
+exports.create = (article, highlight) => {
   return Article.create(article)
     .then((article) => {
         console.log(">> Created article: " + JSON.stringify(article, null, 4));
@@ -21,12 +21,36 @@ exports.findAll = () => {
 
 // Find a single Article with an id
 exports.findById = (id) => {
-  return Article.findByPk(id, { include: "book" })
+  return Article.findByPk(id, { include: "highlight" })
     .then(article => article)
     .catch((err) => {
         console.log(">> Error while finding article: ", err);
     });
 };
+
+// Set highlight
+exports.setHighlight = (articleId, highlightId) => {
+  return Article.findByPk(articleId)
+    .then((article) => {
+      if (!article) {
+        console.log("Error setting book: Article not found!");
+        return null;
+      }
+      return db.highlights.findByPk(highlightId).then((highlight) => {
+        if (!highlight) {
+          console.log("Error setting highlight: Highlight not found!");
+          return null;
+        }
+        article.setHighlight(highlight);
+        console.log(`>> added Highlight id=${highlight.highlightId} to Article id=${article.id}`);
+        return article;
+      });
+    })
+    .catch((err) => {
+      console.log(">> Error while adding Highlight to Article: ", err);
+    });
+};
+
 
 // Update an Article by the id in the request
 exports.update = () => {

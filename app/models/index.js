@@ -21,16 +21,15 @@ db.roles = require("../models/role.model.js")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.chapters = require("../models/chapter.model.js")(sequelize, Sequelize)
 db.chat = require("../models/chat.model.js")(sequelize, Sequelize)
-db.highlight = require("../models/highlight.model.js")(sequelize, Sequelize)
+db.highlights = require("../models/highlight.model.js")(sequelize, Sequelize)
 db.raw = require("../models/raw.model.js")(sequelize, Sequelize)
 
-db.books.hasMany(db.videos, { as: "videos" });
 db.books.hasMany(db.articles, { as: "articles" });
 // db.books.hasMany(db.chapters, { as: "chapters" });
 
-db.articles.belongsTo(db.books, {
-  foreignKey: "bookUUID",
-  as: "book",
+db.articles.belongsTo(db.highlights, {
+  foreignKey: "highlightId",
+  as: "highlight",
 });
 
 db.videos.belongsTo(db.books, {
