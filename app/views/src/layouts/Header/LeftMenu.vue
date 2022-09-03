@@ -4,9 +4,9 @@
 
 <template>
   <nav class="flex flex-1 items-center">
-    <RouterLink to="/" class="flex flex-1 items-center py-2">
-      <img src="/yedia-logo.svg" class="logo mr-1"/> 
-      <span class="title text-lg lg:text-2xl text-rose-500">Yedia</span>
+    <RouterLink to="/" class="flex flex-1 items-end py-2">
+      <img src="/yedia-logo.png" class="logo mr-1 mb-1"/> 
+      <span class="title text-2xl text-rose-500">Yedia</span>
     </RouterLink>
   </nav>
 </template>
@@ -16,6 +16,6 @@
     height: 1.8rem;
   }
   .title {
-    font-family: "Itim";
+    font-family: "Baloo 2";
   }
 </style>

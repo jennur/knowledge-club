@@ -45,7 +45,7 @@
         class="h-screen bg-slate-100 overflow-y-hidden sticky top-0 left-0 p-4"
         :style="sidebarBasis"
       >
-        <LeftMenu class="hidden md:block pt-4 pb-8" />
+        <LeftMenu class="hidden md:block pb-8" />
 
         <slot name="sidebar"></slot>
 
