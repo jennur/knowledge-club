@@ -4,10 +4,7 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Role
 exports.create = (role) => {
-  return Role.create({
-      id: role.id,
-      name: role.name,
-    })
+  return Role.create(role)
     .then((role) => {
         console.log(">> Created role: " + JSON.stringify(role, null, 4));
         return role;

@@ -1,12 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
     const Chat = sequelize.define("chat", {
-      messageid: {
+      messageId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement:true,
         allowNull:false
       },
-      roomid: {
+      roomId: {
         type: Sequelize.STRING,
         allowNull:false
       },

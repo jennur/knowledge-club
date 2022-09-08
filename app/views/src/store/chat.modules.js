@@ -6,13 +6,14 @@ export const chat = {
     messages:[] 
   },
   actions:{
-    async getChatRoomMessages({commit},roomid){
-      ChatService.getChatRoomMessages(roomid).then(messages=>{
-        commit('clearMessages');
-        commit('addMessages',messages)
-      }).catch((err)=>{
-        console.log(err);
-      });
+    async getChatRoomMessages({commit}, roomId){
+      ChatService.getChatRoomMessages(roomId)
+        .then(messages=>{
+          commit('clearMessages');
+          commit('addMessages',messages)
+        }).catch((err)=>{
+          console.log(err);
+        });
     },
     async addMessageToState({commit},message){
       commit("addMessage",message)

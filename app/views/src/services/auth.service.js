@@ -7,9 +7,10 @@ class AuthService {
         password: user.password
       })
       .then(response => {
+        console.log("Response:", response.data);
         const user = response.data;
         localStorage.setItem('user', JSON.stringify({
-            id: user.id,
+            userId: user.userId,
             username: user.username,
             email: user.email,
             roles: user.roles

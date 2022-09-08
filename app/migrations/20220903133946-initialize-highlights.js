@@ -1,5 +1,5 @@
 'use strict';
-const { DataTypes } = require("sequelize");
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
@@ -41,16 +41,22 @@ module.exports = {
         },
         createdAt: {
           type: Sequelize.DATE,
-          default: DataTypes.NOW
+          default: Sequelize.NOW
         },
         updatedAt:{
           type: Sequelize.DATE,
-          default: DataTypes.NOW
-        }
+          default: Sequelize.NOW
+        },
+        chapterUUID: {
+          type: Sequelize.INTEGER,
+          references: { model: 'chapters', key: 'chapterUUID' },
+          onDelete: 'CASCADE',
+        },
       },
       );
       transaction.commit();
-    }catch(err){
+    }
+    catch(err) {
       await transaction.rollback()
       throw err;
     }

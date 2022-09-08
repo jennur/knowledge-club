@@ -17,7 +17,6 @@ module.exports = {
         })
       });
       var chapters = Array();
-
       for(let book of fake_books){
         for(let chapter_num of Array(book.numChapters).keys()){
           chapters.push({
@@ -28,13 +27,12 @@ module.exports = {
           })
         }
       }
-      
       await queryInterface.bulkInsert("books",fake_books,{transaction});
       await queryInterface.bulkInsert("chapters",chapters,{transaction});
       transaction.commit();
    
     }catch(err){
-      await transaction.rollback()
+      await transaction.rollback();
       throw err;
     }
     
@@ -43,13 +41,12 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try{
-      await queryInterface.bulkDelete("chapters",{where:{}})
-      await queryInterface.bulkDelete("videos",{where:{}})
-      await queryInterface.bulkDelete("articles",{where:{}})
-      await queryInterface.bulkDelete("books",{where:{}})
-      await transaction.commit()
-
-    }catch(err){
+      await queryInterface.bulkDelete("chapters");
+      await queryInterface.bulkDelete("books");
+      
+      await transaction.commit();
+    }
+    catch(err){
       await transaction.rollback();
       throw err;
     }
