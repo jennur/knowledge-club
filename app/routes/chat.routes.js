@@ -10,7 +10,7 @@ module.exports = function(app) {
   });
 
   app.get("/api/chat/all", (req,res) => {
-    chatController.findByRoomId(req.query.roomid)
+    chatController.findByRoomId(req.query.roomId)
       .then((messages) => {
         res.status(200).send(messages);
       })

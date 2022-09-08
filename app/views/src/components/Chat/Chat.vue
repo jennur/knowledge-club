@@ -34,7 +34,7 @@
 
   function sendMessage(msg){
     let message_out = {
-      roomid: props.roomId,
+      roomId: props.roomId,
       message: msg,
       timesent: Date(),
       fromUser: store.state.auth.user.username
