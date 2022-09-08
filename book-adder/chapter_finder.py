@@ -36,6 +36,9 @@ class Book():
         self.num_chapters = len(self.chapters)
         self.stats = self.getStats()
 
+    def process_pdf(self):
+        print("PDF in proccess!")
+        self.contents = self.getContents()
 
     @property
     def isEPUB(self):
@@ -65,7 +68,7 @@ class Book():
 
 
         if self.isPDF:
-            reader =PdfReader(self.filename)
+            reader = PdfReader(self.filename)
             text = ""
             for page in reader.pages:
                 text += page.extract_text() + "\n"

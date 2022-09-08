@@ -18,7 +18,13 @@ export const books = {
         });
     },
     async addBook({ commit },book){
-      BookDataService.rawCreate(book)
+      return BookDataService.rawCreate(book)
+        .then((response) => {
+          return Promise.resolve(response.data);
+        })
+        .catch((err) => {
+          return Promise.reject(err.response.data);
+        })
     }
   },
   mutations:{

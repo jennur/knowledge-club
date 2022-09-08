@@ -13,6 +13,12 @@ class BookDataService {
   }
   rawCreate(file){
     return http_py.post("/books",file,{"Content-Type": 'multipar/form-data'})
+      .then((response) => {
+        return response.data;
+      })
+      .catch((err) => {
+        return Promise.reject(err);
+      })
   }
   getAllChapters(bookId){
     return http.get(`/books/chapters?bookId=${bookId}`)
