@@ -1,7 +1,7 @@
 
 export const userModel = (user) => {
   return {
-    id: user.id,
+    userId: user.userId,
     username: user.username,
     email: user.email,
     roles: user.roles

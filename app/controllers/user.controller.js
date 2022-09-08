@@ -18,9 +18,7 @@ exports.create = (user) => {
 // Get a User by the id in the request
 exports.findById = (userId) => {
   return User.findOne({
-    where: {
-      id: userId
-    },
+    where: { userId },
     include: [{
       model: db.roles,
       as: "roles"
@@ -30,7 +28,7 @@ exports.findById = (userId) => {
     console.log(">> Found user: " + JSON.stringify(user, null, 4));
 
     return {
-      id: user.id,
+      id: user.userId,
       username: user.username,
       email: user.email
     };
@@ -96,7 +94,7 @@ exports.setRole = (userId, roleId) => {
           return null;
         }
         user.setRoles(role);
-        console.log(`>> added Role id=${role.id} to User id=${user.id}`);
+        console.log(`>> added Role id=${role.roleId} to User id=${user.userId}`);
         return user;
       });
     })

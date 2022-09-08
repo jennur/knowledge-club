@@ -40,7 +40,7 @@ export const chapters = {
     chapters: {},
     focusedbook: {},
     focusedChapter: {
-      highlights: null,
+      highlights: [],
       visibleHighlights: {
         all: false,
         fromUser: {
@@ -133,6 +133,7 @@ mutations:{
         state.focusedChapter["highlights"] = payload.highlights;
     },
     setHighlight(state, highlight) {
+      console.log("Highlights:", state.focusedChapter.highlights.value);
       state.focusedChapter.highlights.push(highlight);
     },
     setAllHighlightsVisibility(state, visible) {

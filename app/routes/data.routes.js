@@ -58,6 +58,7 @@ module.exports = function(app) {
         res.status(200).send(highlights);
       })
       .catch((err) => {
+        console.log("Error getting highlight:", err);
         res.status(500).send({ message: err.message });
       });
   })

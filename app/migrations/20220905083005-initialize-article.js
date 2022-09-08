@@ -1,32 +1,31 @@
 'use strict';
-
 module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try{
-      await queryInterface.createTable("chats",
-      {
-        messageId: {
+      await queryInterface.createTable("articles",{
+        articleId: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement:true,
           allowNull:false
         },
-        roomId: {
-          type: Sequelize.STRING,
-          allowNull:false
+        type: {
+          type: Sequelize.STRING
         },
-        message:{
-          type:Sequelize.TEXT,
-          allowNull:false
+        title: {
+          type: Sequelize.STRING
         },
-        timesent:{
-          type:Sequelize.DATE,
-          allowNull:false
+        description: {
+          type: Sequelize.STRING
         },
-        fromUser:{
-          type:Sequelize.STRING,
-          allowNull:false
+        published: {
+          type: Sequelize.BOOLEAN
+        },
+        highlightId: {
+          type: Sequelize.INTEGER,
+          references: { model: 'highlights', key: 'highlightId' },
+          onDelete: 'CASCADE',
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -48,13 +47,13 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try{
-      await queryInterface.dropTable("chats");
-      await transaction.commit();
-    }
-    catch(err){
+      await queryInterface.dropTable("articles")
+      await transaction.commit()
+    }catch(err){
       await transaction.rollback();
       throw err;
     }
+    
   }
 };
 
