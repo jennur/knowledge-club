@@ -4,7 +4,7 @@ import re
 
 dotenv_re = re.compile("(.*)=(.*)|")
 
-book_insert_query ="INSERT INTO \"books\" (\"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\"";
+book_insert_query ="INSERT INTO \"books\" (\"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"numChapters\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\"";
 
 chapter_insert_query ="INSERT INTO \"chapters\" (\"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"createdAt\",\"chapterContent\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"createdAt\",\"chapterContent\",\"createdAt\",\"updatedAt\";"
 

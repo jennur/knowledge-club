@@ -2,7 +2,7 @@ node_modules
 .env
 .vscode
 build.css
-log
+log.*
 .ipynb_checkpoints
 research/data
 __pycache__
