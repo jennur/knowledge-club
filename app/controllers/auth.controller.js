@@ -70,7 +70,7 @@ exports.signin = (req, res) => {
       });
     }
 
-    var token = jwt.sign({ id: user.id }, config.secret, {
+    var token = jwt.sign({ id: user.userId }, config.secret, {
       expiresIn: 86400 // 24 hours
     });
 
@@ -84,13 +84,15 @@ exports.signin = (req, res) => {
         .cookie(accessTokenCookie, token, { httpOnly: true })
         .status(200)
         .send({
-          id: user.id,
+          userId: user.userId,
           username: user.username,
           email: user.email,
           roles: authorities,
           accessToken: token
         });
-    });
+    }).catch(err =>{
+      console.log("Error in getRoles:", err);
+    })
   })
   .catch(err => {
     const errors = err?.errors?.map(error => {
@@ -99,6 +101,7 @@ exports.signin = (req, res) => {
         field: error.path
       }
     });
+    console.log("Error finding user by id:", err);
     res.status(500).send({ errors });
   });
 };

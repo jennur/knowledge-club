@@ -1,5 +1,5 @@
 const db = require("../models");
-const Highlight = db.highlight;
+const Highlight = db.highlights;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Chat
@@ -19,7 +19,11 @@ exports.findAll = (bookId,ChapterNum) => {
     where:{
         bookId:bookId,
         chapterNum:ChapterNum
-    }
+    },
+    include: [{
+      model: db.articles,
+      as: "articles"
+    }]
   }).then((highlights) => {
     return highlights;
   });

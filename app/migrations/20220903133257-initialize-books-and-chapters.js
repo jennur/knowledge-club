@@ -1,5 +1,5 @@
 'use strict';
-const { DataTypes } = require("sequelize");
+
 
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -30,11 +30,11 @@ module.exports = {
         },
         createdAt: {
           type: Sequelize.DATE,
-          default: DataTypes.NOW
+          default: Sequelize.NOW
         },
         updatedAt:{
           type: Sequelize.DATE,
-          default: DataTypes.NOW
+          default: Sequelize.NOW
         }
       });
       // await queryInterface.bulkInsert("books",fake_books,{transaction});
@@ -49,9 +49,6 @@ module.exports = {
         chapterName: {
             type: Sequelize.STRING,
         },
-        bookUUID:{
-          type:Sequelize.INTEGER
-        },
         chapterNumber:{
             type: Sequelize.STRING
         },
@@ -60,17 +57,22 @@ module.exports = {
         },
         createdAt: {
             type: Sequelize.DATE,
-            default: DataTypes.NOW
+            default: Sequelize.NOW
         },
         updatedAt:{
           type: Sequelize.DATE,
-          default: DataTypes.NOW
-        }
-        
+          default: Sequelize.NOW
+        },
+        bookUUID: {
+          type: Sequelize.INTEGER,
+          references: { model: 'books', key: 'bookUUID' },
+          onDelete: 'CASCADE',
+        },
       });
       transaction.commit();
    
-    }catch(err){
+    }
+    catch(err) {
       await transaction.rollback()
       throw err;
     }
@@ -79,9 +81,7 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try{
-      await queryInterface.dropTable("chapters")
-      await queryInterface.dropTable("videos");
-      await queryInterface.dropTable("articles");
+      await queryInterface.dropTable("chapters");
       await queryInterface.dropTable("books");
       
       await transaction.commit()

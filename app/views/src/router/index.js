@@ -85,7 +85,6 @@ router.beforeEach(async (to, from, next) => {
   if(adminList.includes(to.name)) {
     store.dispatch("auth/checkAdminAccess")
       .then((response) => {
-        console.log("Response:", response);
         return true;
       })
       .catch(error => {

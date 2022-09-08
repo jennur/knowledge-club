@@ -25,11 +25,9 @@ exports.findAll = () => {
 };
 
 // Find a single Chat with a room id
-exports.findByRoomId = (RoomId) => {
+exports.findByRoomId = (roomId) => {
   return Chat.findAll({
-      where: {
-        roomid:RoomId
-      }
+      where: { roomId }
     })
     .then((messages) => {
       return messages
