@@ -13,16 +13,10 @@ module.exports = (sequelize, Sequelize) => {
         chapterNumber:{
             type: Sequelize.STRING
         },
-        createdAt: {
-            type: Sequelize.DATE,
-            allowNull:false,
-            defaultValue: DataTypes.NOW
-        },
         chapterContent:{
             type: Sequelize.TEXT,
         }
-    },
-    {timestamps:false});
+    });
 
     return Chapter;
   };

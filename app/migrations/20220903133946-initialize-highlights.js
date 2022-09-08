@@ -41,12 +41,14 @@ module.exports = {
         },
         createdAt: {
           type: Sequelize.DATE,
-          allowNull:false,
-          defaultValue: DataTypes.NOW
+          default: DataTypes.NOW
+        },
+        updatedAt:{
+          type: Sequelize.DATE,
+          default: DataTypes.NOW
         }
-
       },
-      {timestamps:false});
+      );
       transaction.commit();
     }catch(err){
       await transaction.rollback()

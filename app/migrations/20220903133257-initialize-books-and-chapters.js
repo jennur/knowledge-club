@@ -25,13 +25,16 @@ module.exports = {
           type:Sequelize.STRING,
           allowNull:false
         },
-        createdAt: {
-          type: Sequelize.DATE,
-          allowNull:false,
-          default: DataTypes.NOW
-      },
         numChapters:{
           type:Sequelize.INTEGER
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          default: DataTypes.NOW
+        },
+        updatedAt:{
+          type: Sequelize.DATE,
+          default: DataTypes.NOW
         }
       });
       // await queryInterface.bulkInsert("books",fake_books,{transaction});
@@ -52,14 +55,18 @@ module.exports = {
         chapterNumber:{
             type: Sequelize.STRING
         },
-        createdAt: {
-            type: Sequelize.DATE,
-            allowNull:false,
-            default: DataTypes.NOW
-        },
         chapterContent:{
             type: Sequelize.TEXT,
+        },
+        createdAt: {
+            type: Sequelize.DATE,
+            default: DataTypes.NOW
+        },
+        updatedAt:{
+          type: Sequelize.DATE,
+          default: DataTypes.NOW
         }
+        
       });
       transaction.commit();
    

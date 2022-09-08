@@ -11,7 +11,6 @@ module.exports = {
         {
           bookUUID: index,
           title:faker.commerce.productName(),
-          createdAt: new Date(),
           published: true,
           fileType:".epub",
           numChapters:faker.mersenne.rand(20,5)
@@ -25,7 +24,6 @@ module.exports = {
             chapterName: faker.name.firstName(),
             chapterNumber: chapter_num,
             bookUUID:book.bookUUID,
-            createdAt: new Date(),
             chapterContent: faker.lorem.paragraphs(5)
           })
         }

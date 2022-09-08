@@ -11,11 +11,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull:false
       },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull:false,
-        defaultValue: DataTypes.NOW
-      },
       published: {
         type: Sequelize.BOOLEAN,
         allowNull:false
@@ -27,8 +22,7 @@ module.exports = (sequelize, Sequelize) => {
       numChapters:{
         type:Sequelize.INTEGER
       }
-    },
-    {timestamps:false});
+    });
 
     return Book;
   };

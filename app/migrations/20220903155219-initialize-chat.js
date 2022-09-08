@@ -4,40 +4,37 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try{
-      await queryInterface.createTable("highlights",
+      await queryInterface.createTable("chats",
       {
-        highlightId: {
+        messageid: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement:true,
           allowNull:false
         },
-        bookId:{
-          type:Sequelize.INTEGER,
+        roomid: {
+          type: Sequelize.STRING,
           allowNull:false
         },
-        chapterNum: {
-          type: Sequelize.INTEGER,
+        message:{
+          type:Sequelize.TEXT,
           allowNull:false
         },
-        startloc:{
-          type:Sequelize.INTEGER,
-          allowNull:false
-        },
-        endloc:{
-          type:Sequelize.INTEGER,
-          allowNull:false
-        },
-        content:{
-          type:Sequelize.STRING
-        },
-        timeSent:{
+        timesent:{
           type:Sequelize.DATE,
           allowNull:false
         },
         fromUser:{
           type:Sequelize.STRING,
           allowNull:false
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          default: DataTypes.NOW
+        },
+        updatedAt:{
+          type: Sequelize.DATE,
+          default: DataTypes.NOW
         }
       });
       transaction.commit();
@@ -50,7 +47,7 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try{
-      await queryInterface.dropTable("highlights")
+      await queryInterface.dropTable("chats")
       await transaction.commit()
     }catch(err){
       await transaction.rollback();

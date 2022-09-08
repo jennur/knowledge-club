@@ -33,12 +33,7 @@ module.exports = (sequelize, Sequelize) => {
       fromUser:{
         type:Sequelize.STRING,
         allowNull:false
-      },
-      createdAt:{
-        type:Sequelize.DATE,
-        default: DataTypes.NOW
       }
-    },
-    {timestamps:false});
+    });
     return Highlight;
   };
