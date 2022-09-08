@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "npm run build --prefix ./app/views && npm run build-css --prefix ./app/views && node server.js",
     "server-only": "node server.js",
-    "pyserver-only": "python3 -m flask --app ./app/admin/server run",
+    "pyserver-only": "python3 -m flask --app ./book-adder/server run",
     "install-client": "npm i --prefix ./app/views",
     "client-only": "npm run dev --prefix ./app/views",
     "socket-server": "node socket-server.js"
