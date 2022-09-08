@@ -1,7 +1,7 @@
 <script setup>
   import { ref, computed } from "vue";
   import store from "../../../store/index";
-  import TextInput from "../../FormFields/TextInput.vue";
+  import TextInput from "../../Inputs/TextInput.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
   import InlineLink from "../../Links/InlineLink.vue";
   const emit = defineEmits(["success"]);

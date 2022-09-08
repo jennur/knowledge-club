@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from "vue";
+  import { ref, watch, computed } from "vue";
   import ChapterToolBar from "../ChapterToolBar/ChapterToolBar.vue";
   import HighlightFilter from "../HighlightFilter/HighlightFilter.vue";
   import NoteList from "../Notes/NoteList/NoteList.vue";
@@ -10,17 +10,22 @@
   const emit = defineEmits(["sliderStatus", "toggleHighlights"]);
   const props = defineProps({
     bookId: String,
-    chapterId: String
+    chapterId: String,
+    highlightText: String
   })
 
   const { bookId, chapterId } = props;
-  const sliderTab = ref('notes');
+  const sliderTab = ref("notes");
 
-  const defaultTab = 'notes';
+  const highlightText = computed(() => props.highlightText);
 
   function setActiveTab(tab) {
     sliderTab.value = tab;
   }
+
+  watch(highlightText, (newVal, oldVal) => {
+    setActiveTab("add-note");
+  })
 
 </script>
 
@@ -46,7 +51,7 @@
       <div v-if="sliderTab === 'add-note'">
         <h2>New note</h2>
 
-        <NewNote />
+        <NewNote :highlightText="highlightText" />
       </div>
 
       <div v-if="sliderTab === 'chat'" class="flex flex-col h-full">

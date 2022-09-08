@@ -1,11 +1,14 @@
 <script setup>
-  import store from "../../../../store/index"
+  import store from "@/store/index"
   import { useRoute } from "vue-router";
   import { computed, ref, watch } from 'vue'
-  import ChapterLayout from "../../../../layouts/ChapterLayout.vue";
-  import Slideover from "../../../../components/Slideover/Slideover.vue";
-  import HighlightToolbar from "../../../../components/HighlightToolbar/HighlightToolbar.vue";
+  import ChapterLayout from "@/layouts/ChapterLayout.vue";
+  import Slideover from "@/components/Slideover/Slideover.vue";
+  import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
+  import Modal from "@/components/Modal/Modal.vue";
+  import MarkdownEditor from "@/components/Inputs/MarkdownEditor.vue";
   import getHighlightedText from "./highlightFunctions/getHighlightedText";
+  import getSelectedText from "./highlightFunctions/getSelectedText";
   import addChapterNote from "./noteFunctions/addChapterNote";
 
   const route = useRoute();
@@ -22,26 +25,6 @@
   const chapterData = computed(() => store.state.chapters.focusedChapter);
   const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
   const bookData = computed(() => store.state.chapters.focusedBook);
-
-
-  function getSelectedText() {
-    let text = "";
-    let text_range = { startloc: 0, endloc: 0 };
-    
-    if(!window.getSelection().focusNode.previousSibling){
-      text = window.getSelection();
-      text_range = { startloc: text.anchorOffset, endloc: text.focusOffset };
-    }
-    else if (typeof window.getSelection != "undefined") {
-      let last_loc= parseInt(window.getSelection().focusNode.previousSibling.attributes.loc.value);
-      text = window.getSelection();
-      text_range = {startloc:last_loc + text.anchorOffset,endloc:last_loc + text.focusOffset}
-
-    } else if (typeof document.selection != "undefined" && document.selection.type == "Text") {
-      text = document.selection.createRange();
-    }
-    return text_range;
-  }
 
   function handleTextSelect() {
     let selection = window.getSelection();
@@ -62,8 +45,8 @@
     }
   }
 
-  const storeSelectedText = () => {
-    var selectedText = getSelectedText();
+  function storeSelectedText(text) {
+    let selectedText = text || getSelectedText();
     const { startloc, endloc } = selectedText;
     
     if(startloc !== endloc) {
@@ -79,34 +62,36 @@
     showHighlightToolBar.value = false;
   }
 
-  function showHighlights () {
+  function toggleHighlights(value) {
     try {
-      textWithHighlights.value = getHighlightedText();
+      textWithHighlights.value = value ? getHighlightedText() : null;
     }
     catch(err) {
       console.log("Error doing highlights:", err);
     }
   }
 
-  function hideHighlights() {
-    textWithHighlights.value = null;
-  }
-
   watch(allHighlightsVisible, (newVal, oldVal) => {
-    if(newVal) showHighlights();
-    else hideHighlights();
+    toggleHighlights(!!newVal);
   })
+
+  const highlightText = ref(null);
+
+  function openNewNoteTab() {
+    let selectedText = window.getSelection().toString();
+    highlightText.value = selectedText;
+  }
 
 </script>
 
 <template>
   <ChapterLayout>
     <template #sidebar>
-      <Slideover class="md:mt-2" />
+      <Slideover class="md:mt-2" :highlightText="highlightText" />
     </template>
 
     <template #main>
-      <div class=" pr-16 pb-16">
+      <div class="pr-16 pb-16">
         <span class="text-xs uppercase text-gray-400">{{ bookData?.title }}</span>
         <h1 class="mt-2">{{ chapterData?.chapterName }}</h1>
         <div 
@@ -121,6 +106,7 @@
           class="absolute"
           :style="toolbarPosition"
           @saveHighlight="storeSelectedText"
+          @addNote="openNewNoteTab"
         />
       </div>
     </template>

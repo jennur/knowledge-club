@@ -1,5 +1,5 @@
 <script setup>
-  import Switch from "../FormFields/Switch.vue";
+  import Switch from "../Inputs/Switch.vue";
   import { ref } from 'vue'
   import store from "../../store/index";
 

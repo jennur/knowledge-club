@@ -3,7 +3,7 @@ const Article = db.articles;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Article
-exports.create = (article, highlight) => {
+exports.create = (article) => {
   return Article.create(article)
     .then((article) => {
         console.log(">> Created article: " + JSON.stringify(article, null, 4));
@@ -42,7 +42,7 @@ exports.setHighlight = (articleId, highlightId) => {
           return null;
         }
         article.setHighlight(highlight);
-        console.log(`>> added Highlight id=${highlight.highlightId} to Article id=${article.id}`);
+        console.log(`>> added Highlight id=${highlight.highlightId} to Article id=${article.articleId}`);
         return article;
       });
     })

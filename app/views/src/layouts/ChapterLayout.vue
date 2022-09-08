@@ -3,7 +3,7 @@
   import LeftMenu from "./Header/LeftMenu.vue";
   import RightMenu from "./Header/RightMenu.vue";
   import Footer from "./Footer/Footer.vue";
-  import Switch from "../components/FormFields/Switch.vue";
+  import Switch from "../components/Inputs/Switch.vue";
 
   const isDragging = ref(false);
   const sidebarBasis = ref({ flexBasis: "25%" });
@@ -131,5 +131,10 @@
   .night .h-toolbar .icon-button .icon,
   .night .h-toolbar .icon-button .text {
     @apply text-gray-700 hover:text-gray-900;
+  }
+
+  .night .editor,
+  .night .compiled {
+    @apply text-gray-900;
   }
 </style>

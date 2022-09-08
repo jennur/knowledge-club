@@ -6,6 +6,11 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement:true,
         allowNull:false
       },
+      highlightId: {
+        type: Sequelize.INTEGER,
+        references: { model: 'highlights', key: 'highlightId' },
+        onDelete: 'CASCADE'
+      },
       type: {
         type: Sequelize.STRING
       },

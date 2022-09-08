@@ -80,10 +80,11 @@ module.exports = function(app) {
 
     try {
       const article = await articleController.create(articleData);
-      const highlight = await articleController.setHighlight(article.id, highlightId);
+      const highlight = await articleController.setHighlight(article.articleId, highlightId);
       res.status(200).send(article);
     } 
     catch (err) {
+      console.log(">> Error creating article:", err.message);
       res.status(500).send({ message: err.message });
     }
   })
