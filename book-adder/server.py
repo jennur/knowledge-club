@@ -3,6 +3,7 @@ from flask import Flask, make_response, jsonify
 from flask import request
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
+from waitress import serve
 import os
 from chapter_finder import Book
 from sql_transmitter import transmit_book
@@ -41,8 +42,3 @@ def do_something():
     if request.method =="OPTION":
         return "OK"
     return "<p>Hello, World!</p>"
-
-
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
