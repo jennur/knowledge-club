@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from "vue";
   const emit = defineEmits(["switch"]);
-
+  const props = defineProps({
+    checked: Boolean
+  })
   function handleSwitch(event) {
     emit('switch', event.target.checked);
   }
@@ -11,7 +13,8 @@ import { ref } from "vue";
   <input 
       class="switch mr-2"
       type="checkbox" 
-      @input="handleSwitch" 
+      @input="handleSwitch"
+      :checked="props.checked"
     />
 </template>
 

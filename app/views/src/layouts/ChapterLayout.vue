@@ -30,10 +30,13 @@
     window.removeEventListener("mouseup", endSidebarResize);
   }
 
-  const colorTheme = ref("day");
+  const currentColorTheme = localStorage.getItem("colorTheme") || "day";
+  const colorTheme = ref(currentColorTheme);
 
   function toggleDarkMode(value) {
-    colorTheme.value = value ? "night" : "day";
+    let newColorTheme = value ? "night" : "day"
+    colorTheme.value = newColorTheme;
+    localStorage.setItem("colorTheme", newColorTheme);
   }
 
 </script>
@@ -65,9 +68,10 @@
       <div ref="mainContent" :style="mainContentBasis">
         <div class="flex items-center">
           <label class="flex items-center text-xs ml-4">
-            <Switch @switch="toggleDarkMode" />
+            <Switch @switch="toggleDarkMode" :checked="colorTheme === 'night'" />
             <span>Dark mode</span>
           </label>
+          
           <RightMenu class="hidden md:flex py-1 px-4" />
         </div>
         <main class="grow px-4">
