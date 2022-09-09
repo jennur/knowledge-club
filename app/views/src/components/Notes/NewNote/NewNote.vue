@@ -35,7 +35,9 @@
       </div>
     </div>
     <div v-else>
-      <p class="text-slate-800 mb-2 bg-emerald-100 p-4">Select some text to start adding notes!</p>
+      <p class="bg-emerald-100 text-slate-800 py-4 px-6 max-w-max mb-2">
+        Select some text to add a note!
+      </p>
     </div>
 
     <MarkdownEditor class="max-h-full" @markdown="setInput" />
