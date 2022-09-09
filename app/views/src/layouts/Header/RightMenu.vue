@@ -14,7 +14,7 @@
       <!-- <IconLink path="/books" linkText="Books" iconClass="fa-solid fa-book" /> -->
       <!-- <IconLink path="/chat" linkText="Chat" iconClass="fa-solid fa-comment" /> -->
       <IconLink path="/account" linkText="Account" iconClass="fa-solid fa-user" />
-      <!-- <IconButton vertical @click="store.dispatch('auth/logout')" buttonText="Log out" iconClass="fa-solid fa-right-from-bracket" /> -->
+      <IconButton vertical @click="store.dispatch('auth/logout')" buttonText="Log out" iconClass="fa-solid fa-right-from-bracket" />
     </div>
   </nav>
 </template>
