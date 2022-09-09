@@ -8,3 +8,5 @@ research/data
 __pycache__
 .DS_Store
 sql_creds.json
+*.epub
+*.pdf

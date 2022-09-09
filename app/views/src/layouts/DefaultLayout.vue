@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <div id="default-layout">
+  <div id="default-layout" class="min-h-screen flex flex-col">
     <header class="outer-content-wrapper text-gray-600 py-1">
       <div class="flex justify-between">
       <LeftMenu />
@@ -15,7 +15,7 @@
       </div>
     </header>
 
-    <main>
+    <main class="grow">
       <slot/>
     </main>
     
