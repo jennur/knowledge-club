@@ -94,6 +94,9 @@
     storeSelectedText(note.highlight, note.note);
     console.log("Saving note");
   }
+  function hideHighlightToolbar() {
+    showHighlightToolBar.value = false;
+  }
 </script>
 
 <template>
@@ -124,7 +127,8 @@
         </div>
 
         <HighlightToolbar 
-          v-if="showHighlightToolBar" 
+          v-if="showHighlightToolBar"
+          v-click-outside="hideHighlightToolbar"
           class="absolute"
           :style="toolbarPosition"
           @saveHighlight="storeSelectedText"

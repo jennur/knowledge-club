@@ -2,44 +2,34 @@
 import { ref } from 'vue'
 import IconButton from "../../Buttons/IconButton.vue";
 const emit = defineEmits(["switchTab"]);
+const props = defineProps({
+  activeTab: String
+})
+
+function isActive(tabName) {
+  return tabName === props.activeTab;
+}
+
+const tabs = [
+  { name: "notes", icon: "fas fa-folder-open" },
+  { name: "add-note", icon: "fas fa-file-circle-plus" },
+  { name: "highlights", icon: "fas fa-eye" },
+  { name: "chat", icon: "fas fa-comment" }
+]
+
 </script>
 
 <template>
   <div class="toolbar">
       <IconButton
+        v-for="tab in tabs"
+        :key="tab.name"
         vertical
         size="lg"
-        class="tool-button"
-        iconClass="fas fa-folder-open"
-        ariaLabel="Open menu at notes tab"
-        @click="emit('switchTab', 'notes')"
-      />
-
-      <IconButton
-        vertical
-        size="lg"
-        class="tool-button"
-        iconClass="fas fa-eye"
-        ariaLabel="Open menu at highlights tab"
-        @click="emit('switchTab', 'highlights')"
-      />
-
-      <IconButton
-        vertical
-        size="lg"
-        class="tool-button"
-        iconClass="fas fa-file-circle-plus"
-        ariaLabel="Open menu at notes tab"
-        @click="emit('switchTab', 'add-note')"
-      />
-
-      <IconButton
-        vertical
-        size="lg"
-        class="tool-button"
-        iconClass="fas fa-comment"
-        ariaLabel="Open menu at notes tab"
-        @click="emit('switchTab', 'chat')"
+        :class="`tool-button ${isActive(tab.name) ? 'active' : ''}`"
+        :iconClass="tab.icon"
+        :ariaLabel="`Open menu at ${tab.name} tab`"
+        @click="emit('switchTab', tab.name)"
       />
   </div>
 </template>
@@ -52,6 +42,10 @@ const emit = defineEmits(["switchTab"]);
 
   .toolbar .tool-button {
     @apply hover:text-black overflow-hidden z-30;
+  }
+
+  .toolbar .tool-button.active {
+    @apply text-blue-500;
   }
 
 </style>

@@ -87,6 +87,11 @@
 
 
 <style lang="postcss">
+
+  .night .select-dropdown {
+    @apply text-slate-100;
+  }
+
   .sidebar-handle {
     @apply absolute top-0 right-0 
       w-[.2rem] h-full px-3 focus:outline-none cursor-ew-resize;
@@ -110,6 +115,10 @@
 
   .night #slider .c-toolbar {
     @apply bg-slate-700;
+  }
+
+  .night #slider .c-toolbar .tool-button.active .icon {
+    @apply text-blue-400;
   }
 
   .night #slider #slider-content {
