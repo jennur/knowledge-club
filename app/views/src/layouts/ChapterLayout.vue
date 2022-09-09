@@ -133,6 +133,7 @@
     @apply text-gray-700 hover:text-gray-900;
   }
 
+  .night .new-note .highlight-text,
   .night .editor,
   .night .compiled {
     @apply text-gray-900;

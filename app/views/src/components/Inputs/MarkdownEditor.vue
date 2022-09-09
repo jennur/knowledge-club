@@ -17,7 +17,7 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-full border border-slate-300">
+  <div class="flex w-full max-w-full">
 
     <textarea class="editor basis-1/2" :value="input" @input="update"></textarea>
 

@@ -7,23 +7,23 @@
   import Chat from "../Chat/Chat.vue"
   import { chapterRoomId } from "../../helpers/chatRoomIds";
 
-  const emit = defineEmits(["sliderStatus", "toggleHighlights"]);
+  const emit = defineEmits(["sliderStatus", "toggleHighlights", "saveNote"]);
   const props = defineProps({
     bookId: String,
     chapterId: String,
-    highlightText: String
+    highlight: Object
   })
 
   const { bookId, chapterId } = props;
   const sliderTab = ref("notes");
 
-  const highlightText = computed(() => props.highlightText);
+  const highlight = computed(() => props.highlight);
 
   function setActiveTab(tab) {
     sliderTab.value = tab;
   }
 
-  watch(highlightText, (newVal, oldVal) => {
+  watch(highlight, (newVal, oldVal) => {
     setActiveTab("add-note");
   })
 
@@ -51,7 +51,7 @@
       <div v-if="sliderTab === 'add-note'">
         <h2>New note</h2>
 
-        <NewNote :highlightText="highlightText" />
+        <NewNote :highlight="highlight" @save="note => emit('saveNote', note)" />
       </div>
 
       <div v-if="sliderTab === 'chat'" class="flex flex-col h-full">

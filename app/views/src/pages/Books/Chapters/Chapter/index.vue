@@ -7,9 +7,9 @@
   import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
   import Modal from "@/components/Modal/Modal.vue";
   import MarkdownEditor from "@/components/Inputs/MarkdownEditor.vue";
-  import getHighlightedText from "./highlightFunctions/getHighlightedText";
-  import getSelectedText from "./highlightFunctions/getSelectedText";
-  import addChapterNote from "./noteFunctions/addChapterNote";
+  import getHighlightedText from "@/helpers/highlightFunctions/getHighlightedText";
+  import getSelectedText from "@/helpers/highlightFunctions/getSelectedText";
+  import addChapterNote from "@/helpers/noteFunctions/addChapterNote";
 
   const route = useRoute();
   const { id: bookId, chapterNum } = route.params;
@@ -45,7 +45,7 @@
     }
   }
 
-  function storeSelectedText(text) {
+  function storeSelectedText(text, note) {
     let selectedText = text || getSelectedText();
     const { startloc, endloc } = selectedText;
     
@@ -56,15 +56,16 @@
         startloc,
         endloc,
         fromUser: user.value.username,
-        content: ""
+        content: "",
+        note
       })
     }
     showHighlightToolBar.value = false;
   }
 
-  function toggleHighlights(value) {
+  function toggleHighlights(show) {
     try {
-      textWithHighlights.value = value ? getHighlightedText() : null;
+      textWithHighlights.value = show ?  getHighlightedText() : null;
     }
     catch(err) {
       console.log("Error doing highlights:", err);
@@ -75,19 +76,27 @@
     toggleHighlights(!!newVal);
   })
 
-  const highlightText = ref(null);
+  const highlight = ref(null);
 
   function openNewNoteTab() {
-    let selectedText = window.getSelection().toString();
-    highlightText.value = selectedText;
+    let selectedText = getSelectedText();
+    highlight.value = selectedText;
   }
 
+  function saveNote(note) {
+    storeSelectedText(note.highlight, note.note);
+
+  }
 </script>
 
 <template>
   <ChapterLayout>
     <template #sidebar>
-      <Slideover class="md:mt-2" :highlightText="highlightText" />
+      <Slideover 
+        class="md:mt-2" 
+        :highlight="highlight"
+        @saveNote="saveNote"
+      />
     </template>
 
     <template #main>

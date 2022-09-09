@@ -2,26 +2,34 @@
   import { ref } from 'vue'
   import MarkdownEditor from "../../Inputs/MarkdownEditor.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
+
+  const emit = defineEmits(["save"]);
+
   const props = defineProps({
-    highlightText: {
-      type: String,
+    highlight: {
+      type: Object,
       default: null
     }
   })
 
-  function setInput() {
-    console.log("Set input");
+  const markdown = ref("");
+
+  function setInput(value) {
+    markdown.value = value;
   }
 
   function saveNote() {
-    console.log("Save note");
+    emit("save", { 
+      note: markdown.value,
+      highlight: props.highlight
+    });
   }
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div v-if="highlightText" class="mb-2">
-      <p class="p-2 bg-blue-100">"{{ highlightText }}"</p>
+  <div class="new-note flex flex-col">
+    <div v-if="highlight?.text" class="mb-2">
+      <p class="highlight-text p-2 bg-blue-100">"{{ highlight.text }}"</p>
     </div>
 
     <MarkdownEditor class="max-h-full" @markdown="setInput" />

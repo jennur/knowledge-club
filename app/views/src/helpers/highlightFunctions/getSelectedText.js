@@ -15,5 +15,5 @@ export default function getSelectedText() {
     } else if (typeof document.selection != "undefined" && document.selection.type == "Text") {
       text = document.selection.createRange();
     }
-    return text_range;
+    return {...text_range, text: text.toString() };
   }

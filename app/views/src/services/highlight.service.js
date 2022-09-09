@@ -33,8 +33,7 @@ class HighlightService {
   postHighlightArticle(article, highlightId) {
     return http.post("/books/chapters/text/highlights/article", {
       article: {
-        title: article.title,
-        text: article.text,
+        description: article.description,
       },
       highlightId
     }).then((response) => {
