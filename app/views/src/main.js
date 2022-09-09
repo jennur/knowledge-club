@@ -4,6 +4,7 @@ import router from './router'
 import store from "./store"
 import './assets/main.css'
 import VueMathjax from 'vue-mathjax-next';
+import vClickOutside from "click-outside-vue3";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 import ChapterLayout from "./layouts/ChapterLayout.vue";
 
@@ -66,6 +67,7 @@ const app = createApp(App)
   .use(router)
   .use(store)
   .use(VueMathjax)
+  .use(vClickOutside)
   .component('font-awesome-icon', FontAwesomeIcon)
   .component('default-layout', DefaultLayout)
   .component('chapter-layout', ChapterLayout)

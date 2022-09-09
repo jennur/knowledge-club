@@ -7,6 +7,10 @@
       options: Array
   })
   const showOptions = ref(false);
+
+  function hideOptions(){
+    showOptions.value = false;
+  }
 </script>
 
 <template>
@@ -18,12 +22,12 @@
       </div>
       <font-awesome-icon icon="fa-solid fa-caret-down" class="icon ml-2 text-xs" />
     </div>
-    <div v-if="showOptions" class="select-options">
+    <div v-if="showOptions" v-click-outside="hideOptions" class="select-options">
       <component 
         v-for="option in options" 
         :key="option.name" 
         :is="option.route ? RouterLink : 'button'"
-        :class="`option ${option.divider ? 'border-t border-slate-300': ''}`"
+        :class="`option ${option.divider ? 'border-t border-slate-200': ''}`"
         @click="option.click"
         :to="option.route"
       >
@@ -40,11 +44,11 @@
   }
 
   .select-display {
-    @apply w-full flex items-center justify-between py-1 px-4 border border-slate-400 text-sm;
+    @apply w-full flex items-center justify-between py-1 px-4 border border-slate-300 text-sm;
   }
 
   .select-options {
-    @apply w-full absolute top-full mt-2 border border-slate-400 shadow-md;
+    @apply w-full absolute top-full mt-2 border border-slate-300 shadow-md;
   }
 
   .select-options .option {
