@@ -60,6 +60,7 @@
       })
       .then((highlight) => {
         console.log("Highlight", highlight);
+        if(note) store.dispatch("chapters/openToolTab", "notes");
       })
       .catch((err) => {
         console.log("Error:", err);

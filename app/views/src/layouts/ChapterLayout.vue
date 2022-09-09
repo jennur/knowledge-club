@@ -93,7 +93,7 @@
   }
 
   .interaction-board {
-    @apply h-screen bg-slate-100 overflow-y-scroll text-black;
+    @apply h-screen bg-slate-100 overflow-y-hidden text-black;
   }
 
   .night .interaction-board {

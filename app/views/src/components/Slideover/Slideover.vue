@@ -1,11 +1,12 @@
 <script setup>
   import { ref, watch, computed } from "vue";
+  import { chapterRoomId } from "../../helpers/chatRoomIds";
+  import store from "@/store/index.js";
   import ChapterToolBar from "../ChapterToolBar/ChapterToolBar.vue";
   import HighlightFilter from "../HighlightFilter/HighlightFilter.vue";
   import NoteList from "../Notes/NoteList/NoteList.vue";
   import NewNote from "../Notes/NewNote/NewNote.vue";
   import Chat from "../Chat/Chat.vue"
-  import { chapterRoomId } from "../../helpers/chatRoomIds";
 
   const emit = defineEmits(["sliderStatus", "toggleHighlights", "saveNote"]);
   const props = defineProps({
@@ -15,12 +16,11 @@
   })
 
   const { bookId, chapterId } = props;
-  const sliderTab = ref("notes");
-
+  const sliderTab = computed(() => store.state.chapters.focusedChapter.currentToolTab);
   const highlight = computed(() => props.highlight);
 
   function setActiveTab(tab) {
-    sliderTab.value = tab;
+    store.dispatch("chapters/openToolTab", tab);
   }
 
   watch(highlight, (newVal, oldVal) => {
@@ -35,7 +35,7 @@
       @switchTab="setActiveTab"
       class="c-toolbar bg-slate-200 py-4 -ml-4"
     />
-    <div id="slider-content" class="basis-full md:border-t md:border-slate-200 pt-5 px-4">
+    <div id="slider-content" class="basis-full md:border-t md:border-slate-200 pt-5 px-4 pb-16">
       <div v-if="sliderTab === 'notes'">
         <h2>Notes</h2>
 
@@ -64,7 +64,12 @@
 </template>
 
 <style lang="postcss" scoped>
-  .slider-content {
+
+#slider {
+  @apply max-h-full;
+}
+  #slider-content {
+    @apply max-h-full overflow-scroll;
   }
 
   .slider-container.closed {

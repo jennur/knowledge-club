@@ -14,7 +14,10 @@ watch(highlights, (newVal, oldVal) => {
 
 <template>
   <div>
-    <div v-for="highlight in store.state.chapters.focusedChapter.highlights" :key="highlight.highlightId">
+    <div 
+      v-for="highlight in store.state.chapters.focusedChapter.highlights" 
+      :key="highlight.highlightId"
+    >
       <Note :highlightText="highlight.content" :articles="highlight.articles"/>
     </div>
   </div>

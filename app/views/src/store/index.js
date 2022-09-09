@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import { auth } from "./auth.module";
-import { books,chapters } from "./books.modules";
+import { books } from "./books.module";
+import { chapters } from "./chapters.module";
 import { chat } from "./chat.modules";
 
 const store = createStore({
