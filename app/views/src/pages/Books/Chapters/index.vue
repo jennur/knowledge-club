@@ -20,8 +20,9 @@
         <h2 class="mt-6 uppercase text-sm text-gray-400">Chapters</h2>
         <div class="ml-4 mt-4">
           <RouterLink 
-            v-for="chapter in store.state.chapters.chapters" :key="chapter"
-            :to="`/books/${bookId}/chapters/${chapter.chapterNumber}`"
+            v-for="chapter in store.state.chapters.chapters" 
+            :key="chapter"
+            :to="{ name: 'chapter', params: { id: bookId, chapterNum: chapter.chapterNumber }}"
             class="flex items-center max-w-max text-black-500 group mb-4"
             >
             <span class="w-12 text-3xl font-thin group-hover:font-bold">

@@ -1,6 +1,6 @@
 <script setup>
   import store from "@/store/index"
-  import { useRoute } from "vue-router";
+  import { useRoute, RouterLink } from "vue-router";
   import { computed, ref, watch } from 'vue'
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
   import Slideover from "@/components/Slideover/Slideover.vue";
@@ -108,7 +108,13 @@
 
     <template #main>
       <div class="pr-16 pb-16">
-        <span class="text-xs uppercase text-gray-400">{{ bookData?.title }}</span>
+        <RouterLink 
+          :to="{ name: 'chapters', params: { id: bookId } }" 
+          class="text-xs uppercase text-gray-400"
+        >
+          {{ bookData?.title }}
+        </RouterLink>
+
         <h1 class="mt-2">{{ chapterData?.chapterName }}</h1>
         <div 
           @mouseup="handleTextSelect"
