@@ -56,7 +56,7 @@
         startloc,
         endloc,
         fromUser: user.value.username,
-        content: "",
+        content: selectedText.text,
         note
       })
     }
