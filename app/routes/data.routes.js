@@ -42,7 +42,7 @@ module.exports = function(app) {
       });
   })
 
-  app.get("/api/books/chapters/text",(req,res)=>{
+  app.get("/api/books/chapters/text", (req,res) => {
     chapterController.findOne(req.query.bookId,req.query.chapterNum)
       .then((chapter)=>{ 
         res.status(200).send(chapter);
@@ -52,9 +52,9 @@ module.exports = function(app) {
       });  
   })
 
-  app.get("/api/books/chapters/text/highlights",(req,res)=>{
+  app.get("/api/books/chapters/text/highlights", (req,res) => {
     highlightController.findAll(req.query.bookId,req.query.chapterNum)
-      .then((highlights)=>{
+      .then((highlights) => {
         res.status(200).send(highlights);
       })
       .catch((err) => {
@@ -80,8 +80,8 @@ module.exports = function(app) {
 
     try {
       const article = await articleController.create(articleData);
-      const highlight = await articleController.setHighlight(article.articleId, highlightId);
-      res.status(200).send(article);
+      const articleWithHighlight = await articleController.setHighlight(article.articleId, highlightId);
+      res.status(200).send(articleWithHighlight);
     } 
     catch (err) {
       console.log(">> Error creating article:", err.message);

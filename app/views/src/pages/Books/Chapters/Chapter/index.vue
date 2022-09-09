@@ -20,6 +20,7 @@
   const textWithHighlights = ref(null);
   const showHighlightToolBar = ref(null);
   const toolbarPosition = ref(null);
+  const errorMsg = ref(null);
 
   const user = computed(() => store.state.auth.user);
   const chapterData = computed(() => store.state.chapters.focusedChapter);
@@ -34,15 +35,13 @@
       return;
     }
 
-    if(!selection.focusNode.previousSibling){
-      let position = selection.getRangeAt(0).getBoundingClientRect();
+    let position = selection.getRangeAt(0).getBoundingClientRect();
 
-      toolbarPosition.value = { 
-        top: `${position.top + position.height}px` ,
-        left: `${position.left}px` 
-      };
-      showHighlightToolBar.value = true;
-    }
+    toolbarPosition.value = {
+      top: `${position.top + position.height}px`,
+      left: `${position.left}px`
+    };
+    showHighlightToolBar.value = true;
   }
 
   function storeSelectedText(text, note) {
@@ -58,6 +57,13 @@
         fromUser: user.value.username,
         content: selectedText.text,
         note
+      })
+      .then((highlight) => {
+        console.log("Highlight", highlight);
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+        errorMsg.value = err.message;
       })
     }
     showHighlightToolBar.value = false;
@@ -85,7 +91,7 @@
 
   function saveNote(note) {
     storeSelectedText(note.highlight, note.note);
-
+    console.log("Saving note");
   }
 </script>
 

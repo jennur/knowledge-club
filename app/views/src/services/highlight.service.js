@@ -40,7 +40,7 @@ class HighlightService {
       return response.data;
     })
     .catch((err) => {
-      console.log("postHighlightArtile:", err);
+      console.log("postHighlightArticle:", err);
       return err;
     })
   }

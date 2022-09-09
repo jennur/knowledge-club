@@ -33,7 +33,7 @@ exports.setHighlight = (articleId, highlightId) => {
   return Article.findByPk(articleId)
     .then((article) => {
       if (!article) {
-        console.log("Error setting book: Article not found!");
+        console.log("Error setting highlight: Article not found!");
         return null;
       }
       return db.highlights.findByPk(highlightId).then((highlight) => {

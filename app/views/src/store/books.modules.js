@@ -46,7 +46,6 @@ export const chapters = {
     chapters: {},
     focusedbook: {},
     focusedChapter: {
-      articles: [],
       highlights: [],
       visibleHighlights: {
         all: false,
@@ -109,19 +108,21 @@ export const chapters = {
           payload.fromUser,
           payload.content
         );
-        commit("setHighlight", highlight);
-
+        
         if(payload.note) {
           const article = await HighlightService.postHighlightArticle({
               description: payload.note
-            }, 
+            },
             highlight.highlightId
           );
-          commit("setArticle", article);
+          highlight.article = article;
         }
+        commit("setHighlight", highlight);
+        return highlight;
       }
       catch(err) {
         console.log("postHighLight():", err);
+        return err;
       }
     },
 
@@ -150,9 +151,6 @@ mutations:{
     },
     setHighlight(state, highlight) {
       state.focusedChapter.highlights.push(highlight);
-    },
-    setArticle(state, article) {
-      state.focusedChapter.articles.push(article);
     },
     setAllHighlightsVisibility(state, visible) {
       state.focusedChapter["visibleHighlights"] = {

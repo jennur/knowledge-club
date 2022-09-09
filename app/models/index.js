@@ -18,14 +18,12 @@ db.chat = require("../models/chat.model.js")(sequelize, Sequelize)
 db.highlights = require("../models/highlight.model.js")(sequelize, Sequelize)
 db.raw = require("../models/raw.model.js")(sequelize, Sequelize)
 
-db.highlights.hasOne(db.articles, {
-    foreignKey: "articleId",
-    as: "articles",
-  });
+db.highlights.hasMany(db.articles, {
+  foreignKey: "highlightId"
+});
 
 db.articles.belongsTo(db.highlights, {
-  foreignKey: "highlightId",
-  as: "highlight",
+  foreignKey: "highlightId"
 });
 
 // db.chapters.belongsTo(db.books, {
