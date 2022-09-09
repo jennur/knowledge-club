@@ -1,10 +1,26 @@
 <script setup>
-import { ref } from 'vue'
+  import { marked } from "marked";
+  import DOMPurify from "dompurify";
+  import { ref, computed } from 'vue'
 
+  const props = defineProps({
+    highlightText: String,
+    articles: Array
+  })
+
+  const getCompiledMarkdown = (text) => {
+    let sanitizedInput = DOMPurify.sanitize(text);
+    return marked(sanitizedInput);
+  }
 </script>
 
 <template>
   <div>
-    Single note component
+    <div v-if="highlightText" class="p-2 mt-4 bg-blue-100">
+      {{ highlightText }}
+    </div>
+    <div v-for="article in articles" :key="article.articleId">
+      <div class="compiled" v-html="getCompiledMarkdown(article.description)"></div>
+    </div>
   </div>
 </template>

@@ -115,7 +115,8 @@ export const chapters = {
             },
             highlight.highlightId
           );
-          highlight.article = article;
+          if(highlight.articles) highlight.articles.push(article);
+          else highlight.articles = [article];
         }
         commit("setHighlight", highlight);
         return highlight;
