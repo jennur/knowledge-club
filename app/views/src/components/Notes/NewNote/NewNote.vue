@@ -2,6 +2,7 @@
   import { ref } from 'vue'
   import MarkdownEditor from "../../Inputs/MarkdownEditor.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
+  import Quotes from "../../Quotes/Quotes.vue";
 
   const emit = defineEmits(["save"]);
 
@@ -27,9 +28,11 @@
 </script>
 
 <template>
-  <div class="new-note flex flex-col">
-    <div v-if="highlight?.text" class="mb-2">
-      <p class="highlight-text p-4 bg-blue-100">"{{ highlight.text }}"</p>
+  <div class="new-note">
+    <div v-if="highlight?.text">
+      <div class="highlight-text">
+        <Quotes>{{ highlight.text }}</Quotes>
+      </div>
     </div>
     <div v-else>
       <p class="text-slate-800 mb-2 bg-emerald-100 p-4">Select some text to start adding notes!</p>
@@ -41,3 +44,14 @@
     </div>
   </div>
 </template>
+
+<style lang="postcss">
+
+  .new-note {
+    @apply flex flex-col;
+  }
+
+  .new-note .highlight-text {
+    @apply p-2 bg-blue-100;
+  }
+</style>

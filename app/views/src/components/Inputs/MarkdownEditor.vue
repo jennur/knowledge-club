@@ -44,10 +44,6 @@
     @apply mt-4 mb-1 font-medium;
   }
 
-  .compiled h4 {
-
-  }
-
   .compiled ul,
   .compiled ol,
   .compiled dl {

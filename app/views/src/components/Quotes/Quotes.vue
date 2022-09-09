@@ -7,7 +7,7 @@
   </span>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 
 .quote::before {
   content: '«';

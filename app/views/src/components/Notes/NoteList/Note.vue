@@ -15,8 +15,8 @@
 </script>
 
 <template>
-  <div>
-    <div v-if="highlightText" class="p-2 mt-4 bg-blue-100">
+  <div class="note">
+    <div v-if="highlightText" class="highlight-text">
       <Quotes>{{ highlightText }}</Quotes>
     </div>
     <div v-for="article in articles" :key="article.articleId">
@@ -24,3 +24,9 @@
     </div>
   </div>
 </template>
+
+<style lang="postcss">
+  .note .highlight-text {
+    @apply p-2 mt-4 bg-blue-100;
+  }
+</style>

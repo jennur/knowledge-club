@@ -70,7 +70,7 @@
           </label>
           <RightMenu class="hidden md:flex py-1 px-4" />
         </div>
-        <main class="px-4">
+        <main class="grow px-4">
           <slot name="main"></slot>
         </main>
 
@@ -133,9 +133,22 @@
     @apply text-gray-700 hover:text-gray-900;
   }
 
-  .night .new-note .highlight-text,
-  .night .editor,
-  .night .compiled {
+  .night .editor {
+    @apply text-gray-900;
+  }
+
+  .night .quote::before, .night .quote::after {
+    @apply text-white;
+  }
+
+  .night #slider #slider-content .new-note .highlight-text,
+  .night #slider #slider-content .note .highlight-text {
+    @apply bg-blue-900;
+  }
+  .night #slider #slider-content .compiled,
+  .night #slider #slider-content .compiled h1,
+  .night #slider #slider-content .compiled h2,
+  .night #slider #slider-content .compiled h3 {
     @apply text-gray-900;
   }
 </style>
