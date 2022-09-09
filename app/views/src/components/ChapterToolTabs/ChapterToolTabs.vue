@@ -2,7 +2,7 @@
   import { ref, watch, computed } from "vue";
   import { chapterRoomId } from "../../helpers/chatRoomIds";
   import store from "@/store/index.js";
-  import ChapterToolBar from "../ChapterToolBar/ChapterToolBar.vue";
+  import ChapterToolBar from "./ChapterToolBar/ChapterToolBar.vue";
   import HighlightFilter from "../HighlightFilter/HighlightFilter.vue";
   import NoteList from "../Notes/NoteList/NoteList.vue";
   import NewNote from "../Notes/NewNote/NewNote.vue";

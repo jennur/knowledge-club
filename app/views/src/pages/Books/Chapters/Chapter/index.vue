@@ -3,7 +3,7 @@
   import { useRoute, RouterLink } from "vue-router";
   import { computed, ref, watch } from 'vue'
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
-  import Slideover from "@/components/Slideover/Slideover.vue";
+  import ChapterToolTabs from "@/components/ChapterToolTabs/ChapterToolTabs.vue";
   import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
   import Modal from "@/components/Modal/Modal.vue";
   import MarkdownEditor from "@/components/Inputs/MarkdownEditor.vue";
@@ -99,7 +99,7 @@
 <template>
   <ChapterLayout>
     <template #sidebar>
-      <Slideover 
+      <ChapterToolTabs 
         class="md:mt-2" 
         :highlight="highlight"
         @saveNote="saveNote"

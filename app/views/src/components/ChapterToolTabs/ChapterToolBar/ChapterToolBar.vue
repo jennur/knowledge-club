@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import IconButton from "../Buttons/IconButton.vue";
+import IconButton from "../../Buttons/IconButton.vue";
 const emit = defineEmits(["switchTab"]);
 </script>
 

@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, reactive, computed, watch } from 'vue'
+  import { computed } from 'vue'
   import highlightSort from "@/helpers/highlightFunctions/highlightSort.js";
   import store from "@/store/index.js";
   import Note from "./Note.vue";
@@ -12,9 +12,12 @@
 </script>
 
 <template>
-  <div>
-    <div v-for="highlight in highlights" :key="highlight.highlightId">
-      <Note :highlightText="highlight.content" :articles="highlight.articles"/>
-    </div>
+  <div id="notes-list">
+    <Note 
+      v-for="highlight in highlights" 
+      :key="highlight.highlightId"
+      :highlightText="highlight.content" 
+      :articles="highlight.articles"
+    />
   </div>
 </template>
