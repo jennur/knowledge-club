@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faBars,
   faBook,
+  faCaretDown,
   faComment,
   faEnvelope,
   faEye,
@@ -40,7 +41,8 @@ import {
 /* add icons to the library */
 library.add(
     faBars,
-    faBook, 
+    faBook,
+    faCaretDown,
     faComment,
     faEnvelope,
     faEye,
