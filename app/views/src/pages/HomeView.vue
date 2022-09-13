@@ -40,8 +40,7 @@
               <NumberedList :listItems="[
                   'Use community documents',
                   'Upload your own private documents and share with friends',
-                  'Use high quality personalized reference material',
-                  'Learn by helping others and earn money'
+                  'Use high quality personalized reference material'
                 ]"
                 fontSize="xxl"
                 numberColor="blue"
