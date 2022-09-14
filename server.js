@@ -32,6 +32,7 @@ var allowList = [
   "http://localhost:5000",
   "http://localhost:8080",
   "https://knowledge-club.herokuapp.com",
+  "https://knowledge-club-staging.herokuapp.com",
   "https://www.yedia.io",
   "http://www.yedia.io"
 ]
