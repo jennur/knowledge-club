@@ -11,7 +11,11 @@ from sql_transmitter import transmit_book
 
 ALLOWED_TYPES = ["application/pdf","application/epub+zip","application/epub"]
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:8080", "http://localhost:5173", "https://knowledge-club.herokuapp.com"])
+CORS(app, origins=["http://localhost:8080", 
+"http://localhost:5173", 
+"https://knowledge-club.herokuapp.com",
+"http://www.yedia.io",
+"https://www.yedia.io"])
 app.config["CORS_HEADERS"] = 'Content-Type'
 
 @app.route("/", methods=["GET"])
