@@ -55,6 +55,7 @@ export const auth = {
         },
         error => {
           console.log("CheckAccessToken error:", error);
+          localStorage.removeItem("user");
           commit('logout');
           router.push({ name: "home" });
           return Promise.reject(error)
