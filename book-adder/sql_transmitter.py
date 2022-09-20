@@ -4,9 +4,9 @@ import re
 
 dotenv_re = re.compile("(.*)=(.*)|")
 
-book_insert_query ="INSERT INTO \"books\" (\"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"numChapters\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"bookUUID\",\"title\",\"createdAt\",\"published\",\"FileType\",\"NumChapters\",\"createdAt\",\"updatedAt\"";
+book_insert_query ="INSERT INTO \"books\" (\"bookUUID\",\"title\",\"published\",\"fileType\",\"numChapters\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s) RETURNING \"bookUUID\",\"title\",\"published\",\"fileType\",\"numChapters\",\"createdAt\",\"updatedAt\"";
 
-chapter_insert_query ="INSERT INTO \"chapters\" (\"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"createdAt\",\"chapterContent\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s) RETURNING \"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"createdAt\",\"chapterContent\",\"createdAt\",\"updatedAt\";"
+chapter_insert_query ="INSERT INTO \"chapters\" (\"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"chapterContent\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s) RETURNING \"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"chapterContent\",\"createdAt\",\"updatedAt\";"
 
 def read_dotenv(path):
     env_vars = {}
@@ -24,13 +24,26 @@ def transmit_book(book):
     password=env_vars["DB_PASSWORD"])
     cursor = conn.cursor()
     #query = book_insert_query()
-    
-    cursor.execute(book_insert_query,[book.title,book.date_uploaded,book.published,book.file_ext,book.num_chapters,book.created_at,book.updated_at])
+    args = [book.title,
+            book.published,
+            book.file_ext,
+            book.num_chapters,
+            book.created_at,
+            book.updated_at
+            ]
+    cursor.execute(book_insert_query, args)
     id_of_new_row = cursor.fetchone()[0]
     
     i = 0
     for chapter_name,chapter_content in zip(book.chapters,book.contents):
-        cursor.execute(chapter_insert_query,[id_of_new_row,chapter_name,i,book.date_uploaded,str(chapter_content['text-only']),book.created_at,book.updated_at])
+        args = [id_of_new_row,
+                chapter_name,
+                str(i),
+                str(chapter_content['text-only']),
+                book.created_at,
+                book.updated_at
+                ]
+        cursor.execute(chapter_insert_query, args)
         i+=1
     conn.commit()
 

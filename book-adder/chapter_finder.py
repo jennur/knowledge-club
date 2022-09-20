@@ -14,8 +14,11 @@ logging.basicConfig(level=logging.INFO)
 class Book():
     def __init__(self, filename, nochapters, stats):
         
-        self.filename = filename
-        self.file_ext = os.path.splitext(filename)[1]
+        self.filepath = filename
+        filename, self.file_ext = os.path.splitext(filename)
+        self.filename = os.path.splitext(os.path.basename(self.filepath))[0]
+
+
         self.date_uploaded = datetime.today()
         self.created_at = datetime.today()
         self.updated_at = datetime.today()
@@ -25,9 +28,11 @@ class Book():
             self.process_epub()
         elif self.isPDF:
             self.process_pdf()
+        elif self.isHTML:
+            self.process_html()
 
     def process_epub(self):
-        self.book_ = epub.read_epub(self.filename)
+        self.book_ = epub.read_epub(self.filepath)
         self.chapters = self.getHeadings() # The contents essentially
         self.contents = self.getContents()
         self.lines = -1 #Deal with this later
@@ -40,6 +45,14 @@ class Book():
         print("PDF in proccess!")
         self.contents = self.getContents()
 
+    def process_html(self):
+        print("HTML in process")
+        self.contents = self.getContents()
+        self.title = self.filename
+        self.chapters = ["Main"]
+        self.lines = -1 #Deal with this later
+        self.num_chapters = 1
+        
     @property
     def isEPUB(self):
         return self.file_ext in [".EPUB",".epub"]
@@ -47,6 +60,10 @@ class Book():
     @property
     def isPDF(self):
         return self.file_ext in [".PDF",".pdf"]
+    
+    @property
+    def isHTML(self):
+        return self.file_ext in [".HTML",".html"]
 
     def getContents(self):
         """
@@ -68,7 +85,7 @@ class Book():
 
 
         if self.isPDF:
-            reader = PdfReader(self.filename)
+            reader = PdfReader(self.filepath)
             text = ""
             for page in reader.pages:
                 text += page.extract_text() + "\n"
@@ -76,9 +93,11 @@ class Book():
             return text
 
         else:
-            with open(self.filename, errors='ignore') as f:
+            text = []
+            with open(self.filepath, errors='ignore') as f:
                 contents = f.read()
-            return contents
+            text = [{"raw":contents,"text-only":contents}]
+            return text
 
     def getLines(self):
         """
@@ -234,7 +253,7 @@ class Book():
         numChapters = self.num_chapters
         averageChapterLength = sum([len(chapter) for chapter in self.chapters])/numChapters
         headings = ['Filename', 'Average chapter length', 'Number of chapters']
-        stats = ['"' + self.filename + '"', averageChapterLength, numChapters]
+        stats = ['"' + self.filepath + '"', averageChapterLength, numChapters]
         stats = [str(val) for val in stats]
         headings = ','.join(headings) + '\n'
         statsLog = ','.join(stats) + '\n'
@@ -254,7 +273,7 @@ class Book():
     def writeChapters(self):
         chapterNums = self.zeroPad(range(1, len(self.chapters)+1))
         logging.debug('Writing chapter headings: %s' % chapterNums)
-        basename = os.path.basename(self.filename)
+        basename = os.path.basename(self.filepath)
         noExt = os.path.splitext(basename)[0]
 
         if self.nochapters:

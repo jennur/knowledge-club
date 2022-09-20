@@ -3,13 +3,12 @@ from flask import Flask, make_response, jsonify
 from flask import request
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
-from waitress import serve
 import os
 from chapter_finder import Book
 from sql_transmitter import transmit_book
 
 
-ALLOWED_TYPES = ["application/pdf","application/epub+zip","application/epub"]
+ALLOWED_TYPES = ["application/pdf","application/epub+zip","application/epub","text/html"]
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:8080", 
 "http://localhost:5173", 
@@ -23,7 +22,7 @@ def hello_word():
     return "<h1>Peaches for free?</h1>"
 
 @app.route("/books",methods = ["POST","OPTION"])
-def do_something():
+def add_book_to_database():
     if request.method == 'POST':
         F = request.files.get("file")
         if(F.content_type in ALLOWED_TYPES):
