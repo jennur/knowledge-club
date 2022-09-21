@@ -13,6 +13,9 @@ function onSelect(e){
   console.log(file.value.get("file"))
 }
 
+function onLinkUpdate(e){
+  console.log(e.target.value)
+}
 function onSubmit(){
   errorMsg.value = null;
   console.log("FileValue", file.value);
@@ -33,7 +36,11 @@ function onSubmit(){
 </script>
 <template>
   <div class="outer-content-wrapper py-16">
-    <div class="mb-4">
+    <div class="mb-4" id="link-adder">
+      <input type="text" @change="onLinkUpdate">
+      <SimpleButton dark @click="onSubmit" buttonText="Upload!"></SimpleButton>
+    </div>
+    <div class="mb-4" id="file-adder">
       <input type="file" @change="onSelect">
       <SimpleButton dark @click="onSubmit" buttonText="Upload!"></SimpleButton>
     </div>

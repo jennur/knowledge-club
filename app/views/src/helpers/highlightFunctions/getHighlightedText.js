@@ -14,6 +14,7 @@ export default function getHighlightedText () {
     */
     // let textContent = textContent;
     const textContent = store.state.chapters.focusedChapter.chapterContent;
+    console.log("TextContent: ", textContent);
     let highlights = store.state.chapters.focusedChapter.highlights;
     const sortedHighlights = highlights?.sort(highlightSort);
 

@@ -1,4 +1,4 @@
-import { NONE } from "sequelize";
+
 import http from "../http-common";
 import http_py from "../http-py"
 
@@ -13,9 +13,6 @@ class BookDataService {
       });
   }
   rawCreate(file){
-    if(file == NONE){
-      console.log("The book you are trying to add is none.")
-    }
     return http_py.post("/books",file,{"Content-Type": 'multipar/form-data'})
       .then((response) => {
         return response.data;

@@ -2,7 +2,18 @@
 export default function getSelectedText() {
     let text = "";
     let text_range = { startloc: 0, endloc: 0 };
-    
+    // let curSelection = window.getSelection().focusNode
+    // let prevSelection = curSelection.previousSibling
+    // while(prevSelection.previousSibling){
+    //   if(prevSelection.classList.contains("highlight")){
+    //     break
+    //   }
+    //   else{
+    //     prevSelection = prevSelection.previousSibling
+    //   }
+    // }
+    // console.log("Previous Selection: ", prevSelection)
+
     if(!window.getSelection().focusNode.previousSibling){
       text = window.getSelection();
       text_range = { startloc: text.anchorOffset, endloc: text.focusOffset };
