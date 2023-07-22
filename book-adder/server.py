@@ -1,35 +1,50 @@
-from importlib.resources import path
+import config
+import os
+
 from flask import Flask, make_response, jsonify
 from flask import request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
-from waitress import serve
-import os
-from chapter_finder import Book
+
 from sql_transmitter import transmit_book
+from chapter_finder import Book
 
-
-ALLOWED_TYPES = ["application/pdf","application/epub+zip","application/epub"]
 app = Flask(__name__)
-CORS(app, origins=[
-    "http://localhost:8080", 
-    "http://localhost:5173", 
-    "https://knowledge-club.herokuapp.com",
-    "http://www.yedia.io",
-    "https://www.yedia.io"
-])
+
+# CORS
+CORS(app, origins=config.CORS_ORIGINS)
 app.config["CORS_HEADERS"] = 'Content-Type'
 
+
+# Helpers
+def send_response(message, status_code, severity=None):
+    print(f">> {message}")
+
+    response = make_response(
+        jsonify(
+            {"message": str(message), "severity": severity}
+        ),
+        status_code,
+    )
+    return response
+
+
+# Routes
 @app.route("/", methods=["GET"])
 def hello_word():
     return "<h1>Peaches for free?</h1>"
 
-@app.route("/books",methods = ["POST","OPTION"])
+@app.route("/books", methods = ["POST"])
 def add_book():
     if request.method == 'POST':
         F = request.files.get("file")
-        if(F.content_type in ALLOWED_TYPES):
-            path_to_file = os.path.join(os.path.dirname(__file__),"saved_books",secure_filename(F.filename))
+        
+        if F.content_type in config.ALLOWED_TYPES:
+            path_to_file = os.path.join(
+                os.path.dirname(__file__),
+                "saved_books",
+                secure_filename(F.filename)
+            )
             print("Path to file:", path_to_file)
             F.save(path_to_file)
             book = Book(path_to_file,False,False)
@@ -38,18 +53,4 @@ def add_book():
         else:
             return send_response("File type not allowed", 500, "danger")
 
-    if request.method == "OPTION":
-        return "OK"
-
     return send_response("Book added to database.", 200)
-
-
-def send_response(message, status_code, severity=None):
-    print(f">> {message}")
-
-    response = make_response(jsonify(
-                    {"message": str(message), "severity": severity}
-                ),
-                status_code,
-            )
-    return response

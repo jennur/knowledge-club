@@ -6,3 +6,4 @@ psycopg2==2.9.3
 PyPDF2==2.10.5
 waitress==2.1.2
 Werkzeug==2.2.2
+python-dotenv==1.0.0
