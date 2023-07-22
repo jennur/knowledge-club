@@ -54,7 +54,7 @@
       </div>
       <div>{{book.title}}</div>
       <div class="text-xs text-gray-400 mt-2">
-        Added {{ moment(book.createdAt).startOf('day').fromNow() }}
+        Added {{ moment(book.createdAt).startOf('minute').fromNow() }}
       </div>
     </component>
   </div>

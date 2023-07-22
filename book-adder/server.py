@@ -23,7 +23,7 @@ def hello_word():
     return "<h1>Peaches for free?</h1>"
 
 @app.route("/books",methods = ["POST","OPTION"])
-def do_something():
+def add_book():
     if request.method == 'POST':
         F = request.files.get("file")
         if(F.content_type in ALLOWED_TYPES):
@@ -34,15 +34,20 @@ def do_something():
             transmit_book(book)
 
         else:
-            message = "File type not allowed"
-            print(f">> {message}")
-            response = make_response(jsonify(
-                    {"message": str(message), "severity": "danger"}
-                ),
-                401,
-            )
-            return response
+            return send_response("File type not allowed", 500, "danger")
 
-    if request.method =="OPTION":
+    if request.method == "OPTION":
         return "OK"
-    return "<p>Hello, World!</p>"
+
+    return send_response("Book added to database.", 200)
+
+
+def send_response(message, status_code, severity=None):
+    print(f">> {message}")
+
+    response = make_response(jsonify(
+                    {"message": str(message), "severity": severity}
+                ),
+                status_code,
+            )
+    return response

@@ -10,7 +10,7 @@ exports.create = (user) => {
       return user;
   })
   .catch((err) => {
-      console.log(">> Error while creating user: ", err);
+      console.log(">> Error while creating user:", err);
       return err;
   });
 };
@@ -25,7 +25,7 @@ exports.findById = (userId) => {
     }]
   })
   .then((user) => {
-    console.log(">> Found user: " + JSON.stringify(user, null, 4));
+    console.log(">> Found user (username, role):", user.username, user.role);
 
     return {
       id: user.userId,
@@ -34,7 +34,7 @@ exports.findById = (userId) => {
     };
   })
   .catch((err) => {
-      console.log(">> Error finding user: ", err);
+      console.log(">> Error finding user:", err);
       return err;
   });
 };
@@ -99,7 +99,7 @@ exports.setRole = (userId, roleId) => {
       });
     })
     .catch((err) => {
-      console.log(">> Error while adding Role to User: ", err);
+      console.log(">> Error while adding Role to User:", err);
     });
 };
 

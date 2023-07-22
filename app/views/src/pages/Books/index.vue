@@ -5,7 +5,7 @@
   store.dispatch("books/getAllBooks")
 </script>
 <template>
-<div>
+  <div>
     <div class="bg-slate-50 p-4">  
     <BooksList
       class="container mx-auto"

@@ -14,7 +14,7 @@ class BookDataService {
   rawCreate(file){
     return http_py.post("/books",file,{"Content-Type": 'multipar/form-data'})
       .then((response) => {
-        return response.data;
+        return response;
       })
       .catch((err) => {
         return Promise.reject(err);
