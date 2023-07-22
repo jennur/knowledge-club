@@ -36,7 +36,8 @@ var allowList = [
   "http://yedia.io",
   "https://yedia.io",
   "http://www.yedia.io",
-  "https://www.yedia.io"
+  "https://www.yedia.io",
+  "https://knowledge-club-book-adder.herokuapp.com/"
 ]
 
 //cors
