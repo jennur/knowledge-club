@@ -8,6 +8,7 @@ import 'dropzone-vue/dist/dropzone-vue.common.css';
 const files = ref([]);
 const errorMsg = ref(null);
 const successMsg = ref(null);
+const isLoading = ref(false);
 
 function onSelect(item) {
   console.log("Selected File.", item);
@@ -18,6 +19,8 @@ function onSelect(item) {
 
 function onSubmit() {
   errorMsg.value = null;
+  successMsg.value = null;
+  isLoading.value = true
   console.log("FileValue", files.value);
   
   if(files.value.length) {
@@ -27,10 +30,12 @@ function onSubmit() {
       store.dispatch("books/addBook", fileObj.file)
         .then(response => {
           console.log("Successfully added book:", response);
+          isLoading.value = false;
           successMsg.value = response.message;
         })
         .catch(err => {
           console.log("Error dispatch:", err);
+          isLoading.value = false;
           errorMsg.value = err.message;
         })
     })
@@ -101,6 +106,9 @@ const maxFileSize = 1000000;
         </DropZone>
         <div class="flex">
           <div class="grow mr-1">
+            <div v-if="isLoading" class="mt-1 text-xs text-orange-600 flex items-center">
+              <div class="spinner mr-2"></div> <p>Uploading book...</p>
+            </div>
             <p v-if="successMsg" class="mt-1 p-2 text-xs text-green-600">
               {{ successMsg }}
             </p>
@@ -150,5 +158,9 @@ const maxFileSize = 1000000;
   }
   .dropzone__progress .dropzone__progress-bar {
     @apply bg-blue-500;
+  }
+
+  .spinner {
+    @apply border-2 border-dotted border-spacing-1 border-orange-400 w-5 h-5 rounded-full animate-spin-slow;
   }
 </style>

@@ -26,8 +26,11 @@
   const chapterData = computed(() => store.state.chapters.focusedChapter);
   const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
   const bookData = computed(() => store.state.chapters.focusedBook);
+  const isFirstChapter = parseInt(chapterNum) - 1 < 0;
+  const isLastChapter = parseInt(chapterNum) + 1 === store.state.chapters.chapters.length;
 
   function handleTextSelect() {
+
     let selection = window.getSelection();
 
     if(selection.type === "Caret") {
@@ -110,16 +113,34 @@
     </template>
 
     <template #main>
-      <div class="pr-16 pb-16">
-        <RouterLink 
-          :to="{ name: 'chapters', params: { id: bookId } }" 
-          class="text-xs uppercase text-gray-400"
-        >
-          {{ bookData?.title }}
-        </RouterLink>
+      <div class="pb-16 mt-4">
+        <div class="flex items-center justify-between">
+          <RouterLink 
+            :to="{ name: 'chapters', params: { id: bookId } }" 
+            class="text-xs uppercase text-gray-400"
+          >
+            {{ bookData?.title }}
+          </RouterLink>
 
-        <h1 class="mt-2">{{ chapterData?.chapterName }}</h1>
-        <div 
+          <div class="text-xs uppercase text-gray-400">
+            <RouterLink 
+              v-if="!isFirstChapter"
+              :to="{ name: 'chapter', params: { id: bookId, chapterNum: parseInt(chapterNum) - 1 }}"
+            >
+              Previous chapter
+            </RouterLink>
+            <span v-if="!isFirstChapter && !isLastChapter" class="mx-1">|</span>
+            <RouterLink 
+              v-if="!isLastChapter"
+              :to="{ name: 'chapter', params: { id: bookId, chapterNum: parseInt(chapterNum) + 1 }}"
+            >
+              Next chapter
+            </RouterLink>
+          </div>
+        </div>
+
+        <h1 class="mt-2" v-html="chapterData?.chapterName"></h1>
+        <div class="chapter-content"
           @mouseup="handleTextSelect"
           @keyup="handleTextSelect"
           v-html="textWithHighlights || chapterData?.chapterContent"
@@ -145,5 +166,16 @@
 
   .highlight{
     @apply bg-emerald-200;
+  }
+
+  .book-page {
+    @apply pt-8 pb-6;
+  }
+
+  .page-num {
+    @apply text-slate-400 text-sm pb-8;
+  }
+  .page-num::before {
+    content: "Page ";
   }
 </style>

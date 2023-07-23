@@ -25,7 +25,7 @@ exports.findById = (userId) => {
     }]
   })
   .then((user) => {
-    console.log(">> Found user (username, role):", user.username, user.role);
+    console.log(">> Found user (username, role):", user.username);
 
     return {
       id: user.userId,

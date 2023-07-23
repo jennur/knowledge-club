@@ -9,6 +9,9 @@ module.exports = {
       flex: {},
       fontSize: {
         '2xs': '.6rem'
+      },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
       }
     },
   },

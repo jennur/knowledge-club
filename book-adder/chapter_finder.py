@@ -1,19 +1,21 @@
-from datetime import datetime
+import ebooklib
+import fitz
 import logging
-import re
 import os
-from PyPDF2 import PdfReader
-from ebooklib import epub
-from utils import get_sections,flatten_xml
-from lxml import etree
-from itertools import chain
+import re
 
+from bs4 import BeautifulSoup, Tag
+from datetime import datetime
+from ebooklib import epub
+from itertools import chain
+from lxml import etree
+from PyPDF2 import PdfReader
+from utils import get_sections,flatten_xml
 
 logging.basicConfig(level=logging.INFO)
 
 class Book():
     def __init__(self, filename, nochapters, stats):
-        
         self.filename = filename
         self.file_ext = os.path.splitext(filename)[1]
         self.date_uploaded = datetime.today()
@@ -28,12 +30,24 @@ class Book():
 
     def process_epub(self):
         self.book_ = epub.read_epub(self.filename)
-        self.chapters = self.getHeadings() # The contents essentially
-        self.contents = self.getContents()
+        
+        # Ebooklib functions
+        self.cover_image = "" #self.book_.get_template("cover")
+
+        self.identifiers = self.book_.get_metadata("DC", "identifier")
+        self.languages = self.book_.get_metadata("DC", "language")
+
         self.lines = -1 #Deal with this later
         self.title = self.book_.title
         
-        self.num_chapters = len(self.chapters)
+        print("\n\nCOVER IMAGE:", self.cover_image)
+        print("\nIDENTIFIER:", self.identifiers)
+        print("\nLANGUAGE:", self.languages)
+        print("\nTITLE:", self.title)
+
+        self.getEpubChaptersAndContents()
+        
+        # self.num_chapters = len(self.chapters)
         self.stats = self.getStats()
 
     def process_pdf(self):
@@ -48,22 +62,96 @@ class Book():
     def isPDF(self):
         return self.file_ext in [".PDF",".pdf"]
 
+    def getEpubChaptersAndContents(self):
+        doc = fitz.open(self.filename)
+        # toc = doc.get_toc()
+        num_chapters = doc.chapter_count
+        
+        chapters = []
+        chapters_text = []
+        prev_page_no = 1
+        page_counter = 1
+
+        for i in range(num_chapters):
+            chapter_page_count = doc.chapter_page_count(i)
+            chapter_text = ""
+            chapter_html = ""
+
+            for j in range(chapter_page_count):
+                page = doc.load_page((i, j))
+                text_page = page.get_textpage()
+                page_text = text_page.extractText()
+
+                chapter_text += page_text
+                chapter_html += text_page.extractHTML() + f"<div class='page-num'>{page_counter}</div>"
+
+                if page_text is not "":
+                    page_counter += 1
+
+            if chapter_text is not "":
+                current_page_no = prev_page_no + (chapter_page_count)
+                page_num_text = f"{prev_page_no + 1}-{current_page_no}"
+
+                if chapter_page_count == 1:
+                    page_num_text = prev_page_no
+                    prev_page_no -= 1
+                prev_page_no += chapter_page_count
+
+                chapters.append(f"Part {i} <span class='page-range'>p.{page_num_text}</span>")
+
+
+                chapter_soup = BeautifulSoup(chapter_html, "html.parser")
+                def handle_attributes(tag, index):
+                    if isinstance(tag, Tag):
+                        if tag.name == "script":
+                            tag.decompose()
+                        if tag.has_attr("style"):
+                            del tag["style"]
+                        if tag.has_attr("id") and tag["id"] == "page0":
+                            tag["id"] = f"page-{index}"
+                            tag["class"] = "book-page"
+
+                for index, tag in enumerate(chapter_soup):
+                    handle_attributes(tag, index)
+
+                chapters_text.append({
+                    "html": chapter_soup, 
+                    "raw": chapter_html,
+                    "text-only": chapter_text
+                    }
+                )
+
+        self.metadata = doc.metadata
+        self.num_pages = doc.page_count
+        print("\n\nMETADATA:", self.metadata)
+        print("\nNUM PAGES:", self.num_pages)
+        self.num_chapters = num_chapters
+        self.chapters = chapters
+        self.contents = chapters_text
+
     def getContents(self):
         """
         Reads the book into memory.
         """
-        if self.isEPUB: 
-            
+        if self.isEPUB:
             text = []
-            for i,x in enumerate(self.book_.items):
-                if isinstance(x,epub.EpubHtml):
-                    raw_string = x.get_body_content()
+            doc_items = self.book_.get_items_of_type(ebooklib.ITEM_DOCUMENT)
+            print("\n\nENUMERATED:", enumerate(doc_items))
+            for i, item in enumerate(doc_items):
+                if isinstance(item, epub.EpubHtml):
+                    html_string = BeautifulSoup(item.get_body_content(), "html.parser")
+                    raw_string = item.get_body_content()
                     processed_string = ""
                     try:
                         processed_string = flatten_xml(raw_string)
                     except:
                         logging.error(f"The chapter couldn't be processed: {i}")
-                    text.append({"raw":raw_string,"text-only":processed_string})
+                    text.append({
+                        "html": html_string.prettify(formatter="html"), 
+                        "raw": raw_string,
+                        "text-only": processed_string
+                        }
+                    )
             return text
 
 
@@ -86,77 +174,101 @@ class Book():
         """
         return self.contents.split('\n')
 
-    def getHeadings(self,flattened=True):
-        if self.isEPUB:
-            return get_sections(self.book_.toc,flattened=flattened)
-        elif self.isPDF:
-            # Form 1: Chapter I, Chapter 1, Chapter the First, CHAPTER 1
-            # Ways of enumerating chapters, e.g.
-            arabicNumerals = '\d+'
-            romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'
-            numberWordsByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty',
-                                'seventy', 'eighty', 'ninety']
-            numberWords = ['one', 'two', 'three', 'four', 'five', 'six',
-                        'seven', 'eight', 'nine', 'ten', 'eleven',
-                        'twelve', 'thirteen', 'fourteen', 'fifteen',
-                        'sixteen', 'seventeen', 'eighteen', 'nineteen'] + numberWordsByTens
-            numberWordsPat = '(' + '|'.join(numberWords) + ')'
-            ordinalNumberWordsByTens = ['twentieth', 'thirtieth', 'fortieth', 'fiftieth', 
-                                        'sixtieth', 'seventieth', 'eightieth', 'ninetieth'] + \
-                                        numberWordsByTens
-            ordinalNumberWords = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
-                                'seventh', 'eighth', 'ninth', 'twelfth', 'last'] + \
-                                [numberWord + 'th' for numberWord in numberWords] + ordinalNumberWordsByTens
-            ordinalsPat = '(the )?(' + '|'.join(ordinalNumberWords) + ')'
-            enumeratorsList = [arabicNumerals, romanNumerals, numberWordsPat, ordinalsPat] 
-            enumerators = '(' + '|'.join(enumeratorsList) + ')'
-            form1 = 'chapter ' + enumerators
+    def getHeadings(self):
+        def get_nav_labels_text(chapter):
+            soup = BeautifulSoup(chapter.get_content(), "xml")
+            # print("\n\n\nPrettified soup:", soup.prettify())
+            nav_labels_text = [nav_label.get_text() for nav_label in soup.find_all("navLabel")]
+            return nav_labels_text
 
-            # Form 2: II. The Mail
-            enumerators = romanNumerals
-            separators = '(\. | )'
-            titleCase = '[A-Z][a-z]'
-            form2 = enumerators + separators + titleCase
+        print("\n\nEPUB:", self.book_)
+        title = self.book_.get_metadata("DC", "title")
+        navigation = self.book_.get_items_of_type(ebooklib.ITEM_NAVIGATION)
 
-            # Form 3: II. THE OPEN ROAD
-            enumerators = romanNumerals
-            separators = '(\. )'
-            titleCase = '[A-Z][A-Z]'
-            form3 = enumerators + separators + titleCase
+        print("\n\nMETADATA:", title) 
 
-            # Form 4: a number on its own, e.g. 8, VIII
-            arabicNumerals = '^\d+\.?$'
-            romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\.?$'
-            enumeratorsList = [arabicNumerals, romanNumerals]
-            enumerators = '(' + '|'.join(enumeratorsList) + ')'
-            form4 = enumerators
+        print("\n\n\nEPUB DOCUMENT:", self.book_.get_items_of_type(ebooklib.ITEM_DOCUMENT))
+        document = self.book_.get_items_of_type(ebooklib.ITEM_DOCUMENT)
+        for doc in document:
+            name = doc.get_name()
+            print("\n\nDOC:", doc, "NAME:", name)
+        for nav in navigation:
+            # print("\n\nNAVIGATION:", nav.get_content())
+            text = get_nav_labels_text(nav)
+            print("\n\nNAVIGATION TEXT:", text)
+            return text
 
-            pat = re.compile(form1, re.IGNORECASE)
-            # This one is case-sensitive.
-            pat2 = re.compile('(%s|%s|%s)' % (form2, form3, form4))
+    # def getHeadings(self,flattened=True):
+    #     if self.isEPUB:
+    #         return get_sections(self.book_.toc,flattened=flattened)
+    #     elif self.isPDF:
+    #         # Form 1: Chapter I, Chapter 1, Chapter the First, CHAPTER 1
+    #         # Ways of enumerating chapters, e.g.
+    #         arabicNumerals = '\d+'
+    #         romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'
+    #         numberWordsByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty',
+    #                             'seventy', 'eighty', 'ninety']
+    #         numberWords = ['one', 'two', 'three', 'four', 'five', 'six',
+    #                     'seven', 'eight', 'nine', 'ten', 'eleven',
+    #                     'twelve', 'thirteen', 'fourteen', 'fifteen',
+    #                     'sixteen', 'seventeen', 'eighteen', 'nineteen'] + numberWordsByTens
+    #         numberWordsPat = '(' + '|'.join(numberWords) + ')'
+    #         ordinalNumberWordsByTens = ['twentieth', 'thirtieth', 'fortieth', 'fiftieth', 
+    #                                     'sixtieth', 'seventieth', 'eightieth', 'ninetieth'] + \
+    #                                     numberWordsByTens
+    #         ordinalNumberWords = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 
+    #                             'seventh', 'eighth', 'ninth', 'twelfth', 'last'] + \
+    #                             [numberWord + 'th' for numberWord in numberWords] + ordinalNumberWordsByTens
+    #         ordinalsPat = '(the )?(' + '|'.join(ordinalNumberWords) + ')'
+    #         enumeratorsList = [arabicNumerals, romanNumerals, numberWordsPat, ordinalsPat] 
+    #         enumerators = '(' + '|'.join(enumeratorsList) + ')'
+    #         form1 = 'chapter ' + enumerators
 
-            # TODO: can't use .index() since not all lines are unique.
+    #         # Form 2: II. The Mail
+    #         enumerators = romanNumerals
+    #         separators = '(\. | )'
+    #         titleCase = '[A-Z][a-z]'
+    #         form2 = enumerators + separators + titleCase
 
-            headings = []
-            for i, line in enumerate(self.lines):
-                if pat.match(line) is not None:
-                    headings.append(i)
-                if pat2.match(line) is not None:
-                    headings.append(i)
+    #         # Form 3: II. THE OPEN ROAD
+    #         enumerators = romanNumerals
+    #         separators = '(\. )'
+    #         titleCase = '[A-Z][A-Z]'
+    #         form3 = enumerators + separators + titleCase
 
-            if len(headings) < 3:
-                logging.info('Headings: %s' % headings)
-                logging.error("Detected fewer than three chapters. This probably means there's something wrong with chapter detection for this book.")
-                exit()
+    #         # Form 4: a number on its own, e.g. 8, VIII
+    #         arabicNumerals = '^\d+\.?$'
+    #         romanNumerals = '(?=[MDCLXVI])M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\.?$'
+    #         enumeratorsList = [arabicNumerals, romanNumerals]
+    #         enumerators = '(' + '|'.join(enumeratorsList) + ')'
+    #         form4 = enumerators
 
-            self.endLocation = self.getEndLocation()
+    #         pat = re.compile(form1, re.IGNORECASE)
+    #         # This one is case-sensitive.
+    #         pat2 = re.compile('(%s|%s|%s)' % (form2, form3, form4))
 
-            # Treat the end location as a heading.
-            headings.append(self.endLocation)
+    #         # TODO: can't use .index() since not all lines are unique.
 
-            return headings
-        else:
-            raise ValueError("The input is neither pdf nor epub.")
+    #         headings = []
+    #         for i, line in enumerate(self.lines):
+    #             if pat.match(line) is not None:
+    #                 headings.append(i)
+    #             if pat2.match(line) is not None:
+    #                 headings.append(i)
+
+    #         if len(headings) < 3:
+    #             logging.info('Headings: %s' % headings)
+    #             logging.error("Detected fewer than three chapters. This probably means there's something wrong with chapter detection for this book.")
+    #             exit()
+
+    #         self.endLocation = self.getEndLocation()
+
+    #         # Treat the end location as a heading.
+    #         headings.append(self.endLocation)
+
+    #         return headings
+    #     else:
+    #         raise ValueError("The input is neither pdf nor epub.")
 
     def ignoreTOC(self):
         """

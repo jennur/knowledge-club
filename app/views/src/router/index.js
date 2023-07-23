@@ -56,7 +56,8 @@ const router = createRouter({
       path: "/books/:id/chapters/:chapterNum",
       name: "chapter",
       meta: { layout: "CustomLayout" },
-      component: () => import("../pages/Books/Chapters/Chapter/index.vue")
+      component: () => import("../pages/Books/Chapters/Chapter/index.vue"),
+      props: route => ({ key: route.fullPath }),
     },
     {
       path: "/admin/books/add",

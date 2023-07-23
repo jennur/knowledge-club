@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
         chapterNumber:{
-            type: Sequelize.STRING
+            type: Sequelize.INTEGER
         },
         chapterContent:{
             type: Sequelize.TEXT,

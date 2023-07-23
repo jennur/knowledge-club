@@ -2,7 +2,7 @@ import BookDataService from "../services/book.service"
 
 export const books = {
   namespaced:true,
-  state:{
+  state: {
     books:[]
   },
   actions:{

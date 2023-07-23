@@ -23,7 +23,7 @@ exports.findAll = (bookId) => {
     order:[['chapterNumber','ASC']]
   })
   .then(chapters => {
-    console.log(">> Found chapters: " + chapters);
+    console.log(">> Found chapters of bookId: " + bookId);
     return chapters;
   })
   .catch(err => {

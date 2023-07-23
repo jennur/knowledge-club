@@ -15,12 +15,27 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         allowNull:false
       },
-      fileType:{
+      fileType: {
         type:Sequelize.STRING,
         allowNull:false
       },
-      numChapters:{
+      numChapters: {
         type:Sequelize.INTEGER
+      },
+      metadata: {
+        type: Sequelize.STRING
+      },
+      languages: {
+        type: Sequelize.STRING
+      },
+      identifiers: {
+        type: Sequelize.STRING
+      },
+      numPages: {
+        type: Sequelize.INTEGER
+      },
+      coverImage: {
+        type: Sequelize.STRING
       }
     });
 

@@ -1,6 +1,9 @@
 import config
+import ebooklib
 import os
 
+from bs4 import BeautifulSoup
+from ebooklib import epub
 from flask import Flask, make_response, jsonify
 from flask import request
 from flask_cors import CORS
@@ -38,18 +41,16 @@ def hello_word():
 def add_book():
     if request.method == 'POST':
         F = request.files.get("file")
-        
+
         if F.content_type in config.ALLOWED_TYPES:
             path_to_file = os.path.join(
                 os.path.dirname(__file__),
                 "saved_books",
                 secure_filename(F.filename)
             )
-            print("Path to file:", path_to_file)
             F.save(path_to_file)
             book = Book(path_to_file,False,False)
             transmit_book(book)
-
         else:
             return send_response("File type not allowed", 500, "danger")
 
