@@ -4,7 +4,8 @@
   import TextInput from "../../Inputs/TextInput.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
 
-  const emit = defineEmits(["signupSuccess"]);
+  const emit = defineEmits(["success"]);
+
   const username = ref("");
   const email = ref("");
   const password = ref("");
@@ -18,7 +19,7 @@
     })
   )
 
-  async function checkForm() {
+  function checkForm() {
     fieldErrors.value = [];
     
     if(password.value !== passwordCompare.value) {
@@ -32,7 +33,7 @@
           email: email.value 
         })
         .then(() => {
-          emit("signupSuccess");
+          emit("success");
         })
         .catch(err => {
           console.log("SignUp.vue error:", err);

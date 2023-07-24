@@ -4,7 +4,9 @@
   import TextInput from "../../Inputs/TextInput.vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
   import InlineLink from "../../Links/InlineLink.vue";
+
   const emit = defineEmits(["success"]);
+
   const props = defineProps(["headline", "hasSignUpLink"])
   const username = ref("");
   const password = ref("");
@@ -16,12 +18,12 @@
     })
   );
 
-  async function login() {
+  function login() {
     fieldErrors.value = [];
     
     store.dispatch("auth/login", { username: username.value, password: password.value })
       .then(() => {
-        emit("success");
+        location.reload();
       })
       .catch(err => {
         console.log("Login.vue error:", err);
@@ -66,6 +68,8 @@
       {{ error.message }}
     </p>
 
-    <p v-if="props.hasSignUpLink" class="text-sm mt-4">If you don't have an account yet, <InlineLink :to="{ name: 'signup' }" linkText="sign up!"/></p>
+    <p v-if="props.hasSignUpLink" class="text-sm mt-4">If you don't have an account yet,
+      <InlineLink :to="{ name: 'signup' }" linkText="sign up!"/>
+    </p>
   </form>
 </template>

@@ -29,7 +29,7 @@ const router = createRouter({
     },
     {
       path: "/books/:id",
-      name: "book-details",
+      name: "book",
       component: () => import("../pages/Books/_id.vue")
     },
     {
@@ -56,12 +56,12 @@ const router = createRouter({
       path: "/books/:id/chapters/:chapterNum",
       name: "chapter",
       meta: { layout: "CustomLayout" },
-      component: () => import("../pages/Books/Chapters/Chapter/index.vue"),
+      component: () => import("../pages/Books/Chapter/index.vue"),
       props: route => ({ key: route.fullPath }),
     },
     {
       path: "/admin/books/add",
-      name: "admin-add",
+      name: "book-adder",
       component: () => import("../pages/Books/addBooks.vue")
     }
 
@@ -70,7 +70,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const safeList = ["home", "signup", "about"];
-  const adminList = ["admin-add"];
+  const adminList = ["book-adder"];
 
   if(!safeList.includes(to.name) && !adminList.includes(to.name)) {
     store.dispatch("auth/checkAccessToken")

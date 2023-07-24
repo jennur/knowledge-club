@@ -32,6 +32,7 @@
   function handleTextSelect() {
 
     let selection = window.getSelection();
+    console.log("SELECTION:", selection);
 
     if(selection.type === "Caret") {
       showHighlightToolBar.value = false;

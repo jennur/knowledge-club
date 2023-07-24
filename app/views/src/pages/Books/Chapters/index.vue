@@ -24,7 +24,7 @@
 
         <div class="bg-yellow-50 p-4 text-sm text-slate-800">
           <ul>
-            <li v-if="book.title">
+            <li v-if="book?.title">
               <b>Title:</b> {{ book.title }}
             </li>
             <li v-if="metadata?.author">
@@ -59,12 +59,12 @@
             v-for="chapter in store.state.chapters.chapters" 
             :key="chapter"
             :to="{ name: 'chapter', params: { id: bookId, chapterNum: chapter.chapterNumber }}"
-            class="flex items-center max-w-max text-black-500 group mb-4"
+            class="flex items-center max-w-max text-black-500 group mb-2"
             >
-            <span class="w-12 text-3xl font-thin group-hover:font-bold">
+            <span class="w-12 text-xl font-thin group-hover:font-bold">
               {{chapter.chapterNumber + 1}}
             </span> 
-            <span class="text-2xl font-light" v-html="chapter.chapterName"></span>
+            <span class="text-lg font-light" v-html="chapter.chapterName"></span>
           </RouterLink>
         </div>
       </div>

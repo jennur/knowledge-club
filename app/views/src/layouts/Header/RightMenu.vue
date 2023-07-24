@@ -1,9 +1,19 @@
 <script setup>
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
   import store from "@/store/index";
   import NavigationDropdown from "@/components/Inputs/NavigationDropdown.vue";
 
   const user = ref(store.state.auth.user);
+
+  const adminOptions = computed(() => {
+    return user.value && user.value.roles.includes("ROLE_ADMIN") && [
+      {
+        name: 'Book adder', 
+        icon: 'fa-solid fa-book', 
+        route: { name: 'book-adder' }
+      }
+    ] || [];
+  })
 </script>
 
 <template>
@@ -17,12 +27,13 @@
             icon: 'fa-solid fa-lock', 
             route: { name: 'account' } 
           },
+          ...adminOptions,
           { 
             name: 'Log out', 
             icon: 'fa-solid fa-right-from-bracket', 
             click: () => store.dispatch('auth/logout'),
             divider: true
-          }
+          },
         ]"
       />
     </div>

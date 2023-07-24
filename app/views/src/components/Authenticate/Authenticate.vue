@@ -28,7 +28,7 @@
 <template>
   <div>
     <Modal :modalId="signUpModalId" :modalOpen="modalOpen" @close="toggleModal">
-      <SignUp @signupSuccess="signupSuccess" class="bg-white rounded-3xl p-16" />
+      <SignUp @success="signupSuccess" class="bg-white rounded-3xl p-16" />
     </Modal>
 
     <div 

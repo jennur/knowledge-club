@@ -39,7 +39,7 @@
     </Modal>
 
     <component :is="!store?.state?.auth?.user && 'span' || 'RouterLink'"
-      :to="`/books/${book.bookUUID}/chapters`"
+      :to="{ name: 'book', params: { id: book.bookUUID }}"
       :role="!store?.state?.auth?.user ? 'button' : ''"
       :aria-label="`Book title: ${book.title}`"
       :aria-expanded="modalOpen"
