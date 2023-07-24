@@ -39,7 +39,7 @@ def transmit_book(book):
             json.dumps(book.languages),
             json.dumps(book.identifiers),
             book.num_pages,
-            json.dumps(book.cover_image),
+            book.cover_image,
             book.created_at,
             book.updated_at
         ]

@@ -32,21 +32,19 @@ class Book():
         self.book_ = epub.read_epub(self.filename)
         
         # Ebooklib functions
-        self.cover_image = "" #self.book_.get_template("cover")
-
         self.identifiers = self.book_.get_metadata("DC", "identifier")
         self.languages = self.book_.get_metadata("DC", "language")
 
         self.lines = -1 #Deal with this later
         self.title = self.book_.title
         
-        print("\n\nCOVER IMAGE:", self.cover_image)
-        print("\nIDENTIFIER:", self.identifiers)
-        print("\nLANGUAGE:", self.languages)
-        print("\nTITLE:", self.title)
+        # print("\n\nCOVER IMAGE:", self.cover_image)
+        # print("\nIDENTIFIER:", self.identifiers)
+        # print("\nLANGUAGE:", self.languages)
+        # print("\nTITLE:", self.title)
 
         self.getEpubChaptersAndContents()
-        
+        self.getEpubCoverImage()
         # self.num_chapters = len(self.chapters)
         self.stats = self.getStats()
 
@@ -61,6 +59,19 @@ class Book():
     @property
     def isPDF(self):
         return self.file_ext in [".PDF",".pdf"]
+
+    def getEpubCoverImage(self):
+        cover_image_item = self.book_.get_item_with_id('cover')
+        
+        if cover_image_item:
+            cover_image_binary = cover_image_item.content
+            self.cover_image = cover_image_binary
+
+            print(">> Cover image extracted.")
+        else:
+            self.cover_image = None
+            print(">> No cover image found in the EPUB file.")
+
 
     def getEpubChaptersAndContents(self):
         doc = fitz.open(self.filename)
@@ -85,10 +96,10 @@ class Book():
                 chapter_text += page_text
                 chapter_html += text_page.extractHTML() + f"<div class='page-num'>{page_counter}</div>"
 
-                if page_text is not "":
+                if page_text != "":
                     page_counter += 1
 
-            if chapter_text is not "":
+            if chapter_text != "":
                 current_page_no = prev_page_no + (chapter_page_count)
                 page_num_text = f"{prev_page_no + 1}-{current_page_no}"
 
@@ -123,8 +134,8 @@ class Book():
 
         self.metadata = doc.metadata
         self.num_pages = doc.page_count
-        print("\n\nMETADATA:", self.metadata)
-        print("\nNUM PAGES:", self.num_pages)
+        # print("\n\nMETADATA:", self.metadata)
+        # print("\nNUM PAGES:", self.num_pages)
         self.num_chapters = num_chapters
         self.chapters = chapters
         self.contents = chapters_text

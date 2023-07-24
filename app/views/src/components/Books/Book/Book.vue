@@ -4,6 +4,7 @@
   import store from "../../../store/index";
   import Modal from "../../Modal/Modal.vue";
   import Login from "../../Authenticate/Login/Login.vue";
+  import BookCover from "./BookCover.vue";
 
   const props = defineProps({
     book: {
@@ -49,8 +50,10 @@
       @click.stop="authenticate"
     >
 
-      <div class="h-40 sm:h-60 md:h-60 lg:h-70 xl:h-80 bg-slate-200 text-2xs text-slate-400 p-2 mb-2">
-        Book cover
+      <div v-if="book?.coverImage" class="h-auto bg-slate-200 text-2xs text-slate-400 mb-2">
+        <BookCover :coverImage="book?.coverImage" />
+      </div>
+      <div v-else class="h-auto sm:h-60 md:h-60 lg:h-70 xl:h-80 bg-slate-200 text-2xs text-slate-400 mb-2">
       </div>
       <div>{{book.title}}</div>
       <div class="text-xs text-gray-400 mt-2">

@@ -23,7 +23,7 @@ module.exports = {
     });
 
     await queryInterface.addColumn('books', 'coverImage', {
-      type: Sequelize.STRING,
+      type: Sequelize.BLOB,
       allowNull: true,
     });
   },
