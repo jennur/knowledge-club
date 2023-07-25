@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
   import moment from "moment";
   import store from "../../../store/index";
   import Modal from "../../Modal/Modal.vue";
@@ -16,6 +16,8 @@
   const bookAccessModalId = "book-access-modal";
 
   const { book } = props;
+
+  const userAuthenticated = computed(() => store?.state?.auth?.user);
 
   function toggleModal() {
     modalOpen.value = !modalOpen.value;
@@ -39,9 +41,9 @@
       />
     </Modal>
 
-    <component :is="!store?.state?.auth?.user && 'span' || 'RouterLink'"
+    <component :is="!userAuthenticated && 'span' || 'RouterLink'"
       :to="{ name: 'book', params: { id: book.bookUUID }}"
-      :role="!store?.state?.auth?.user ? 'button' : ''"
+      :role="!userAuthenticated ? 'button' : ''"
       :aria-label="`Book title: ${book.title}`"
       :aria-expanded="modalOpen"
       :aria-controls="bookAccessModalId"
@@ -50,12 +52,9 @@
       @click.stop="authenticate"
     >
 
-      <div v-if="book?.coverImage" class="h-auto bg-slate-200 text-2xs text-slate-400 mb-2">
-        <BookCover :coverImage="book?.coverImage" />
-      </div>
-      <div v-else class="h-auto sm:h-60 md:h-60 lg:h-70 xl:h-80 bg-slate-200 text-2xs text-slate-400 mb-2">
-      </div>
-      <div>{{book.title}}</div>
+      <BookCover :bookId="book?.bookUUID" />
+
+      <div>{{ book.title }}</div>
       <div class="text-xs text-gray-400 mt-2">
         Added {{ moment(book.createdAt).startOf('minute').fromNow() }}
       </div>

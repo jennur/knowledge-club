@@ -32,6 +32,16 @@ module.exports = function(app) {
       });
   });
 
+  app.get("/api/book/cover-image", (req, res) => {
+    bookController.getCoverImage(req.query.bookId)
+      .then((coverImage) => {
+        res.status(200).send(coverImage);
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
+  });
+
   app.get("/api/books/chapters", (req, res) => {
     chapterController.findAll(req.query.bookId)
       .then((chapters) => { 

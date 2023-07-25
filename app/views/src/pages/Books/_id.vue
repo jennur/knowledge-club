@@ -20,9 +20,7 @@
   <div class="outer-content-wrapper pt-16 pb-16">
     <div class="flex flex-col md:flex-row">
       <div class="basis-full md:basis-1/3">
-        <div class="border border-slate-200 p-4 flex items-center justify-center">
-          <BookCover :coverImage="book?.coverImage" />
-        </div>
+        <BookCover :bookId="bookId" />
 
         <div class="bg-yellow-50 p-4 text-sm text-slate-800">
           <ul>
