@@ -13,13 +13,13 @@
   const book = computed(() => store.state?.chapters?.focusedBook);
   const metadata = computed(() => book.value && JSON.parse(book.value.metadata))
   const languages = computed(() => book.value && JSON.parse(book.value.languages))
-
+  const chapters = computed(() => store.state.chapters.chapters);
 </script>
 
 <template>
   <div class="outer-content-wrapper pt-16 pb-16">
-    <div class="flex flex-col md:flex-row">
-      <div class="basis-full md:basis-1/3">
+    <div class="flex flex-col sm:flex-row">
+      <div class="basis-full sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
         <BookCover :bookId="bookId" />
 
         <div class="bg-yellow-50 p-4 text-sm text-slate-800">
@@ -51,12 +51,12 @@
         </div>
       </div>
 
-      <div class="basis-full md:basis-1/2 lg:basis-2/3 md:pl-8 lg:pl-16 pt-16 md:pt-0">
+      <div class="basis-full sm:basis-2/3 md:basis-3/4 lg:basis-4/5 sm:pl-8 md:pl-8 lg:pl-16 pt-16 sm:pt-0">
         <h1 class="">{{ book?.title }}</h1>
         <h2 class="mt-6 uppercase text-sm text-gray-400">Chapters</h2>
         <div class="ml-4 mt-4">
           <RouterLink 
-            v-for="chapter in store.state.chapters.chapters" 
+            v-for="chapter in chapters" 
             :key="chapter"
             :to="{ name: 'chapter', params: { id: bookId, chapterNum: chapter.chapterNumber }}"
             class="flex items-center max-w-max text-black-500 group mb-2"

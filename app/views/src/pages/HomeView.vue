@@ -4,8 +4,6 @@
   import BookList from "../components/Books/BooksList/BooksList.vue";
   import NumberedList from "../components/List/NumberedList/NumberedList.vue";
   import store from "../store/index";
-
-  if(!store.state?.books?.books[0]) store.dispatch("books/getAllBooks");
 </script>
 
 <template>
@@ -52,8 +50,11 @@
 
       <div v-if="store.state?.books?.books" class="bg-slate-50 py-16">
         <BookList
-          class="outer-content-wrapper px-2 xl:px-0"
-          :books="store.state.books.books" 
+          :params="{
+            limit: 8,
+            order: JSON.stringify([['createdAt', 'DESC']])
+          }"
+          class="outer-content-wrapper px-2"
           headline="Newly added books"
         />
       </div>

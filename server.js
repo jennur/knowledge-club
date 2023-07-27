@@ -5,6 +5,7 @@ const path = __dirname + '/app/views/dist/';
 const cors = require("cors");
 const app = express();
 const http = require("http").createServer(app);
+const bodyParser = require('body-parser');
 const io = require("socket.io")(http, {
     cors:{
         origin:"http://localhost:5173"
@@ -14,6 +15,9 @@ const db = require("./app/models");
 
 const history = require('connect-history-api-fallback');
 const cookieParser = require("cookie-parser");
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(history());
 app.use(cookieParser());

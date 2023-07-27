@@ -13,7 +13,7 @@ module.exports = function(app) {
   });
 
   app.get("/api/books", (req, res) => {
-    bookController.findAll()
+    bookController.findAll(req)
       .then(books => {
         res.status(200).send(books);
       })

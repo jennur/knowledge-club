@@ -2,6 +2,7 @@ const db = require("../models");
 const Book = db.books;
 const Op = db.Sequelize.Op;
 const btoa = require("btoa");
+const querystring = require("querystring");
 
 // Create and Save a new Book
 exports.create = (book) => {
@@ -11,19 +12,24 @@ exports.create = (book) => {
       return book;
     })
     .catch((err) => {
-      console.log(">> Error while creating book: ", err);
+      console.log(">> Error while creating book: ", err.message);
       return err;
     });
 };
 
 // Retrieve all Books from the database.
-exports.findAll = (req,res) => {
-  return Book.findAll()
+exports.findAll = (req, res) => {
+  const { order, limit } = req.query;
+  const query = {
+    order: order && JSON.parse(order),
+    limit: limit && parseInt(limit)
+  }
+  return Book.findAll(query)
     .then((books) => {
       return books
     })
     .catch((err) => {
-      console.log(">> Error while finding all books: ", err);
+      console.log(">> Error while finding books: ", err.message);
       return err;
     })
 };
@@ -35,7 +41,7 @@ exports.findById = (bookId) => {
       return book;
     })
     .catch((err) => {
-      console.log(">> Error while finding book: ", err);
+      console.log(">> Error while finding book: ", err.message);
       return err;
     });
 };
@@ -59,7 +65,7 @@ exports.deleteAll = () => {
     console.log("destroyed book" + book.title)
   })
   .catch((err) => {
-    console.log(">> Error while destroying books: ", err);
+    console.log(">> Error while destroying books: ", err.message);
     return err;
   })
 };
