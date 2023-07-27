@@ -2,6 +2,8 @@
   import store from "@/store/index"
   import { useRoute, RouterLink } from "vue-router";
   import { computed, ref, watch } from 'vue'
+  import encodeUrl from "../../../helpers/urlEncoder/encodeUrl";
+
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
   import ChapterToolTabs from "@/components/ChapterToolTabs/ChapterToolTabs.vue";
   import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
@@ -117,7 +119,7 @@
       <div class="pb-16 mt-4">
         <div class="flex items-center justify-between">
           <RouterLink 
-            :to="{ name: 'chapters', params: { id: bookId } }" 
+            :to="{ name: 'book', params: { id: bookId, bookTitle: bookData && encodeUrl(bookData?.title) }}"
             class="text-xs uppercase text-gray-400"
           >
             {{ bookData?.title }}

@@ -2,6 +2,7 @@
   import { ref, computed } from "vue";
   import moment from "moment";
   import store from "../../../store/index";
+  import encodeUrl from "../../../helpers/urlEncoder/encodeUrl";
   import Modal from "../../Modal/Modal.vue";
   import Login from "../../Authenticate/Login/Login.vue";
   import BookCover from "./BookCover.vue";
@@ -42,7 +43,7 @@
     </Modal>
 
     <component :is="!userAuthenticated && 'span' || 'RouterLink'"
-      :to="{ name: 'book', params: { id: book.bookUUID }}"
+      :to="{ name: 'book', params: { id: book.bookUUID, bookTitle: encodeUrl(book.title) }}"
       :role="!userAuthenticated ? 'button' : ''"
       :aria-label="`Book title: ${book.title}`"
       :aria-expanded="modalOpen"
@@ -54,7 +55,7 @@
 
       <BookCover :bookId="book?.bookUUID" />
 
-      <div>{{ book.title }}</div>
+      <div class="mt-1">{{ book.title }}</div>
       <div class="text-xs text-gray-400 mt-2">
         Added {{ moment(book.createdAt).startOf('minute').fromNow() }}
       </div>
