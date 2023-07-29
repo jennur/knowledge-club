@@ -12,14 +12,9 @@ class HighlightService {
       })
   }
 
-  postNewHighlight(bookId,chapterNum,startloc,endloc,fromUser,content=""){
+  postNewHighlight(payload) {
     return http.post("/books/chapters/text/highlights", {
-        bookId,
-        chapterNum,
-        startloc,
-        endloc,
-        fromUser,
-        content,
+        ...payload,
         timeSent: new Date()
     }).then((response) => {
       return response.data;

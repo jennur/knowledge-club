@@ -52,8 +52,10 @@ module.exports = function(app) {
       });
   })
 
-  app.get("/api/books/chapters/text", (req,res) => {
-    chapterController.findOne(req.query.bookId,req.query.chapterNum)
+  app.get("/api/books/chapters/text", (req, res) => {
+    const { bookId, chapterNum } = req.query;
+
+    chapterController.findOne(bookId, chapterNum)
       .then((chapter)=>{ 
         res.status(200).send(chapter);
       })
@@ -62,8 +64,10 @@ module.exports = function(app) {
       });  
   })
 
-  app.get("/api/books/chapters/text/highlights", (req,res) => {
-    highlightController.findAll(req.query.bookId,req.query.chapterNum)
+  app.get("/api/books/chapters/text/highlights", (req, res) => {
+    const { bookId, chapterNum } = req.query;
+
+    highlightController.findAll(bookId, chapterNum)
       .then((highlights) => {
         res.status(200).send(highlights);
       })

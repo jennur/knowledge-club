@@ -1,6 +1,6 @@
 <script setup>
   import store  from "../../store/index"
-  import { useRoute } from "vue-router";
+  import { RouterLink, useRoute } from "vue-router";
   import { computed } from 'vue'
 
   import BookCover from "../../components/Books/Book/BookCover.vue";
@@ -17,7 +17,15 @@
 </script>
 
 <template>
-  <div class="outer-content-wrapper pt-16 pb-16">
+  <div class="outer-content-wrapper pt-8 pb-16">
+    <div class="breadcrumbs text-xs uppercase pb-8">
+        <RouterLink 
+            :to="{ name: 'books' }"
+            class="text-gray-400"
+        >
+          Books
+        </RouterLink> / {{ book?.title }}
+    </div>
     <div class="flex flex-col sm:flex-row">
       <div class="basis-full sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
         <BookCover :bookId="bookId" />
@@ -53,7 +61,7 @@
 
       <div class="basis-full sm:basis-2/3 md:basis-3/4 lg:basis-4/5 sm:pl-8 md:pl-8 lg:pl-16 pt-16 sm:pt-0">
         <h1 class="">{{ book?.title }}</h1>
-        <h2 class="mt-6 uppercase text-sm text-gray-400">Chapters</h2>
+        <h2 class="mt-6 uppercase text-sm text-gray-400">Pages</h2>
         <div class="ml-4 mt-4">
           <RouterLink 
             v-for="chapter in chapters" 

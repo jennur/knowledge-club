@@ -14,7 +14,7 @@
           <div class="basis-full md:basis-1/2 flex flex-col justify-center text-center md:text-left md:pr-8 pb-16 lg:p-16">
             <h1 class="text-4xl text-slate-700 mb-6">Learn anything, anytime</h1>
             <p class="text-xl">
-              Collaborate on learning documents with people who are interested in the same topics you are. Learn faster with algorithms that learn how you learn.
+              Collaborate on learning documents with people who are interested in the same topics you are. 
             </p>
           </div>
           <div class="basis-full md:basis-1/2">
@@ -37,8 +37,8 @@
               <h2 class="text-3xl text-slate-800 mb-8">Ways to Learn</h2>
               <NumberedList :listItems="[
                   'Use community documents',
-                  'Upload your own private documents and share with friends',
-                  'Use high quality personalized reference material'
+                  'Highlight and make notes for yourself and others to read',
+                  'Discuss each chapter in the chat',
                 ]"
                 fontSize="xxl"
                 numberColor="blue"

@@ -2,7 +2,7 @@ const db = require("../models");
 const Highlight = db.highlights;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Chat
+// Create and Save a new Highlight
 exports.create = (highlight) => {
   return Highlight.create(highlight)
     .then((highlight) => {
@@ -30,16 +30,16 @@ exports.findAll = (bookId,ChapterNum) => {
 };
 
 
-// Update a Chat by the id in the request
+// Update a Highlight by the id in the request
 exports.update = () => {
   
 };
 
-// Delete a Chat with the specified id in the request
+// Delete a Highlight with the specified id in the request
 exports.delete = () => {
 };
 
-// Delete all Chats from the database.
+// Delete all Highlights from the database.
 exports.deleteAll = () => {
   Highlight.destroy({
     where: {},
@@ -47,6 +47,5 @@ exports.deleteAll = () => {
   });
 };
 
-// Find all published Chats
-exports.findAllPublished = () => {
-};
+// Find all published Highlights
+exports.findAllPublished = () => {};

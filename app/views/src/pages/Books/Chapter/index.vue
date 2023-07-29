@@ -11,6 +11,7 @@
   import MarkdownEditor from "@/components/Inputs/MarkdownEditor.vue";
   import getHighlightedText from "@/helpers/highlightFunctions/getHighlightedText";
   import getSelectedText from "@/helpers/highlightFunctions/getSelectedText";
+  import processSelectedText from "@/helpers/highlightFunctions/processSelectedText";
   import addChapterNote from "@/helpers/noteFunctions/addChapterNote";
 
   const route = useRoute();
@@ -19,6 +20,7 @@
   store.dispatch("chapters/getChapter", { bookId, chapterNum });
   store.dispatch("chapters/getFocusedBook", bookId);
 
+  const dbObj = ref(null);
   const textWithHighlights = ref(null);
   const showHighlightToolBar = ref(null);
   const toolbarPosition = ref(null);
@@ -32,47 +34,41 @@
   const isLastChapter = parseInt(chapterNum) + 1 === store.state.chapters.chapters.length;
 
   function handleTextSelect() {
-
-    let selection = window.getSelection();
-    console.log("SELECTION:", selection);
+    const selection = window.getSelection();
 
     if(selection.type === "Caret") {
       showHighlightToolBar.value = false;
       return;
     }
-
     let position = selection.getRangeAt(0).getBoundingClientRect();
 
     toolbarPosition.value = {
       top: `${position.top + position.height}px`,
       left: `${position.left}px`
     };
+
+    dbObj.value = processSelectedText(selection);
     showHighlightToolBar.value = true;
+    console.log("DB_OBJ:", dbObj.value);
   }
 
-  function storeSelectedText(text, note) {
-    let selectedText = text || getSelectedText();
-    const { startloc, endloc } = selectedText;
-    
-    if(startloc !== endloc) {
-      store.dispatch("chapters/postHighlight", {
-        bookId,
-        chapterNum,
-        startloc,
-        endloc,
-        fromUser: user.value.username,
-        content: selectedText.text,
-        note
-      })
-      .then((highlight) => {
-        console.log("Highlight", highlight);
-        if(note) store.dispatch("chapters/openToolTab", "notes");
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-        errorMsg.value = err.message;
-      })
-    }
+  function storeSelectedText(text, note) {  
+    store.dispatch("chapters/postHighlight", {
+      ...dbObj.value,
+      bookId,
+      chapterNum,
+      fromUser: user.value.username,
+      note
+    })
+    .then((highlight) => {
+      console.log("Highlight", highlight);
+      if(note) store.dispatch("chapters/openToolTab", "notes");
+    })
+    .catch((err) => {
+      console.log("Error:", err);
+      errorMsg.value = err.message;
+    })
+
     showHighlightToolBar.value = false;
   }
 
@@ -119,7 +115,7 @@
       <div class="pb-16 mt-4">
         <div class="flex items-center justify-between">
           <RouterLink 
-            :to="{ name: 'book', params: { id: bookId, bookTitle: bookData && encodeUrl(bookData?.title) }}"
+            :to="{ name: 'book', params: { id: bookId }}"
             class="text-xs uppercase text-gray-400"
           >
             {{ bookData?.title }}

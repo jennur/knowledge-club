@@ -43,7 +43,7 @@
     </Modal>
 
     <component :is="!userAuthenticated && 'span' || 'RouterLink'"
-      :to="{ name: 'book', params: { id: book.bookUUID, bookTitle: encodeUrl(book.title) }}"
+      :to="{ name: 'book', params: { id: book.bookUUID }}"
       :role="!userAuthenticated ? 'button' : ''"
       :aria-label="`Book title: ${book.title}`"
       :aria-expanded="modalOpen"

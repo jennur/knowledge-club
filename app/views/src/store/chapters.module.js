@@ -46,7 +46,7 @@ export const chapters = {
   
         try {
           const chapter = await BookDataService.getChapter(bookId, chapterNum);
-          const highlights = await HighlightService.getAllHighlights(bookId, chapterNum);
+          const highlights = [];//await HighlightService.getAllHighlights(bookId, chapterNum);
   
           commit("setFocusedChapter", {
             chapter: chapter.data,
@@ -62,14 +62,7 @@ export const chapters = {
       },
       async postHighlight({ commit }, payload){
         try {
-          const highlight = await HighlightService.postNewHighlight(
-            payload.bookId,
-            payload.chapterNum,
-            payload.startloc,
-            payload.endloc,
-            payload.fromUser,
-            payload.content
-          );
+          const highlight = await HighlightService.postNewHighlight(payload);
           
           if(payload.note) {
             const article = await HighlightService.postHighlightArticle({
