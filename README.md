@@ -6,7 +6,8 @@
 - `app/config/db.config.js` is the config file for your database. The values here are taken from the `.env` file which you will create in the root folder. See the `.env.example` file.
 - `app/controllers` contains the functions for interacting with the database.
 - `app/models` contains all the database models.
-- `server.js` is the server 😜.
+- `server.js` is the node server.
+- `book-adder` is the python server.
 
 ## Set up & install
 
@@ -18,6 +19,7 @@
 3. Run `npm i` to install the node server
 4. Run `npm run install-client` to install the Vue application.
    - The same as running `npm i` from `app/views`.
+5. In `/book-adder` create a new venv and run `pip install -r requirements.txt`
 
 ## Develop
 
@@ -35,11 +37,16 @@
    - This will generate your css.
    - With Tailwind you don't need to add any css, you simply add the predefined classes to your elements. See the [Tailwind docs](https://tailwindcss.com/docs/) for available classes.
 
+#### From `/book-adder`
+1. Run `waitress-serve --port=3000 server:app`
+
 ### Voila 🎉
+The client is now available at `localhost:5173`.
 
-The server is now available at `localhost:8080`.
+The servers are available at:
+- Node server `localhost:8080`.
+- Python server: `localhost:3000`
 
-The client is available at `localhost:5173`.
 
 ## Build for production 🚀
 
