@@ -25,9 +25,8 @@ export const chapters = {
             commit("setChapters", chapters.data);
             return chapters;
           })
-          .catch(err => {
-            console.log("getAllChapters():", err);
-            return err;
+          .catch((err) => {
+            return Promise.reject(err);
           })
       },
   
@@ -36,8 +35,8 @@ export const chapters = {
           .then(book => {
             commit("setFocusedBook", book.data);
           })
-          .catch(err => {
-            console.log("getFocusedBook():", err);
+          .catch((err) => {
+            return Promise.reject(err);
           })
       },
   
@@ -55,9 +54,8 @@ export const chapters = {
   
           return { chapter: chapter.data, highlights };
         } 
-        catch (err) {
-          console.log("getChapter():", err);
-          return { error: err.message };
+        catch(err) {
+          return Promise.reject(err);
         }
       },
       async postHighlight({ commit }, payload){
@@ -74,16 +72,14 @@ export const chapters = {
               else highlight.articles = [article];
             }
             catch(err) {
-              console.log("postHighLight():", err.message);
-              return err;
+              return Promise.reject(err);
             }
           }
           commit("setHighlight", highlight);
           return highlight;
         }
         catch(err) {
-          console.log("postHighLight():", err.message);
-          return err;
+          return Promise.reject(err);
         }
       },
   

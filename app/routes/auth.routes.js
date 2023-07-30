@@ -49,7 +49,7 @@ module.exports = function(app) {
       })
       .catch((err) => {
         console.log(">> Error signing in:", err);
-        return res.status(401).send({message: err.message });
+        return res.status(401).send({ message: err.message });
       })
   });
 

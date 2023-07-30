@@ -8,12 +8,13 @@ export const chat = {
   actions:{
     async getChatRoomMessages({commit}, roomId){
       ChatService.getChatRoomMessages(roomId)
-        .then(messages=>{
+        .then(messages => {
           commit('clearMessages');
           commit('addMessages',messages)
-        }).catch((err)=>{
-          console.log(err);
-        });
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        })
     },
     async addMessageToState({commit},message){
       commit("addMessage",message)

@@ -23,8 +23,7 @@ export const auth = {
         err => {
           commit('loginFailure');
           return Promise.reject(err);
-        }
-      );
+        });
     },
     logout({ commit }) {
       AuthService.logout();
@@ -41,38 +40,31 @@ export const auth = {
           err => {
             commit('registerFailure');
             return Promise.reject(err);
-          }
-        );
+          });
     },
     checkAccessToken({ commit }) {
       return AuthService.getAccessToken().then(
         response => {
-          console.log("[Y]", response.data.message);
           if(!store.state.auth.user) {
             commit("loginSuccess", response.data.user);
           }
           return Promise.resolve(response.data);
         },
         err => {
-          console.log("CheckAccessToken error:", err);
           localStorage.removeItem("user");
           commit('logout');
           router.push({ name: "home" });
           return Promise.reject(err)
-        }
-      );
+        });
     },
-    checkAdminAccess({ commit }) {
+    checkAdminAccess() {
       return AuthService.checkAdminAccess().then(
         response => {
-          console.log("[Y]", response.data.message);
           return Promise.resolve(response.data);
         },
         err => {
-          console.log("CheckAdminAccess error:", err);
           return Promise.reject(err)
-        }
-      )
+        });
     }
   },
   mutations: {

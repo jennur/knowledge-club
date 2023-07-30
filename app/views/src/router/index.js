@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from "../store/index";
-import authService from "../services/auth.service";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,24 +73,14 @@ router.beforeEach(async (to, from, next) => {
 
   if(!safeList.includes(to.name) && !adminList.includes(to.name)) {
     store.dispatch("auth/checkAccessToken")
-      .then(() => {
-        return true;
-      })
-      .catch(error => {
-        console.log("Cannot access:", error?.response?.data?.message || error.message);
-        return router.push({ name: "home" });
-      })
+      .then(() => true)
+      .catch(() => router.push({ name: "home" }))
   }
 
   if(adminList.includes(to.name)) {
     store.dispatch("auth/checkAdminAccess")
-      .then((response) => {
-        return true;
-      })
-      .catch(error => {
-        console.log("Cannot access admin page:", error?.response?.data?.message || error.message);
-        return router.push({ name: from.name || "home" });
-      })
+      .then(() => true)
+      .catch(() => router.push({ name: from.name || "home" }))
   }
 
   next();

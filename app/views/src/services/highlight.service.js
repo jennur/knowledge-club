@@ -7,8 +7,8 @@ class HighlightService {
         return response.data;
       })
       .catch((err) => {
-        console.log("getAllHighlights:", err.message);
-        return err;
+        console.error("[Y]", err.response.data.message);
+        return Promise.reject(err);
       })
   }
 
@@ -20,8 +20,8 @@ class HighlightService {
       return response.data;
     })
     .catch((err) => {
-      console.log("postNewHighlight:", err.message);
-      return err;
+      console.error("[Y]", err.response.data.message);
+      return Promise.reject(err);
     })
   }
 
@@ -31,12 +31,13 @@ class HighlightService {
         description: article.description,
       },
       highlightId
-    }).then((response) => {
+    })
+    .then((response) => {
       return response.data;
     })
     .catch((err) => {
-      console.log("postHighlightArticle:", err.message);
-      return err;
+      console.error("[Y]", err.response.data.message);
+      return Promise.reject(err);
     })
   }
 }

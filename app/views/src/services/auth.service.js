@@ -7,7 +7,6 @@ class AuthService {
         password: user.password
       })
       .then(response => {
-        console.log("Response:", response.data);
         const user = response.data;
         localStorage.setItem('user', JSON.stringify({
             userId: user.userId,
@@ -18,6 +17,7 @@ class AuthService {
         return user;
       })
       .catch(err => {
+        console.error("[Y]", err.response.data.message);
         return Promise.reject(err);
       });
   }
@@ -26,11 +26,11 @@ class AuthService {
     localStorage.removeItem("user");
     return http.get("/auth/logout")
       .then((response => {
-        console.log(response.data.message);
+        console.log("[Y]", response.data.message);
         return response;
       }))
       .catch(err => {
-        console.log("AuthService logout error:", err.response);
+        console.error("[Y]", err.message);
         return Promise.reject(err);
       });
   }
@@ -42,7 +42,7 @@ class AuthService {
       email: user.email
     })
     .catch(err => {
-      console.log("AuthService register error:", err.response);
+      console.error("[Y]", err.response.data.message);
       return Promise.reject(err);
     });
   }
@@ -50,7 +50,7 @@ class AuthService {
   getAccessToken() {
     return http.get("/auth/verify-access-token")
       .catch(err => {
-        console.log("AuthService get access token error:", err.response);
+        console.error("[Y]", err.response.data.message);
         return Promise.reject(err);
       })
   }
@@ -58,7 +58,7 @@ class AuthService {
   checkAdminAccess() {
     return http.get("/auth/verify-admin-access")
       .catch(err => {
-        console.log("AuthService verify admin access error:", err.response);
+        console.error("[Y]", err.response.data.message);
         return Promise.reject(err);
       })
   }

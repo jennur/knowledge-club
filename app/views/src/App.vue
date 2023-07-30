@@ -11,7 +11,6 @@
       const component = await import(`./layouts/${route.meta.layout}.vue`)
       layout.value = component?.default || DefaultLayout;
     } catch (err) {
-      console.log("[Y] using default layout");
       layout.value = DefaultLayout;
     }
   })

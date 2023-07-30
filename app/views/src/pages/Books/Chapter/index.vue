@@ -66,25 +66,25 @@
     }
   }
 
-  function storeSelectedText(highlightObj, note) {  
+  function storeSelectedText(highlightObj, note) {
     const userObj = {
       userId: user.value.userId,
       username: user.value.username
     }
   
     store.dispatch("chapters/postHighlight", {
-      ...highlightDbObject(highlightObj),
-      bookId,
-      chapterNum,
-      fromUser: JSON.stringify(userObj),
-      note
-    })
-    .then((response) => {
-      if(note) store.dispatch("chapters/openToolTab", "notes");
-    })
-    .catch((err) => {
-      errorMsg.value = err.message;
-    })
+        ...highlightDbObject(highlightObj),
+        bookId,
+        chapterNum,
+        fromUser: JSON.stringify(userObj),
+        note
+      })
+      .then((response) => {
+        if(note) store.dispatch("chapters/openToolTab", "notes");
+      })
+      .catch((err) => {
+        errorMsg.value = err.message;
+      })
 
     showHighlightToolBar(false);
   }
