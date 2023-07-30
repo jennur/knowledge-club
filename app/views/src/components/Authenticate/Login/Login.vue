@@ -10,24 +10,17 @@
   const props = defineProps(["headline", "hasSignUpLink"])
   const username = ref("");
   const password = ref("");
-
-  const fieldErrors = ref([]);
   const errorMsg = ref("");
-  const errorFields = computed(() => fieldErrors.value && [...fieldErrors.value].map(error => {
-      return error.field;
-    })
-  );
 
   function login() {
-    fieldErrors.value = [];
-    
-    store.dispatch("auth/login", { username: username.value, password: password.value })
+    store.dispatch("auth/login", { 
+      username: username.value, 
+      password: password.value 
+    })
       .then(() => {
         location.reload();
       })
       .catch(err => {
-        console.log("Login.vue error:", err);
-        fieldErrors.value = err?.response?.data?.errors;
         errorMsg.value = err?.response?.data?.message;
       });
   }
@@ -45,9 +38,8 @@
       id="login-username"
       placeholder="Username"
       iconClass="fas fa-user"
-      required
       class="mb-4"
-      :hasError="errorFields?.includes('username')"
+      required
     />
 
     <TextInput 
@@ -57,15 +49,16 @@
       id="login-password"
       placeholder="Password"
       iconClass="fas fa-lock"
-      required
       class="mb-4"
-      :hasError="errorFields?.includes('password')"
+      required
     />
 
     <SimpleButton type="submit" buttonText="Log in" fluid dark/>
-    <p v-if="errorMsg" class="mt-2 text-left text-red-500">{{ errorMsg }}</p>
-    <p v-for="error in fieldErrors" :key="error.field || error.message" class="mt-2 text-left text-red-500">
-      {{ error.message }}
+    <p 
+      v-if="errorMsg"
+      class="border border-red-300 bg-red-50 py-1 px-2 mt-2 text-sm text-left text-red-500"
+    >
+      {{ errorMsg }}
     </p>
 
     <p v-if="props.hasSignUpLink" class="text-sm mt-4">If you don't have an account yet,

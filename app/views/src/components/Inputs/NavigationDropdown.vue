@@ -40,7 +40,7 @@
 
 <style lang="postcss" scoped>
   .select-dropdown {
-    @apply relative w-32 min-w-max text-sm text-gray-800 cursor-pointer;
+    @apply z-50 relative w-32 min-w-max text-sm text-gray-800 cursor-pointer;
   }
 
   .select-display {
@@ -48,7 +48,7 @@
   }
 
   .select-options {
-    @apply w-full absolute top-full mt-2 border border-slate-300 shadow-md;
+    @apply bg-white  w-full absolute top-full mt-2 border border-slate-300 shadow-md;
   }
 
   .select-options .option {

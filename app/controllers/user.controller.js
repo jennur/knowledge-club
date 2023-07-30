@@ -6,12 +6,12 @@ const Op = db.Sequelize.Op;
 exports.create = (user) => {
   return User.create(user)
   .then((user) => {
-      console.log(">> Created user: " + JSON.stringify(user, null, 4));
+      console.log(">> Created User:", user.userId);
       return user;
   })
   .catch((err) => {
       console.log(">> Error while creating user:", err);
-      return err;
+      return Promise.reject(err);
   });
 };
 
@@ -25,8 +25,6 @@ exports.findById = (userId) => {
     }]
   })
   .then((user) => {
-    console.log(">> Found user (username, role):", user.username);
-
     return {
       id: user.userId,
       username: user.username,
@@ -34,72 +32,71 @@ exports.findById = (userId) => {
     };
   })
   .catch((err) => {
-      console.log(">> Error finding user:", err);
-      return err;
+    console.log(">> Error finding user:", err.message);
+    return Promise.reject(err);
   });
 };
 
 // Update a user's username
-exports.updateUsername = (req, res) => {
-  const newUsername = req.body.newUsername;
-  const user = User.findOne({
-    where: {
-      id: req.userId
-    }
-  });
+exports.updateUsername = (newUsername, userId) => {
+  const user = User.findOne({ where: { id: userId }});
   user.username = newUsername;
   user.save()
-    .then(() => {
-      return res.status(200).send({message: "Your username was successfully updated!"});
-    })
+    .then(response => response)
     .catch((err) => {
-      return res.status(500).send({message: err.message});
+      console.log(">> Error saving new username:", err.message);
+      return Promise.reject({ message: err.message });
     });
 };
 
 // Update a User by the id in the request
-exports.updateBiography = (req, res) => {
-  const newBiography = req.body.newBiography;
-  const user = User.findOne({
-    where: {
-      id: req.userId
-    }
-  });
+exports.updateBiography = (newBiography, userId) => {
+  const user = User.findOne({ where: { id: userId }});
   user.biography = newBiography;
   user.save()
-    .then(() => {
-      return res.status(200).send({message: "Your biography was successfully updated!"});
-    })
+    .then(response => response)
     .catch((err) => {
-      return res.status(500).send({message: err.message});
+      console.log(">> Error saving new biography:", err.message);
+      return Promise.reject({ message: err.message });
     });
 };
 
 // Delete a User with the specified id in the request
-exports.delete = (id) => {
-  
-};
+exports.delete = (id) => {};
 
-
+// Set user role
 exports.setRole = (userId, roleId) => {
   return User.findByPk(userId)
     .then((user) => {
       if (!user) {
-        console.log("Error setting role: User not found!");
-        return null;
+        console.log(">> Error setting role: User not found!");
+        return Promise.reject({ message: "User not found"})
       }
-      return db.roles.findByPk(roleId).then((role) => {
-        if (!role) {
-          console.log("Error setting role: Role not found!");
-          return null;
-        }
-        user.setRoles(role);
-        console.log(`>> added Role id=${role.roleId} to User id=${user.userId}`);
-        return user;
-      });
+      return db.roles.findByPk(roleId)
+        .then(async (role) => {
+          if (!role) {
+            console.log(">> Error setting role: Role not found!");
+            return Promise.reject({ message: "Role not found"})
+          }
+
+          try {
+            await user.setRoles(role);
+            console.log(`>> added Role id=${role.roleId} to User id=${user.userId}`);
+          }
+          catch(err) {
+            console.log(">> Error setting Roles:", err.message);
+            return Promise.reject({ message: err.message });
+          }
+
+          return user;
+        })
+        .catch((err) => {
+          return Promise.reject({ message: err.message });
+        });
     })
     .catch((err) => {
-      console.log(">> Error while adding Role to User:", err);
+      console.log(">> Error adding Role to User:", err.message);
+      return Promise.reject({ message: err.message });
     });
 };
 

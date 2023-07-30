@@ -6,34 +6,32 @@ const Op = db.Sequelize.Op;
 exports.create = (message) => {
   return Chat.create(message)
     .then((message) => {
-      console.log(">> Message added from: " + message.fromUser);
+      console.log(">> Created Chat:", messageId);
       return message;
     })
     .catch((err) => {
-      console.log(">> Error while creating message: ", err);
-      return err;
+      console.log(">> Error creating Chat:", err.message);
+      return Promise.reject(err);
     });
 };
 
 // Retrieve all messages from the database.
 exports.findAll = () => {
-  return Chat.findAll().then((messages) => {
-    return(messages)
-  }).catch(err=>{
-    console.log(err)
+  return Chat.findAll()
+  .then(response => response)
+  .catch((err) => {
+    console.log(">> Error finding all Chats:", err.message);
+    return Promise.reject(err);
   });
 };
 
 // Find a single Chat with a room id
 exports.findByRoomId = (roomId) => {
-  return Chat.findAll({
-      where: { roomId }
-    })
-    .then((messages) => {
-      return messages
-    })
+  return Chat.findAll({ where: { roomId }})
+    .then(messages => messages)
     .catch((err) => {
-        console.log(">> Error while finding messages: ", err);
+      console.log(">> Error finding Chat by roomId:", err.message);
+      return Promise.reject(err);
     });
 };
 
@@ -48,9 +46,13 @@ exports.delete = () => {
 
 // Delete all Chats from the database.
 exports.deleteAll = () => {
-  Chat.destroy({
-    where: {},
-    truncate: true
+  Chat.destroy({ where: {}, truncate: true })
+  .then(() => {
+    console.log(">> Destroyed Chat");
+  })
+  .catch((err) => {
+    console.log(">> Error destroying chat:", err.message);
+    return Promise.reject(err);
   });
 };
 

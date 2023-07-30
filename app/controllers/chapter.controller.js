@@ -6,51 +6,52 @@ const Op = db.Sequelize.Op;
 exports.create = (chapter) => {
   return Chapter.create(chapter)
     .then((chapter) => {
-      console.log(">> Created chapter: " + chapter.chapterName);
+      console.log(">> Created Chapter:", chapter.chapterUUID);
       return chapter;
     })
     .catch((err) => {
-      console.log(">> Error while creating chapter: ", err);
+      console.log(">> Error creating Chapter:", err.message);
+      return Promise.reject(err);
     });
 };
 
 // Retrieve all Chapters from the database.
 exports.findAll = (bookId) => {
   return Chapter.findAll({
-    where:{
+    where: {
       bookUUID: bookId,
     },
     order:[['chapterNumber','ASC']]
   })
-  .then(chapters => {
-    console.log(">> Found chapters of bookId: " + bookId);
-    return chapters;
-  })
+  .then(chapters => chapters)
   .catch(err => {
-    console.log(">> Error while finding all chapters: ", err.message);
+    console.log(">> Error finding all Chapters:", err.message);
+    return Promise.reject(err);
   });
 };
 
-exports.findOne = (bookId,chapterNum) => {
+exports.findOne = (bookId, chapterNum) => {
   console.log(bookId, chapterNum)
   return Chapter.findAll({
     where: {
-      bookUUID:bookId,
-      chapterNumber:chapterNum
+      bookUUID: bookId,
+      chapterNumber: chapterNum
     }
-  }).then((chapters) => {
-    return chapters[0];
+  })
+  .then(chapters => chapters[0])
+  .catch((err) => {
+    console.log(">> Error finding all Chapters from bookId and chapterNum:", err.message);
+    return Promise.reject(err);
   });
 };
 
 // Find a single Book with an id
 exports.findById = (chapterId) => {
   return Chapter.findByPk(chapterId)
-    .then((chapter) => {
-        return chapter;
-    })
+    .then(chapter => chapter)
     .catch((err) => {
-        console.log(">> Error while finding chapter: ", err.message);
+      console.log(">> Error finding Chapter by id:", err.message);
+      return Promise.reject(err);
     });
 };
 
@@ -65,9 +66,16 @@ exports.delete = () => {
 
 // Delete all Chapters from the database.
 exports.deleteAll = () => {
-  Chapter.destroy({where:{},
-  truncate:true}).then((chapter)=>{
-    console.log("destroyed book" + chapter.chaptrName)
+  Chapter.destroy({
+    where: {},
+    truncate:true
+  })
+  .then((chapter) => {
+    console.log(">> Destroyed chapter:", chapter.chapterName)
+  })
+  .catch((err) => {
+    console.log(">> Error destroying Chapter", err.message);
+    return Promise.reject(err);
   })
 };
 

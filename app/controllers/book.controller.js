@@ -1,19 +1,17 @@
 const db = require("../models");
 const Book = db.books;
-const Op = db.Sequelize.Op;
 const btoa = require("btoa");
-const querystring = require("querystring");
 
 // Create and Save a new Book
 exports.create = (book) => {
   return Book.create(book)
     .then((book) => {
-      console.log(">> Created book: " + book.title);
+      console.log(">> Created Book:", book.bookUUID);
       return book;
     })
     .catch((err) => {
-      console.log(">> Error while creating book: ", err.message);
-      return err;
+      console.log(">> Error creating Book:", err.message);
+      return Promise.reject(err);
     });
 };
 
@@ -29,8 +27,8 @@ exports.findAll = (req, res) => {
       return books
     })
     .catch((err) => {
-      console.log(">> Error while finding books: ", err.message);
-      return err;
+      console.log(">> Error finding all Books:", err.message);
+      return Promise.reject(err);
     })
 };
 
@@ -41,8 +39,8 @@ exports.findById = (bookId) => {
       return book;
     })
     .catch((err) => {
-      console.log(">> Error while finding book: ", err.message);
-      return err;
+      console.log(">> Error finding Book by id:", err.message);
+      return Promise.reject(err);
     });
 };
 
@@ -62,11 +60,11 @@ exports.deleteAll = () => {
     truncate: true
   })
   .then((book)=>{
-    console.log("destroyed book" + book.title)
+    console.log(">> Destroyed book:", book.title)
   })
   .catch((err) => {
-    console.log(">> Error while destroying books: ", err.message);
-    return err;
+    console.log(">> Error while destroying Books:", err.message);
+    return Promise.reject(err);
   })
 };
 
@@ -91,7 +89,7 @@ exports.getCoverImage = (bookId) => {
       return `${process.env.VITE_BASE_URL}/placeholder.jpg`;
     })
     .catch((err) => {
-      console.log(">> No cover image found: ", err.message);
-      return err;
+      console.log(">> No cover image found:", err.message);
+      return Promise.reject(err);
     });
 };

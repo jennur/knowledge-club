@@ -5,8 +5,8 @@ module.exports = (sequelize, Sequelize) => {
     userId: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement:true,
-      allowNull:false
+      autoIncrement: true,
+      allowNull: false
     },
     username: {
       type: Sequelize.STRING,
@@ -52,7 +52,7 @@ module.exports = (sequelize, Sequelize) => {
         }
       },
       set (value) {
-        if(value.length >= 8 && value.length <= 15) {
+        if(value && (value.length >= 8 && value.length <= 15)) {
           this.setDataValue("password", bcrypt.hashSync(value, 8));
         } else {
           throw {

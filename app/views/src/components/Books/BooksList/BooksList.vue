@@ -12,7 +12,6 @@
 
   httpCommon.get("/books", { params: props.params })
     .then(response => {
-      console.log("Response", response.data);
       books.value = response.data;
     })
     .catch(error => {

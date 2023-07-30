@@ -6,25 +6,23 @@ const Op = db.Sequelize.Op;
 exports.create = (role) => {
   return Role.create(role)
     .then((role) => {
-        console.log(">> Created role: " + JSON.stringify(role, null, 4));
-        return role;
+      console.log(">> Created Role:", role.roleId);
+      return role;
     })
     .catch((err) => {
-        console.log(">> Error while creating role: ", err);
+      console.log(">> Error creating Role:", err.message);
+      return Promise.reject(err);
     });
 };
 
 // Find a single Role by id
 exports.findById = (id) => {
-    return Role.findOne({
-        where: {
-            id
-        }
-    }).then((role) => {
-        console.log(">> Found role: " + JSON.stringify(role, null, 4));
-        return role;
-    })
-    .catch((err) => {
-        console.log(">> Error finding role: ", err);
-    });
+  return Role.findOne({
+    where: { id }
+  })
+  .then(role => role)
+  .catch((err) => {
+    console.log(">> Error finding Role by id:", err.message);
+    return Promise.reject(err);
+  });
 };

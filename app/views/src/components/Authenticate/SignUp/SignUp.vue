@@ -12,7 +12,7 @@
   const passwordCompare = ref("");
 
   const passwordError = ref(false);
-  const fieldErrors = ref([]);
+  const fieldErrors = ref(null);
   const errorMsg = ref("");
   const errorFields = computed(() => fieldErrors.value && [...fieldErrors.value].map(error => {
       return error.field;
@@ -53,7 +53,6 @@
       id="signup-username"
       placeholder="Username"
       iconClass="fas fa-user"
-      required
       class="mb-4"
       :hasError="errorFields?.includes('username')"
     />
@@ -65,7 +64,6 @@
       id="signup-email"
       placeholder="E-mail"
       iconClass="fas fa-envelope"
-      required
       class="mb-4"
       :hasError="errorFields?.includes('email')"
     />
@@ -77,7 +75,6 @@
       id="signup-password"
       placeholder="Password"
       iconClass="fas fa-lock"
-      required
       class="mb-4"
       :hasError="passwordError || errorFields?.includes('password')"
     />
@@ -89,19 +86,28 @@
       id="signup-password-compare"
       placeholder="Repeat password"
       iconClass="fas fa-lock"
-      required
       class="mb-4"
       :hasError="passwordError || errorFields?.includes('password')"
     />
 
     <SimpleButton type="submit" buttonText="Sign up" fluid customColors class="bg-emerald-600 text-white  mb-2" />
 
-    <div class="text-left text-sm text-red-500">
-      <p v-if="errorMsg">{{ errorMsg }}</p>
-      <p v-for="error in fieldErrors" :key="error.field" class="">
-        {{ error.message }}
+      <p v-if="errorMsg" class="error-container">
+      {{ errorMsg }}
       </p>
-      <p v-if="passwordError" class="">Passwords don't match</p>
-    </div>
+      <div v-if="fieldErrors" class="error-container">
+        <p v-for="error in fieldErrors" :key="error.field" class="my-1">
+          {{ error.message }}
+        </p>
+      </div>
+      <p v-if="passwordError" class="error-container">
+        Passwords don't match
+      </p>
   </form>
 </template>
+
+<style lang="postcss" scoped>
+  .error-container {
+    @apply border border-red-300 bg-red-50 py-1 px-2 mt-2 text-sm text-left text-red-500;
+  }
+</style>

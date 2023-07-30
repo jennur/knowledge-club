@@ -6,25 +6,27 @@ const Op = db.Sequelize.Op;
 exports.create = (raw_file) => {
   return Raw.create(raw_file)
     .then((raw) => {
-      console.log(">> Created raw book: " + title);
+      console.log(">> Created Raw book:", raw.bookUUID);
       return raw;
     })
     .catch((err) => {
-      console.log(">> Error while creating book: ", err);
+      console.log(">> Error creating Raw book:", err.message);
+      return Promise.reject(err);
     });
 };
 
 
 // Find a single Book with an id
 exports.findById = (bookId) => {
-  return Raw.findOne(bookId, { where:{
-    bookUUID:bookId
-  }})
-    .then((raw) => {
-        return raw;
+  return Raw.findOne(bookId, { 
+      where: {
+        bookUUID:bookId
+      }
     })
+    .then(raw => raw)
     .catch((err) => {
-        console.log(">> Error while finding book: ", err);
+      console.log(">> Error finding Raw book:", err.message);
+      return Promise.reject(err);
     });
 };
 
@@ -39,9 +41,16 @@ exports.delete = () => {
 
 // Delete all Books from the database.
 exports.deleteAll = () => {
-  Raw.destroy({where:{},
-  truncate:true}).then(()=>{
-    console.log("destroyed raw")
+  Raw.destroy({
+    where: {},
+    truncate:true
+  })
+  .then(() => {
+    console.log(">> Destroyed Raw book");
+  })
+  .catch((err) => {
+    console.log(">> Error destroying Raw book");
+    return Promise.reject(err);
   })
 };
 

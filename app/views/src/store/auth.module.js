@@ -18,12 +18,11 @@ export const auth = {
           const userObj = JSON.stringify(userModel(user));
           localStorage.setItem("user", userObj);
           commit('loginSuccess', user);
-          return Promise.resolve(user);
+          return user;
         },
-        error => {
-          console.log("Failure login:", error);
+        err => {
           commit('loginFailure');
-          return Promise.reject(error);
+          return Promise.reject(err);
         }
       );
     },
@@ -33,16 +32,17 @@ export const auth = {
       router.push({ name: "home" });
     },
     register({ commit }, user) {
-      return AuthService.register(user).then(
-        response => {
-          commit('registerSuccess');
-          return Promise.resolve(response.data);
-        },
-        error => {
-          commit('registerFailure');
-          return Promise.reject(error);
-        }
-      );
+      return AuthService.register(user)
+        .then(
+          response => {
+            commit('registerSuccess');
+            return response.data
+          },
+          err => {
+            commit('registerFailure');
+            return Promise.reject(err);
+          }
+        );
     },
     checkAccessToken({ commit }) {
       return AuthService.getAccessToken().then(
@@ -53,12 +53,12 @@ export const auth = {
           }
           return Promise.resolve(response.data);
         },
-        error => {
-          console.log("CheckAccessToken error:", error);
+        err => {
+          console.log("CheckAccessToken error:", err);
           localStorage.removeItem("user");
           commit('logout');
           router.push({ name: "home" });
-          return Promise.reject(error)
+          return Promise.reject(err)
         }
       );
     },
@@ -68,9 +68,9 @@ export const auth = {
           console.log("[Y]", response.data.message);
           return Promise.resolve(response.data);
         },
-        error => {
-          console.log("CheckAdminAccess error:", error);
-          return Promise.reject(error)
+        err => {
+          console.log("CheckAdminAccess error:", err);
+          return Promise.reject(err)
         }
       )
     }

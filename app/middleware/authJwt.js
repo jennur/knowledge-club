@@ -4,7 +4,7 @@ const db = require("../models");
 const User = db.users;
 
 verifyToken = (req, res, next) => {
-  let token = req.cookies["kc_access_token"];
+  let token = req.cookies[config.accessTokenCookie];
 
   if (!token) {
     return res.status(403).send({

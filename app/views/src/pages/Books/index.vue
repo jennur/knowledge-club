@@ -10,7 +10,7 @@
     <BooksList
       class="container mx-auto"
       :books="store.state.books.books" 
-      headline="Newly added books"
+      headline="Available books"
     />
     </div>
   </div>

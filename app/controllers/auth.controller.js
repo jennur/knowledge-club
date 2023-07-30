@@ -6,107 +6,81 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-const accessTokenCookie = "kc_access_token";
-const defaultError = {
+const defaultError = { 
   message: "Something went wrong, please contact us if the issue persists."
-}
-
-exports.signup = (req, res) => {
-  User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
-  })
-  .then(user => {
-    if (req.body.roles) {
-      Role.findAll({
-        where: {
-          name: {
-            [Op.or]: req.body.roles
-          }
-        }
-      }).then(roles => {
-        user.setRoles(roles).then(() => {
-          res.send({ message: "User was registered successfully" });
-        });
-      });
-    } else {
-      user.setRoles([1]).then(() => {
-        res.send({ message: "User was registered successfully" });
-      });
-    }
-  })
-  .catch(err => {
-    var errors = err?.errors?.map(error => {
-      return {
-        message: error.message,
-        field: error.path
-      }
-    });
-    res.status(500).send({ errors });
-  });
 };
 
-exports.signin = (req, res) => {
-  User.findOne({
-    where: {
-      username: req.body.username
-    }
-  })
-  .then(user => {
-    if (!user) {
-      return res.status(404).send({ message: "Invalid password or username" });
-    }
+exports.signup = (username, email, password, roles) => {
+  return User.create({ username, email, password })
+    .then(user => {
+      if (roles) {
+        Role.findAll({ where: { name: { [Op.or]: roles }}})
+          .then(roles => {
+            user.setRoles(roles)
+              .then(roles => roles)
+              .catch((err) => {
+                console.log(">> Error setting Roles:", err.message);
+                return Promise.reject({ message: err.message });
+              });
+          });
+      }
+      else {
+        user.setRoles([1])
+          .then(roles => roles)
+          .catch((err) => {
+            console.log(">> Error setting Roles:", err.message);
+            return Promise.reject({ message: err.message });
+          });
+      }
+    })
+    .catch((err) => {
+      const errors = err?.errors?.map(error => {
+        console.log(">> Error in field:", error.path);
+        return {
+          message: error.message,
+          field: error.path
+        }
+      });
+      console.log(">> Error registering user:", err.message);
+      const error = errors && { errors } || defaultError;
+      return Promise.reject(error)
+    });
+};
 
-    var passwordIsValid = bcrypt.compareSync(
-      req.body.password,
-      user.password
-    );
+exports.signin = (username, password) => {
+  return User.findOne({
+    where: { username }
+  })
+  .then((user) => {
+    if(!user) return Promise.reject({ message: "User not found"})
+
+    const passwordIsValid = bcrypt.compareSync(password, user.password);
 
     if (!passwordIsValid) {
-      return res.status(401).send({
-        accessToken: null,
-        message: "Invalid password or username"
-      });
+      return Promise.reject({ message: "Invalid password or username"})
     }
 
-    var token = jwt.sign({ id: user.userId }, config.secret, {
+    const token = jwt.sign({ id: user.userId }, config.secret, {
       expiresIn: 86400 // 24 hours
     });
 
     var authorities = [];
 
-    user.getRoles().then(roles => {
-      for (let i = 0; i < roles.length; i++) {
-        authorities.push("ROLE_" + roles[i].name.toUpperCase());
-      }
-      res
-        .cookie(accessTokenCookie, token, { httpOnly: true })
-        .status(200)
-        .send({
-          userId: user.userId,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token
-        });
-    }).catch(err =>{
-      console.log("Error in getRoles:", err);
-    })
+    return user.getRoles()
+      .then(roles => {
+        roles.forEach((role) => {
+          authorities.push("ROLE_" + role.name.toUpperCase());
+        })
+        const accessTokenCookie = config.accessTokenCookie;
+        return { accessTokenCookie, token, user, authorities };
+      })
+      .catch(err =>{
+        console.log(">> Error getting Roles:", err.message);
+        return Promise.reject({ message: err.message });
+      })
   })
-  .catch(err => {
-    const errors = err?.errors?.map(error => {
-      return {
-        message: error.message,
-        field: error.path
-      }
-    });
-    console.log("Error finding user by id:", err);
-    res.status(500).send({ errors });
+  .catch((err) => {
+    console.log(">> Error finding User by id:", err.message);
+    return Promise.reject({ message: err.message });
   });
-};
-
-exports.logout = (req, res) => {
-  res.clearCookie(accessTokenCookie);
-  res.send({ message: "User logged out" })
 };

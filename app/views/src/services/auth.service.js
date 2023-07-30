@@ -18,7 +18,6 @@ class AuthService {
         return user;
       })
       .catch(err => {
-        console.log("AuthService login error:", err.response);
         return Promise.reject(err);
       });
   }

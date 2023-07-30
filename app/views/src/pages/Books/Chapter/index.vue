@@ -9,8 +9,8 @@
   import getContainerWithHighlights from "@/helpers/highlightFunctions/getContainerWithHighlights";
   import highlightContainerFromRange from "@/helpers/highlightFunctions/highlightContainerFromRange";
 
-  import { 
-    highlight as highlightModel, 
+  import {
+    highlight as highlightModel,
     highlightDbObject
   } from "@/models/highlight";
 
@@ -83,7 +83,6 @@
       if(note) store.dispatch("chapters/openToolTab", "notes");
     })
     .catch((err) => {
-      console.log(err.message);
       errorMsg.value = err.message;
     })
 

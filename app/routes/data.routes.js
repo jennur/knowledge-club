@@ -72,25 +72,21 @@ module.exports = function(app) {
         res.status(200).send(highlights);
       })
       .catch((err) => {
-        console.log("Error getting highlight:", err);
         res.status(500).send({ message: err.message });
       });
   })
 
   app.post("/api/books/chapters/text/highlights", (req, res) => {
     highlightController.create(req.body)
-      .then((highlights) => {
-        console.log("Posted highlight", highlights);
-        res.status(200).send(highlights)
+      .then((response) => {
+        res.status(200).send(response)
       })
       .catch((err) => {
-        console.log(">> Error creating highlight:", err.message);
         res.status(500).send({ message: err.message });
       });
   })
 
   app.post("/api/books/chapters/text/highlights/article", async (req, res) => {
-    console.log("Req body:", req.body);
     const articleData = req.body.article;
     const highlightId = req.body.highlightId;
 
@@ -100,9 +96,7 @@ module.exports = function(app) {
       res.status(200).send(articleWithHighlight);
     } 
     catch (err) {
-      console.log(">> Error creating article:", err.message);
       res.status(500).send({ message: err.message });
     }
-  })
-  
+  });
 };
