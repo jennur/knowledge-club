@@ -7,7 +7,7 @@ class HighlightService {
         return response.data;
       })
       .catch((err) => {
-        console.log("getAllHighlights:", err);
+        console.log("getAllHighlights:", err.message);
         return err;
       })
   }
@@ -20,7 +20,7 @@ class HighlightService {
       return response.data;
     })
     .catch((err) => {
-      console.log("postNewHighlight:", err);
+      console.log("postNewHighlight:", err.message);
       return err;
     })
   }
@@ -35,7 +35,7 @@ class HighlightService {
       return response.data;
     })
     .catch((err) => {
-      console.log("postHighlightArticle:", err);
+      console.log("postHighlightArticle:", err.message);
       return err;
     })
   }

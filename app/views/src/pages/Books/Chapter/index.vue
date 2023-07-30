@@ -1,18 +1,18 @@
 <script setup>
   import store from "@/store/index"
   import { useRoute, RouterLink } from "vue-router";
-  import { computed, ref, watch } from 'vue'
-  import encodeUrl from "../../../helpers/urlEncoder/encodeUrl";
+  import { computed, ref, watch, onMounted } from 'vue'
 
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
   import ChapterToolTabs from "@/components/ChapterToolTabs/ChapterToolTabs.vue";
   import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
-  import Modal from "@/components/Modal/Modal.vue";
-  import MarkdownEditor from "@/components/Inputs/MarkdownEditor.vue";
-  import getHighlightedText from "@/helpers/highlightFunctions/getHighlightedText";
-  import getSelectedText from "@/helpers/highlightFunctions/getSelectedText";
-  import processSelectedText from "@/helpers/highlightFunctions/processSelectedText";
-  import addChapterNote from "@/helpers/noteFunctions/addChapterNote";
+  import getContainerWithHighlights from "@/helpers/highlightFunctions/getContainerWithHighlights";
+  import highlightContainerFromRange from "@/helpers/highlightFunctions/highlightContainerFromRange";
+
+  import { 
+    highlight as highlightModel, 
+    highlightDbObject
+  } from "@/models/highlight";
 
   const route = useRoute();
   const { id: bookId, chapterNum } = route.params;
@@ -20,85 +20,88 @@
   store.dispatch("chapters/getChapter", { bookId, chapterNum });
   store.dispatch("chapters/getFocusedBook", bookId);
 
-  const dbObj = ref(null);
-  const textWithHighlights = ref(null);
-  const showHighlightToolBar = ref(null);
-  const toolbarPosition = ref(null);
   const errorMsg = ref(null);
+  const highlight = ref(null);
+  const showingHighlightToolBar = ref(null);
+  const textWithHighlights = ref(null);
+  const highlightedChapterContent = ref(null)
+  const toolbarPosition = ref(null);
 
+  const allHighlights = computed(() => store.state.chapters.focusedChapter.highlights);
   const user = computed(() => store.state.auth.user);
   const chapterData = computed(() => store.state.chapters.focusedChapter);
   const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
   const bookData = computed(() => store.state.chapters.focusedBook);
+  const chapterContentNode = computed(() => document.getElementById("chapter-content"));
+
+  // TODO: Make this into a component:
   const isFirstChapter = parseInt(chapterNum) - 1 < 0;
   const isLastChapter = parseInt(chapterNum) + 1 === store.state.chapters.chapters.length;
+  //
+
+  function getHighLights() {
+    let chapterContentCopy = chapterContentNode.value.cloneNode(true);
+    if (chapterContentCopy.hasChildNodes()) {
+      highlightedChapterContent.value = getContainerWithHighlights(chapterContentCopy, allHighlights.value);
+    }
+  }
 
   function handleTextSelect() {
     const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    const position = range.getBoundingClientRect();
+    highlight.value = highlightModel(range);
 
     if(selection.type === "Caret") {
-      showHighlightToolBar.value = false;
-      return;
+      showHighlightToolBar(false);
     }
-    let position = selection.getRangeAt(0).getBoundingClientRect();
+    else {
+      highlightContainerFromRange(chapterContentNode.value, range);
+      toolbarPosition.value = {
+        top: `${position.top + position.height}px`,
+        left: `${position.left}px`
+      };
 
-    toolbarPosition.value = {
-      top: `${position.top + position.height}px`,
-      left: `${position.left}px`
-    };
-
-    dbObj.value = processSelectedText(selection);
-    showHighlightToolBar.value = true;
-    console.log("DB_OBJ:", dbObj.value);
+      showHighlightToolBar(true);
+    }
   }
 
-  function storeSelectedText(text, note) {  
+  function storeSelectedText(highlightObj, note) {  
+    const userObj = {
+      userId: user.value.userId,
+      username: user.value.username
+    }
+  
     store.dispatch("chapters/postHighlight", {
-      ...dbObj.value,
+      ...highlightDbObject(highlightObj),
       bookId,
       chapterNum,
-      fromUser: user.value.username,
+      fromUser: JSON.stringify(userObj),
       note
     })
-    .then((highlight) => {
-      console.log("Highlight", highlight);
+    .then((response) => {
       if(note) store.dispatch("chapters/openToolTab", "notes");
     })
     .catch((err) => {
-      console.log("Error:", err);
+      console.log(err.message);
       errorMsg.value = err.message;
     })
 
-    showHighlightToolBar.value = false;
+    showHighlightToolBar(false);
   }
 
   function toggleHighlights(show) {
-    try {
-      textWithHighlights.value = show ?  getHighlightedText() : null;
-    }
-    catch(err) {
-      console.log("Error doing highlights:", err);
-    }
+    if(!highlightedChapterContent.value) getHighLights();
+    textWithHighlights.value = show ?  highlightedChapterContent.value : null;
+  }
+
+  function showHighlightToolBar(value) {
+    showingHighlightToolBar.value = value;
   }
 
   watch(allHighlightsVisible, (newVal, oldVal) => {
     toggleHighlights(!!newVal);
   })
-
-  const highlight = ref(null);
-
-  function openNewNoteTab() {
-    let selectedText = getSelectedText();
-    highlight.value = selectedText;
-  }
-
-  function saveNote(note) {
-    storeSelectedText(note.highlight, note.note);
-    console.log("Saving note");
-  }
-  function hideHighlightToolbar() {
-    showHighlightToolBar.value = false;
-  }
 </script>
 
 <template>
@@ -107,7 +110,7 @@
       <ChapterToolTabs 
         class="md:mt-2" 
         :highlight="highlight"
-        @saveNote="saveNote"
+        @saveNote="(note) => storeSelectedText(note.highlight, note.note)"
       />
     </template>
 
@@ -139,7 +142,7 @@
         </div>
 
         <h1 class="mt-2" v-html="chapterData?.chapterName"></h1>
-        <div class="chapter-content"
+        <div id="chapter-content" class="chapter-content"
           @mouseup="handleTextSelect"
           @keyup="handleTextSelect"
           v-html="textWithHighlights || chapterData?.chapterContent"
@@ -147,12 +150,11 @@
         </div>
 
         <HighlightToolbar 
-          v-if="showHighlightToolBar"
-          v-click-outside="hideHighlightToolbar"
+          v-if="showingHighlightToolBar"
+          v-click-outside="() => showHighlightToolBar(false)"
           class="absolute"
           :style="toolbarPosition"
-          @saveHighlight="storeSelectedText"
-          @addNote="openNewNoteTab"
+          @saveHighlight="() => storeSelectedText(highlight)"
         />
       </div>
     </template>

@@ -9,7 +9,7 @@ exports.create = (highlight) => {
       return highlight;
     })
     .catch((err) => {
-      console.log(">> Error while creating highlight: ", err);
+      console.log(">> Error while creating highlight: ", err.message);
     });
 };
 

@@ -56,7 +56,7 @@ module.exports = function(app) {
     const { bookId, chapterNum } = req.query;
 
     chapterController.findOne(bookId, chapterNum)
-      .then((chapter)=>{ 
+      .then((chapter) => { 
         res.status(200).send(chapter);
       })
       .catch((err) => {
@@ -79,10 +79,12 @@ module.exports = function(app) {
 
   app.post("/api/books/chapters/text/highlights", (req, res) => {
     highlightController.create(req.body)
-      .then((highlights)=>{
+      .then((highlights) => {
+        console.log("Posted highlight", highlights);
         res.status(200).send(highlights)
       })
       .catch((err) => {
+        console.log(">> Error creating highlight:", err.message);
         res.status(500).send({ message: err.message });
       });
   })

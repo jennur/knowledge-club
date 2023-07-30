@@ -10,7 +10,7 @@ exports.create = (article) => {
         return article;
     })
     .catch((err) => {
-        console.log(">> Error while creating article: ", err);
+        console.log(">> Error while creating article: ", err.message);
     });
 };
 
@@ -24,7 +24,7 @@ exports.findById = (id) => {
   return Article.findByPk(id, { include: "highlight" })
     .then(article => article)
     .catch((err) => {
-        console.log(">> Error while finding article: ", err);
+        console.log(">> Error while finding article: ", err.message);
     });
 };
 
@@ -47,7 +47,7 @@ exports.setHighlight = (articleId, highlightId) => {
       });
     })
     .catch((err) => {
-      console.log(">> Error while adding Highlight to Article: ", err);
+      console.log(">> Error while adding Highlight to Article: ", err.message);
     });
 };
 

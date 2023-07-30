@@ -3,6 +3,7 @@
   import DOMPurify from "dompurify";
   import { ref, computed } from 'vue'
   import Quotes from "../../Quotes/Quotes.vue";
+  
   const props = defineProps({
     highlightText: String,
     articles: Array

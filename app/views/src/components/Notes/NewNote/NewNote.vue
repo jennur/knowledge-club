@@ -29,9 +29,9 @@
 
 <template>
   <div class="new-note">
-    <div v-if="highlight?.text">
+    <div v-if="highlight?.content">
       <div class="highlight-text">
-        <Quotes>{{ highlight.text }}</Quotes>
+        <Quotes>{{ highlight.content }}</Quotes>
       </div>
     </div>
     <div v-else>
@@ -42,7 +42,7 @@
 
     <MarkdownEditor class="max-h-full" @markdown="setInput" />
     <div class="self-end mt-2">
-      <SimpleButton :disabled="!highlight?.text" dark buttonText="Save" @click="saveNote" />
+      <SimpleButton :disabled="!highlight?.content" dark buttonText="Save" @click="saveNote" />
     </div>
   </div>
 </template>

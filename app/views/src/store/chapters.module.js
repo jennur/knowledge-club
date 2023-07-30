@@ -25,8 +25,8 @@ export const chapters = {
             commit("setChapters", chapters.data);
             return chapters;
           })
-          .catch(err=>{
-            console.log("getAllChapters:", err);
+          .catch(err => {
+            console.log("getAllChapters():", err);
             return err;
           })
       },
@@ -46,7 +46,7 @@ export const chapters = {
   
         try {
           const chapter = await BookDataService.getChapter(bookId, chapterNum);
-          const highlights = [];//await HighlightService.getAllHighlights(bookId, chapterNum);
+          const highlights = await HighlightService.getAllHighlights(bookId, chapterNum);
   
           commit("setFocusedChapter", {
             chapter: chapter.data,
@@ -56,28 +56,33 @@ export const chapters = {
           return { chapter: chapter.data, highlights };
         } 
         catch (err) {
-          console.log("Error in getChapter():", err);
+          console.log("getChapter():", err);
           return { error: err.message };
         }
       },
       async postHighlight({ commit }, payload){
         try {
           const highlight = await HighlightService.postNewHighlight(payload);
-          
           if(payload.note) {
-            const article = await HighlightService.postHighlightArticle({
-                description: payload.note
-              },
-              highlight.highlightId
-            );
-            if(highlight.articles) highlight.articles.push(article);
-            else highlight.articles = [article];
+            try {
+              const article = await HighlightService.postHighlightArticle({
+                  description: payload.note
+                },
+                highlight.highlightId
+              );
+              if(highlight.articles) highlight.articles.push(article);
+              else highlight.articles = [article];
+            }
+            catch(err) {
+              console.log("postHighLight():", err.message);
+              return err;
+            }
           }
           commit("setHighlight", highlight);
           return highlight;
         }
         catch(err) {
-          console.log("postHighLight():", err);
+          console.log("postHighLight():", err.message);
           return err;
         }
       },

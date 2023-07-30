@@ -27,7 +27,7 @@ exports.findAll = (bookId) => {
     return chapters;
   })
   .catch(err => {
-    console.log(">> Error while finding all chapters: ", err);
+    console.log(">> Error while finding all chapters: ", err.message);
   });
 };
 
@@ -50,7 +50,7 @@ exports.findById = (chapterId) => {
         return chapter;
     })
     .catch((err) => {
-        console.log(">> Error while finding chapter: ", err);
+        console.log(">> Error while finding chapter: ", err.message);
     });
 };
 
