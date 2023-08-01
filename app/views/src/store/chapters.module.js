@@ -92,7 +92,7 @@ export const chapters = {
       },
 
       openToolTab({ commit }, tab) {
-          commit("setCurrentToolTab", tab);
+        commit("setCurrentToolTab", tab);
       }
   },
   

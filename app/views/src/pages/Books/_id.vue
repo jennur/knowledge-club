@@ -1,10 +1,10 @@
 <script setup>
-  import store  from "../../store/index"
+  import store  from "@/store/index"
   import { RouterLink, useRoute } from "vue-router";
   import { computed } from 'vue'
 
-  import BookCover from "../../components/Books/Book/BookCover.vue";
-
+  import BookCover from "@/components/Books/Book/BookCover.vue";
+  import Breadcrumbs from "@/components/Navigation/Breadcrumbs.vue";
   const route = useRoute();
   const bookId = route.params.id;
 
@@ -18,14 +18,15 @@
 
 <template>
   <div class="outer-content-wrapper pt-8 pb-16">
-    <div class="breadcrumbs text-xs uppercase pb-8">
-        <RouterLink 
-            :to="{ name: 'books' }"
-            class="text-gray-400"
-        >
-          Books
-        </RouterLink> / {{ book?.title }}
-    </div>
+    <Breadcrumbs 
+      class="mb-16"
+      :routes="[
+        { title: 'Home', name: 'home'},
+        { title: 'Books', name: 'books'}
+      ]"
+      :current-route="book?.title"
+    />
+
     <div class="flex flex-col sm:flex-row">
       <div class="basis-full sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
         <BookCover :bookId="bookId" />
@@ -82,7 +83,13 @@
 
 <style lang="postcss">
   span.page-range {
-    @apply text-slate-400 text-sm;
+    @apply text-slate-400;
+  }
+  span.page-range::before {
+    content: "(";
+  }
+    span.page-range::after {
+    content: ")";
   }
 </style>
 

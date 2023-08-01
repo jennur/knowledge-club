@@ -5,8 +5,10 @@
 
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
   import ChapterToolTabs from "@/components/ChapterToolTabs/ChapterToolTabs.vue";
+  import Breadcrumbs from "@/components/Navigation/Breadcrumbs.vue";
+  import ChapterNavigation from "@/components/Navigation/ChapterNavigation.vue";
   import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
-  import getContainerWithHighlights from "@/helpers/highlightFunctions/getContainerWithHighlights";
+  import setHighlights from "@/helpers/highlightFunctions/getContainerWithHighlights";
   import highlightContainerFromRange from "@/helpers/highlightFunctions/highlightContainerFromRange";
 
   import {
@@ -24,7 +26,7 @@
   const highlight = ref(null);
   const showingHighlightToolBar = ref(null);
   const textWithHighlights = ref(null);
-  const highlightedChapterContent = ref(null)
+  const highlightedCC = ref(null)
   const toolbarPosition = ref(null);
 
   const allHighlights = computed(() => store.state.chapters.focusedChapter.highlights);
@@ -32,66 +34,55 @@
   const chapterData = computed(() => store.state.chapters.focusedChapter);
   const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
   const bookData = computed(() => store.state.chapters.focusedBook);
-  const chapterContentNode = computed(() => document.getElementById("chapter-content"));
-
-  // TODO: Make this into a component:
-  const isFirstChapter = parseInt(chapterNum) - 1 < 0;
-  const isLastChapter = parseInt(chapterNum) + 1 === store.state.chapters.chapters.length;
-  //
+  const ccNode = computed(() => document.getElementById("chapter-content"));
 
   function getHighLights() {
-    let chapterContentCopy = chapterContentNode.value.cloneNode(true);
-    if (chapterContentCopy.hasChildNodes()) {
-      highlightedChapterContent.value = getContainerWithHighlights(chapterContentCopy, allHighlights.value);
+    let ccCopy = ccNode.value.cloneNode(true);
+    if (ccCopy.hasChildNodes()) {
+      highlightedCC.value = setHighlights(ccCopy, allHighlights.value);
     }
   }
 
   function handleTextSelect() {
     const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    const position = range.getBoundingClientRect();
-    highlight.value = highlightModel(range);
-
     if(selection.type === "Caret") {
       showHighlightToolBar(false);
+      return;
     }
-    else {
-      highlightContainerFromRange(chapterContentNode.value, range);
-      toolbarPosition.value = {
-        top: `${position.top + position.height}px`,
-        left: `${position.left}px`
-      };
+    const range = selection.getRangeAt(0);
+    const { top, height, left } = range.getBoundingClientRect();
+    highlight.value = highlightModel(range);
 
-      showHighlightToolBar(true);
-    }
+    highlightContainerFromRange(ccNode.value, range);
+    toolbarPosition.value = { top: `${top + height}px`, left: `${left}px` };
+
+    showHighlightToolBar(true);
   }
 
   function storeSelectedText(highlightObj, note) {
-    const userObj = {
-      userId: user.value.userId,
-      username: user.value.username
-    }
+    const { userId, username } = user.value;
   
     store.dispatch("chapters/postHighlight", {
         ...highlightDbObject(highlightObj),
         bookId,
         chapterNum,
-        fromUser: JSON.stringify(userObj),
+        fromUser: JSON.stringify({ userId, username }),
         note
       })
       .then((response) => {
-        if(note) store.dispatch("chapters/openToolTab", "notes");
+        if(response.articles) store.dispatch("chapters/openToolTab", "notes");
       })
-      .catch((err) => {
+      .catch(err => {
+        console.error(err.message);
         errorMsg.value = err.message;
-      })
+      });
 
     showHighlightToolBar(false);
   }
 
   function toggleHighlights(show) {
-    if(!highlightedChapterContent.value) getHighLights();
-    textWithHighlights.value = show ?  highlightedChapterContent.value : null;
+    if(!highlightedCC.value) getHighLights();
+    textWithHighlights.value = show ?  highlightedCC.value : null;
   }
 
   function showHighlightToolBar(value) {
@@ -116,31 +107,20 @@
     <template #main>
       <div class="pb-16 mt-4">
         <div class="flex items-center justify-between">
-          <RouterLink 
-            :to="{ name: 'book', params: { id: bookId }}"
-            class="text-xs uppercase text-gray-400"
-          >
-            {{ bookData?.title }}
-          </RouterLink>
-
-          <div class="text-xs uppercase text-gray-400">
-            <RouterLink 
-              v-if="!isFirstChapter"
-              :to="{ name: 'chapter', params: { id: bookId, chapterNum: parseInt(chapterNum) - 1 }}"
-            >
-              Previous chapter
-            </RouterLink>
-            <span v-if="!isFirstChapter && !isLastChapter" class="mx-1">|</span>
-            <RouterLink 
-              v-if="!isLastChapter"
-              :to="{ name: 'chapter', params: { id: bookId, chapterNum: parseInt(chapterNum) + 1 }}"
-            >
-              Next chapter
-            </RouterLink>
-          </div>
+          <Breadcrumbs :routes="[
+              { title: 'Home', name: 'home' }, 
+              { title: 'Books', name: 'books' }, 
+              { title: bookData?.title, name: 'book', params: { id: bookId } }
+            ]"
+            :current-route="chapterData?.chapterName"
+          />
         </div>
 
-        <h1 class="mt-2" v-html="chapterData?.chapterName"></h1>
+        <div class="sticky-container flex justify-center mt-10">
+          <ChapterNavigation :bookId="bookId" :chapterNum="chapterNum" />
+        </div>
+
+        <h1 class="mt-8" v-html="chapterData?.chapterName"></h1>
         <div id="chapter-content" class="chapter-content"
           @mouseup="handleTextSelect"
           @keyup="handleTextSelect"
@@ -163,13 +143,18 @@
 
 
 <style lang="postcss">
-
+  .sticky-container {
+    @apply sticky top-0 bg-white p-4 md:p-6;
+  }
+  .night .sticky-container {
+    @apply sticky top-0 bg-slate-900 p-4 md:p-6;
+  }
   .highlight{
     @apply bg-emerald-200;
   }
 
   .book-page {
-    @apply pt-8 pb-6;
+    @apply first:pt-0 pt-8 pb-6;
   }
 
   .page-num {

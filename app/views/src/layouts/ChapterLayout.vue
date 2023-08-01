@@ -3,15 +3,19 @@
   import LeftMenu from "./Header/LeftMenu.vue";
   import RightMenu from "./Header/RightMenu.vue";
   import Footer from "./Footer/Footer.vue";
-  import Switch from "../components/Inputs/Switch.vue";
+  import Switch from "@/components/Inputs/Switch.vue";
+  import ScrollButton from "@/components/Buttons/ScrollButton.vue";
+
+  const storedSBBasis = localStorage.getItem("sidebar-basis");
+  const storedMCBasis = localStorage.getItem("main-content-basis");
 
   const isDragging = ref(false);
-  const sidebarBasis = ref({ flexBasis: "25%" });
-  const mainContentBasis = ref({ flexBasis: "75%" });
+  const sidebarBasis = ref(storedSBBasis || "25%");
+  const mainContentBasis = ref(storedMCBasis || "75%");
 
   function initSidebarResize(event) {
     isDragging.value = true;
-    window.addEventListener("mouseover", resizeSidebar);
+    window.addEventListener("mousemove", resizeSidebar);
     window.addEventListener("mouseup", endSidebarResize);
   }
   function resizeSidebar(event) {
@@ -20,13 +24,15 @@
       const newWidth = event.clientX;
       const widthPercent = (newWidth/screenWidth)*100;
 
-      sidebarBasis.value = { flexBasis: `${widthPercent}%`};
-      mainContentBasis.value = { flexBasis: `${100 - widthPercent}%`};
+      sidebarBasis.value = `${widthPercent}%`;
+      mainContentBasis.value = `${100 - widthPercent}%`;
     }
   }
   function endSidebarResize(event) {
     isDragging.value = false;
-    window.removeEventListener("mouseover", resizeSidebar);
+    localStorage.setItem("sidebar-basis", sidebarBasis.value);
+    localStorage.setItem("main-content-basis", mainContentBasis.value);
+    window.removeEventListener("mousemove", resizeSidebar);
     window.removeEventListener("mouseup", endSidebarResize);
   }
 
@@ -52,7 +58,7 @@
       <section 
         id="interaction-board"
         class="interaction-board sticky top-0 left-0 md:pt-2 pl-4"
-        :style="sidebarBasis"
+        :style="{ flexBasis: sidebarBasis }"
       >
         <LeftMenu class="hidden md:block" />
 
@@ -65,7 +71,7 @@
         ></button>
       </section>
 
-      <div ref="mainContent" :style="mainContentBasis">
+      <div ref="mainContent" :style="{ flexBasis: mainContentBasis }">
         <div class="flex items-center">
           <label class="flex items-center text-xs ml-4">
             <Switch @switch="toggleDarkMode" :checked="colorTheme === 'night'" />
@@ -76,6 +82,8 @@
         </div>
         <main class="grow px-4">
           <slot name="main"></slot>
+
+          <ScrollButton />
         </main>
 
         <Footer class="hidden md:flex" />
@@ -89,7 +97,15 @@
 <style lang="postcss">
 
   .night .select-dropdown {
-    @apply text-slate-100;
+    @apply text-slate-200;
+  }
+
+  .night .select-options {
+    @apply text-slate-100 bg-slate-800;
+  }
+
+  .night .select-options .option {
+    @apply hover:bg-slate-700;
   }
 
   .sidebar-handle {
@@ -98,7 +114,11 @@
   }
   .sidebar-handle::before {
     content: "";
-    @apply absolute top-1/2 -translate-y-1/2 right-2 bg-slate-400 w-[.2rem] h-8;
+    @apply absolute top-1/2 -translate-y-1/2 right-1 border-[3px] border-dotted border-slate-300 w-[.5rem] h-8;
+  }
+
+  .night .sidebar-handle::before {
+    @apply border-slate-500;
   }
 
   .interaction-board {

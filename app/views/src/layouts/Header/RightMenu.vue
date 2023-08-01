@@ -1,7 +1,7 @@
 <script setup>
   import { ref, computed } from "vue";
   import store from "@/store/index";
-  import NavigationDropdown from "@/components/Inputs/NavigationDropdown.vue";
+  import NavigationDropdown from "@/components/Navigation/NavigationDropdown.vue";
 
   const user = ref(store.state.auth.user);
 
