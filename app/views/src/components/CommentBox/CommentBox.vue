@@ -4,6 +4,9 @@
   import IconButton from "../Buttons/IconButton.vue"
 
   const emit = defineEmits(["sendMessage", "inputValue"]);
+  const { placeholder } = defineProps({ 
+    placeholder: { type: String}
+    })
   const value = ref("");
   const input = ref("")
 
@@ -26,15 +29,16 @@
       <input
         type="text" 
         v-model="input"
+        :placeholder="placeholder"
         class="w-full text-gray-800 bg-inherit pt-2 pl-2 pb-2 pr-10 text-sm focus:outline-none"
       />
 
-      <DiscordPicker 
+      <!-- <DiscordPicker 
         class="emoji-picker absolute right-2 bottom-2" 
         :value="value" 
         @emoji="setEmoji" 
         @update:value="value = $event"
-      />
+      /> -->
     </div>
       <IconButton
         type="submit"

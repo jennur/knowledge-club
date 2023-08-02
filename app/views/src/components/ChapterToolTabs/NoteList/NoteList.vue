@@ -1,14 +1,9 @@
 <script setup>
   import { computed } from 'vue'
-  // import highlightSort from "@/helpers/highlightFunctions/highlightSort.js";
   import store from "@/store/index.js";
   import Note from "./Note.vue";
 
   const highlights = computed(() => store.state.chapters.focusedChapter.highlights);
-  // const highlights = computed(() => {
-  //   let highlightList = storeHighlights.value;
-  //   return highlightList.sort(highlightSort).reverse();
-  // });
 </script>
 
 <template>

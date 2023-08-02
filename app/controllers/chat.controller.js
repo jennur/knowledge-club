@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 exports.create = (message) => {
   return Chat.create(message)
     .then((message) => {
-      console.log(">> Created Chat:", messageId);
+      console.log(">> Created Chat:", message.messageId);
       return message;
     })
     .catch((err) => {

@@ -1,12 +1,18 @@
 import BookDataService from "../services/book.service";
 import HighlightService from "../services/highlight.service";
 
+function getCurrentToolTab() {
+  const tooltab = localStorage.getItem("current-tool-tab");
+  return tooltab || "notes";
+}
+
 export const chapters = {
     namespaced:true,
     state: {
       chapters: {},
       focusedbook: {},
       focusedChapter: {
+        chapterUUID: null,
         highlights: [],
         visibleHighlights: {
           all: false,
@@ -15,7 +21,7 @@ export const chapters = {
             visible: false
           }
         },
-        currentToolTab: "notes"
+        currentToolTab: null,
       },
     },
     actions:{
@@ -92,6 +98,7 @@ export const chapters = {
       },
 
       openToolTab({ commit }, tab) {
+        localStorage.setItem("current-tool-tab", tab);
         commit("setCurrentToolTab", tab);
       }
   },
@@ -109,7 +116,7 @@ export const chapters = {
       setFocusedChapter(state, payload){
           state.focusedChapter = payload.chapter;
           state.focusedChapter["highlights"] = payload.highlights;
-          state.focusedChapter["currentToolTab"] = "notes";
+          state.focusedChapter["currentToolTab"] = getCurrentToolTab();
       },
       setHighlight(state, highlight) {
         state.focusedChapter.highlights.push(highlight);

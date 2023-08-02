@@ -100,6 +100,8 @@
       <ChapterToolTabs 
         class="md:mt-2" 
         :highlight="highlight"
+        :bookId="bookId"
+        :chapterNum="chapterNum"
         @saveNote="(note) => storeSelectedText(note.highlight, note.note)"
       />
     </template>

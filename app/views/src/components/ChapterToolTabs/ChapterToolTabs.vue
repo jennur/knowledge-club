@@ -1,26 +1,29 @@
 <script setup>
   import { ref, watch, computed } from "vue";
-  import { chapterRoomId } from "../../helpers/chatRoomIds";
+  import { chapterRoomId } from "@/helpers/chatRoomIds";
   import store from "@/store/index.js";
   import ChapterToolBar from "./ChapterToolBar/ChapterToolBar.vue";
-  import HighlightFilter from "../HighlightFilter/HighlightFilter.vue";
-  import NoteList from "../Notes/NoteList/NoteList.vue";
-  import NewNote from "../Notes/NewNote/NewNote.vue";
-  import Chat from "../Chat/Chat.vue"
+  import HighlightFilter from "./HighlightFilter/HighlightFilter.vue";
+  import NoteList from "./NoteList/NoteList.vue";
+  import NewNote from "./NewNote/NewNote.vue";
+  import Chat from "./Chat/Chat.vue"
 
   const emit = defineEmits(["sliderStatus", "toggleHighlights", "saveNote"]);
   const props = defineProps({
     bookId: String,
-    chapterId: String,
+    chapterNum: String,
     highlight: Object
   })
 
-  const { bookId, chapterId } = props;
+  const { bookId, chapterNum } = props;
   const toolTab = computed(() => store.state.chapters.focusedChapter.currentToolTab);
   const highlight = computed(() => props.highlight);
 
   function setActiveTab(tab) {
-    store.dispatch("chapters/openToolTab", tab);
+    store.dispatch("chapters/openToolTab", tab)
+    .catch((err) => {
+      console.error(err.message);
+    })
   }
 
   watch(highlight, (newVal, oldVal) => {
@@ -58,7 +61,7 @@
       <div v-if="toolTab === 'chat'" class="flex flex-col h-full">
         <h2>Chat room</h2>
 
-        <Chat :roomId="chapterRoomId(bookId, chapterId)" />
+        <Chat :roomId="chapterRoomId(bookId, chapterNum)" />
       </div>
     </div>
   </div>
