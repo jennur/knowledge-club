@@ -1,77 +1,74 @@
 <script setup>
-import DropZone from 'dropzone-vue';
-import store from "../../../store/index"
-import { ref } from "vue";
-import SimpleButton from "../../Buttons/SimpleButton.vue";
-import 'dropzone-vue/dist/dropzone-vue.common.css';
+  import DropZone from 'dropzone-vue';
+  import store from "../../../store/index"
+  import { ref } from "vue";
+  import SimpleButton from "../../Buttons/SimpleButton.vue";
+  import 'dropzone-vue/dist/dropzone-vue.common.css';
 
-const files = ref([]);
-const errorMsg = ref(null);
-const successMsg = ref(null);
-const isLoading = ref(false);
+  const files = ref([]);
+  const errorMsg = ref(null);
+  const successMsg = ref(null);
+  const isLoading = ref(false);
 
-function onSelect(item) {
-  console.log("Selected File.", item);
-  let file = new FormData();
-  file.append('file', item.file);
-  files.value = [...files.value, { file, id: item.id }];
-}
-
-function onSubmit() {
-  errorMsg.value = null;
-  successMsg.value = null;
-  isLoading.value = true
-  console.log("FileValue", files.value);
-  
-  if(files.value.length) {
-    files.value.forEach(fileObj => {
-      console.log("Submitted File")
-      console.log(fileObj.file.get("file"))
-      store.dispatch("books/addBook", fileObj.file)
-        .then(response => {
-          console.log("Successfully added book:", response);
-          isLoading.value = false;
-          successMsg.value = response.message;
-        })
-        .catch(err => {
-          console.log("Error dispatch:", err);
-          isLoading.value = false;
-          errorMsg.value = err.message;
-        })
-    })
+  function onSelect(item) {
+    let file = new FormData();
+    file.append('file', item.file);
+    files.value = [...files.value, { file, id: item.id }];
   }
-}
 
-function onFileRemove(file) {
-  let addedFiles = files.value;
-  for (let i = 0; i < addedFiles.length; i++) {
-    if(file.id === addedFiles[i].id) {
-      files.value.splice(i, 1);
-      return;
+  function onSubmit() {
+    errorMsg.value = null;
+    successMsg.value = null;
+    isLoading.value = true
+    
+    if(files.value.length) {
+      files.value.forEach(fileObj => {
+        console.log("Submitted File")
+        console.log(fileObj.file.get("file"))
+        store.dispatch("books/addBook", fileObj.file)
+          .then(response => {
+            isLoading.value = false;
+            successMsg.value = response.message;
+          })
+          .catch(err => {
+            isLoading.value = false;
+            errorMsg.value = err.message;
+          })
+      })
     }
   }
-}
 
-function onError(err) {
-  let error = "";
-  switch (err.error) {
-    case "MAX_FILE":
-      error = `You can only upload ${maxNumFiles} files at once.
-      The excess files were removed.`;
-      break;
-    case "MAX_FILE_SIZE":
-      error = `You can only upload ${maxFileSize / 1000000} MB.`;
-      break;
-    default:
-      error = "Something went wrong.";
+  function onFileRemove(file) {
+    let addedFiles = files.value;
+    for (let i = 0; i < addedFiles.length; i++) {
+      if(file.id === addedFiles[i].id) {
+        files.value.splice(i, 1);
+        return;
+      }
+    }
   }
-  errorMsg.value = error;
-}
 
-const maxNumFiles = 5;
-const maxFileSize = 1000000;
+  function onError(err) {
+    let error = "";
+    switch (err.error) {
+      case "MAX_FILE":
+        error = `You can only upload ${maxNumFiles} files at once.
+        The excess files were removed.`;
+        break;
+      case "MAX_FILE_SIZE":
+        error = `You can only upload ${maxFileSize / 1000000} MB.`;
+        break;
+      default:
+        error = "Something went wrong.";
+    }
+    errorMsg.value = error;
+  }
+
+  const maxNumFiles = 5;
+  const maxFileSize = 1000000;
 
 </script>
+
 <template>
   <div class="my-10">
     <div class="md:flex">

@@ -10,9 +10,12 @@ ALLOWED_TYPES = [
 CORS_ORIGINS = [
     "http://localhost:8080", 
     "http://localhost:5173", 
+    "https://www.knowledge-club.herokuapp.com",
     "https://knowledge-club.herokuapp.com",
     "http://www.yedia.io",
-    "https://www.yedia.io"
+    "https://www.yedia.io",
+    "http://yedia.io",
+    "https://yedia.io"
 ]
 
 DB_NAME = os.getenv("DB_NAME")

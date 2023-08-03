@@ -17,7 +17,7 @@ class AuthService {
         return user;
       })
       .catch(err => {
-        console.error("[Y]", err.response.data.message);
+        console.error("[Y]", err.response.data.message || err.message);
         return Promise.reject(err);
       });
   }
@@ -42,7 +42,7 @@ class AuthService {
       email: user.email
     })
     .catch(err => {
-      console.error("[Y]", err.response.data.message);
+      console.error("[Y]", err.response.data.message || err.message);
       return Promise.reject(err);
     });
   }
@@ -50,7 +50,7 @@ class AuthService {
   getAccessToken() {
     return http.get("/auth/verify-access-token")
       .catch(err => {
-        console.error("[Y]", err.response.data.message);
+        console.error("[Y]", err.response.data.message || err.message);
         return Promise.reject(err);
       })
   }
@@ -58,7 +58,7 @@ class AuthService {
   checkAdminAccess() {
     return http.get("/auth/verify-admin-access")
       .catch(err => {
-        console.error("[Y]", err.response.data.message);
+        console.error("[Y]", err.response.data.message || err.message);
         return Promise.reject(err);
       })
   }

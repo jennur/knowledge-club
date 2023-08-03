@@ -7,7 +7,7 @@ class HighlightService {
         return response.data;
       })
       .catch((err) => {
-        console.error("[Y]", err.response.data.message);
+        console.error("[Y]", err.response.data.message || err.message);
         return Promise.reject(err);
       })
   }
@@ -20,7 +20,7 @@ class HighlightService {
       return response.data;
     })
     .catch((err) => {
-      console.error("[Y]", err.response.data.message);
+      console.error("[Y]", err.response.data.message || err.message);
       return Promise.reject(err);
     })
   }
@@ -36,7 +36,7 @@ class HighlightService {
       return response.data;
     })
     .catch((err) => {
-      console.error("[Y]", err.response.data.message);
+      console.error("[Y]", err.response.data.message || err.message);
       return Promise.reject(err);
     })
   }
