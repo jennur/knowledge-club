@@ -31,6 +31,9 @@ def send_response(message, status_code, severity=None):
     )
     return response
 
+def remove_file_from_storage(path):
+    os.remove(path)
+    print(">> File was removed from directory")
 
 # Routes
 @app.route("/", methods=["GET"])
@@ -51,6 +54,7 @@ def add_book():
             F.save(path_to_file)
             book = Book(path_to_file,False,False)
             transmit_book(book)
+            remove_file_from_storage(path_to_file)
         else:
             return send_response("File type not allowed", 500, "danger")
 

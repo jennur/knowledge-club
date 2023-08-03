@@ -32,6 +32,16 @@ module.exports = function(app) {
       });
   });
 
+  app.get("/api/books/delete", (req, res) => {
+    bookController.delete(req.query.bookId)
+      .then(() => {
+        res.status(200).send({ message: "Successfully removed book"});
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message });
+      });
+  });
+
   app.get("/api/book/cover-image", (req, res) => {
     bookController.getCoverImage(req.query.bookId)
       .then((coverImage) => {

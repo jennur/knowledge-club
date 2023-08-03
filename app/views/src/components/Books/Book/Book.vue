@@ -1,22 +1,26 @@
 <script setup>
-  import { ref, computed } from "vue";
+  import { ref, computed, defineEmits } from "vue";
   import moment from "moment";
   import store from "../../../store/index";
   import encodeUrl from "../../../helpers/urlEncoder/encodeUrl";
   import Modal from "../../Modal/Modal.vue";
   import Login from "../../Authenticate/Login/Login.vue";
   import BookCover from "./BookCover.vue";
+  import IconButton from "../../Buttons/IconButton.vue"
 
-  const props = defineProps({
+  const emit = defineEmits(["remove"])
+  const bookAccessModalId = "book-access-modal";
+  const removeHover = ref(false);
+  const errorMsg = ref(null);
+
+  const { book, manager } = defineProps({
     book: {
       type: Object,
       required: true
-    }
+    },
+    manager: Boolean
   })
   const modalOpen = ref(false);
-  const bookAccessModalId = "book-access-modal";
-
-  const { book } = props;
 
   const userAuthenticated = computed(() => store?.state?.auth?.user);
 
@@ -29,10 +33,23 @@
       toggleModal();
     }
   }
+
+  function handleRemove() {
+    store.dispatch("books/deleteBook", book.bookUUID)
+      .then(() => {
+        emit("remove");
+      })
+      .catch(err => {
+        errorMsg.value = err.message;
+        setTimeout(() => {
+          errorMsg.value = null;
+        }, 10000);
+      });
+  }
 </script>
 
 <template>
-  <div>
+  <div :class="`transition-colors flex flex-col items-center justify-between grow ${removeHover ? 'bg-red-100' : ''}`">
     <Modal :modalId="bookAccessModalId" :modalOpen="modalOpen" @close="toggleModal">
       <Login 
         class="bg-white rounded-3xl p-16" 
@@ -49,7 +66,7 @@
       :aria-expanded="modalOpen"
       :aria-controls="bookAccessModalId"
       aria-haspopup="dialog"
-      class="block box-border text-gray-600 text-sm m-2 cursor-pointer"
+      class="block box-border text-gray-600 text-sm min-w-full p-2 cursor-pointer"
       @click.stop="authenticate"
     >
 
@@ -60,5 +77,25 @@
         Added {{ moment(book.createdAt).startOf('minute').fromNow() }}
       </div>
     </component>
+    <div v-if="manager" class="relative mb-7 text-center">
+      <IconButton  
+        buttonText="Remove"
+        iconClass="trash"
+        size="xs"
+        customColors
+        :class="`transition-colors bg-red-400 text-slate-100 ${removeHover ? 'bg-red-500' : ''}`"
+        @click.native="handleRemove"
+        @mouseover="removeHover = true"
+        @mouseleave="removeHover = false"
+      />
+      
+      <p v-if="errorMsg" class="transition-all bg-red-50 p-2 z-10 text-red-500 text-xs absolute top-full">{{ errorMsg }}</p>
+
+    </div>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+
+
+</style>

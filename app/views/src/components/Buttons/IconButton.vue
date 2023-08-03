@@ -40,7 +40,7 @@
     :class="`icon-button ${hasText} ${sizeClass} ${verticalClass} ${fluidClass} ${colorClass}`"
     :aria-label="ariaLabel"
   >
-    <font-awesome-icon :icon="iconClass" class="icon" />
+    <font-awesome-icon :icon="iconClass" class="icon" aria-hidden="true" />
     <div v-if="buttonText" class="text">{{ buttonText }}</div>
   </button>
 </template>

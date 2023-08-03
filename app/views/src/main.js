@@ -38,6 +38,7 @@ import {
   faRightToBracket, 
   faShareFromSquare,
   faSpa,
+  faTrash,
   faUser, 
   faUserPlus,
   faXmark,
@@ -66,6 +67,7 @@ library.add(
     faRightToBracket,
     faShareFromSquare,
     faSpa,
+    faTrash,
     faUser,
     faUserPlus,
     faXmark

@@ -8,9 +8,9 @@
   const adminOptions = computed(() => {
     return user.value && user.value.roles.includes("ROLE_ADMIN") && [
       {
-        name: 'Book adder', 
+        name: 'Book manager', 
         icon: 'fa-solid fa-book', 
-        route: { name: 'book-adder' }
+        route: { name: 'book-manager' }
       }
     ] || [];
   })

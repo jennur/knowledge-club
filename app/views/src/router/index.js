@@ -59,9 +59,9 @@ const router = createRouter({
       props: route => ({ key: route.fullPath }),
     },
     {
-      path: "/admin/books/add",
-      name: "book-adder",
-      component: () => import("../pages/Books/addBooks.vue")
+      path: "/admin/books",
+      name: "book-manager",
+      component: () => import("../pages/Books/bookManager.vue")
     }
 
   ]
@@ -69,7 +69,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const safeList = ["home", "signup", "about"];
-  const adminList = ["book-adder"];
+  const adminList = ["book-manager"];
 
   if(!safeList.includes(to.name) && !adminList.includes(to.name)) {
     store.dispatch("auth/checkAccessToken")

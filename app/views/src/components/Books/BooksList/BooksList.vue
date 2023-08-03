@@ -1,22 +1,29 @@
 <script setup>
   import httpCommon from "../../../http-common";
   import Book from "../Book/Book.vue";
-  import { ref } from "vue";
+  import { ref, onBeforeMount } from "vue";
 
   const props = defineProps({
       headline: String,
       params: Object,
+      manager: Boolean
   })
 
   const books = ref([]);
 
-  httpCommon.get("/books", { params: props.params })
-    .then(response => {
-      books.value = response.data;
-    })
-    .catch(error => {
-      console.log("Error fetching books:", error.message);
-    })
+  function getBookList() {
+    httpCommon.get("/books", { params: props.params })
+      .then(response => {
+        books.value = response.data;
+      })
+      .catch(error => {
+        console.error("[Y]", error.message);
+      })
+  }
+
+
+  onBeforeMount(() => getBookList());
+
 </script>
 <template>
   <div>
@@ -25,14 +32,10 @@
       <div 
         v-for="book in books"
         :key="book.title"
-        class="basis-1/2 sm:basis-1/4 lg:basis-1/8 mb-6"
+        class="flex basis-1/2 sm:basis-1/4 lg:basis-1/8 mb-6"
       >
-        <Book :book="book" />
+        <Book :book="book" :manager="manager" @remove="getBookList"/>
       </div>
     </div>
   </div>
 </template>
-
-<style>
-
-</style>

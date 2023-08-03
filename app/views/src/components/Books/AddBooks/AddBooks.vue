@@ -23,8 +23,6 @@
     
     if(files.value.length) {
       files.value.forEach(fileObj => {
-        console.log("Submitted File")
-        console.log(fileObj.file.get("file"))
         store.dispatch("books/addBook", fileObj.file)
           .then(response => {
             isLoading.value = false;

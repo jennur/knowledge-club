@@ -50,7 +50,18 @@ exports.update = () => {
 };
 
 // Delete a Book with the specified id in the request
-exports.delete = () => {
+exports.delete = (bookId) => {
+  return Book.destroy({
+    where: { bookUUID: bookId}
+  })
+  .then(() => {
+    console.log(">> Deleted book")
+    return true;
+  })
+  .catch((err) => {
+    console.log(">> Error while destroying Book:", err.message);
+    return Promise.reject(err);
+  })
 };
 
 // Delete all Books from the database.
@@ -59,7 +70,7 @@ exports.deleteAll = () => {
     where: {},
     truncate: true
   })
-  .then((book)=>{
+  .then((book) => {
     console.log(">> Destroyed book:", book.title)
   })
   .catch((err) => {
