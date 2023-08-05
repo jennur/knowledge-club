@@ -56,6 +56,7 @@
           }"
           class="outer-content-wrapper px-2"
           headline="Newly added books"
+          :gatewayRoute="{ name: 'books', title: 'See all books' }"
         />
       </div>
     </div>

@@ -51,6 +51,7 @@
     const selection = window.getSelection();
     if(selection.type === "Caret") {
       showHighlightToolBar(false);
+      highlight.value = null;
       return;
     }
     const range = selection.getRangeAt(0);

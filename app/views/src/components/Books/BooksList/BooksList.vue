@@ -1,12 +1,14 @@
 <script setup>
   import httpCommon from "../../../http-common";
   import Book from "../Book/Book.vue";
+  import { RouterLink } from "vue-router"
   import { ref, onBeforeMount } from "vue";
 
   const props = defineProps({
       headline: String,
       params: Object,
-      manager: Boolean
+      manager: Boolean,
+      gatewayRoute: Object,
   })
 
   const books = ref([]);
@@ -27,7 +29,19 @@
 </script>
 <template>
   <div>
-    <h2 class="text-xs mb-2 text-slate-500 uppercase font-semibold ml-2">{{ props.headline }}</h2>
+    <div class="flex items-center ml-2 mb-4">
+      <h2 class="text-xs text-slate-500 uppercase font-semibold">
+        {{ props.headline }}
+      </h2>
+      <RouterLink 
+        v-if="gatewayRoute" 
+        :to="{ name: gatewayRoute.name }"
+        class="gateway-link"
+      >
+        {{ gatewayRoute.title }}
+        <font-awesome-icon class="icon" :icon="['fas', 'angle-right']" />
+      </RouterLink>
+    </div>
     <div class="flex flex-wrap">
       <div 
         v-for="book in books"
@@ -39,3 +53,14 @@
     </div>
   </div>
 </template>
+
+
+<style lang="postcss" scoped>
+  .gateway-link {
+    @apply ml-2 text-xs text-blue-600;
+  }
+
+  .gateway-link:hover .icon {
+    @apply animate-bounce-x;
+  }
+</style>

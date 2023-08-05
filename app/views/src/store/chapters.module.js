@@ -95,7 +95,7 @@ export const chapters = {
           return Promise.reject(err);
         }
       },
-  
+
       toggleAllHighlights({ commit }, visible) {
         commit("setAllHighlightsVisibility", visible);
       },
@@ -107,9 +107,9 @@ export const chapters = {
       openToolTab({ commit }, tab) {
         localStorage.setItem("current-tool-tab", tab);
         commit("setCurrentToolTab", tab);
-      }
+      },
   },
-  
+
   mutations:{
       setChapters(state, chapters) {
           state.chapters= chapters;
@@ -160,7 +160,7 @@ export const chapters = {
       },
       setCurrentToolTab(state, tab) {
           state.focusedChapter.currentToolTab = tab;
-      }
+      },
     }
   }
   
