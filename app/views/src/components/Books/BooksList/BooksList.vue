@@ -1,6 +1,8 @@
 <script setup>
   import httpCommon from "../../../http-common";
   import Book from "../Book/Book.vue";
+  import Spinner from "@/components/Loading/Spinner.vue";
+  import IconLink from "@/components/Links/IconLink.vue";
   import { RouterLink } from "vue-router"
   import { ref, onBeforeMount } from "vue";
 
@@ -12,14 +14,20 @@
   })
 
   const books = ref([]);
+  const loading = ref(false);
+  const errorMsg = ref(null);
 
   function getBookList() {
+    loading.value = true;
     httpCommon.get("/books", { params: props.params })
       .then(response => {
         books.value = response.data;
+        loading.value = false;
       })
-      .catch(error => {
-        console.error("[Y]", error.message);
+      .catch(err => {
+        console.error("[Y]", err.message);
+        errorMsg.value = err.message
+        loading.value = false;
       })
   }
 
@@ -33,15 +41,17 @@
       <h2 class="text-xs text-slate-500 uppercase font-semibold">
         {{ props.headline }}
       </h2>
-      <RouterLink 
-        v-if="gatewayRoute" 
+      <IconLink
+        v-if="gatewayRoute"
         :to="{ name: gatewayRoute.name }"
-        class="gateway-link"
-      >
-        {{ gatewayRoute.title }}
-        <font-awesome-icon class="icon" :icon="['fas', 'angle-right']" />
-      </RouterLink>
+        iconClass="fa-solid fa-angle-right"
+        :text="gatewayRoute.title"
+        inlineLink
+        animate
+      />
     </div>
+    
+    <Spinner v-if="loading && !books.length" text="Loading books..." size="sm" class="ml-2 my-4" />
     <div class="flex flex-wrap">
       <div 
         v-for="book in books"
@@ -56,11 +66,4 @@
 
 
 <style lang="postcss" scoped>
-  .gateway-link {
-    @apply ml-2 text-xs text-blue-600;
-  }
-
-  .gateway-link:hover .icon {
-    @apply animate-bounce-x;
-  }
 </style>

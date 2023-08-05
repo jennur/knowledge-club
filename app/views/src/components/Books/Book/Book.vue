@@ -52,7 +52,7 @@
   <div :class="`transition-colors flex flex-col items-center justify-between grow ${removeHover ? 'bg-red-100' : ''}`">
     <Modal :modalId="bookAccessModalId" :modalOpen="modalOpen" @close="toggleModal">
       <Login 
-        class="bg-white rounded-3xl p-16" 
+        class="bg-white rounded-3xl p-12 md:p-16" 
         headline="Login to access this book"
         :hasSignUpLink="true"
         @success="toggleModal"

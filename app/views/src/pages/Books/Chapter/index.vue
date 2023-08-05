@@ -3,6 +3,7 @@
   import { useRoute, RouterLink } from "vue-router";
   import { computed, onBeforeMount, ref, watch } from 'vue'
 
+  import Spinner from "@/components/Loading/Spinner.vue";
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
   import ChapterToolTabs from "@/components/ChapterToolTabs/ChapterToolTabs.vue";
   import Breadcrumbs from "@/components/Navigation/Breadcrumbs.vue";
@@ -141,6 +142,7 @@
         </div>
 
         <h1 class="mt-8" v-html="chapterData?.chapterName"></h1>
+        <Spinner v-if="loading" text="Loading chapter..." />
         <div
           v-if="!loading && chapterData.chapterContent" 
           ref="ccNode" id="chapter-content" class="chapter-content"
@@ -148,9 +150,6 @@
           @keyup="handleTextSelect"
           v-html="textWithHighlights || chapterData.chapterContent"
         >
-        </div>
-        <div v-else-if="loading" class="text-xs text-orange-500 flex items-center">
-          <div class="spinner mr-2"></div> <p>Loading chapter...</p>
         </div>
 
         <HighlightToolbar 
@@ -187,9 +186,5 @@
   }
   .page-num::before {
     content: "Page ";
-  }
-
-  .spinner {
-    @apply border-2 border-dotted border-spacing-1 border-orange-400 w-5 h-5 rounded-full animate-spin-slow;
   }
 </style>

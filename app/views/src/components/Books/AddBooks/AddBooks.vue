@@ -3,6 +3,7 @@
   import store from "../../../store/index"
   import { ref } from "vue";
   import SimpleButton from "../../Buttons/SimpleButton.vue";
+  import Spinner from "@/components/Loading/Spinner.vue";
   import 'dropzone-vue/dist/dropzone-vue.common.css';
 
   const files = ref([]);
@@ -11,6 +12,7 @@
   const isLoading = ref(false);
 
   function onSelect(item) {
+    errorMsg.value = null;
     let file = new FormData();
     file.append('file', item.file);
     files.value = [...files.value, { file, id: item.id }];
@@ -26,10 +28,12 @@
         store.dispatch("books/addBook", fileObj.file)
           .then(response => {
             isLoading.value = false;
+            errorMsg.value = null;
             successMsg.value = response.message;
           })
           .catch(err => {
             isLoading.value = false;
+            successMsg.value = null;
             errorMsg.value = err.message;
           })
       })
@@ -101,13 +105,11 @@
         </DropZone>
         <div class="flex">
           <div class="grow mr-1">
-            <div v-if="isLoading" class="mt-1 text-xs text-orange-600 flex items-center">
-              <div class="spinner mr-2"></div> <p>Uploading book...</p>
-            </div>
-            <p v-if="successMsg" class="mt-1 p-2 text-xs text-green-600">
+            <Spinner v-if="isLoading" text="Uploading book..." class="pt-1" />
+            <p v-if="successMsg" class="mt-2 text-xs text-green-600">
               {{ successMsg }}
             </p>
-            <p v-if="errorMsg" class="mt-1 p-2 text-xs text-red-500">
+            <p v-if="errorMsg" class="mt-2 text-xs text-red-500">
               {{ errorMsg }}
             </p>
           </div>
@@ -122,10 +124,6 @@
 
   .dropzone {
     @apply flex flex-wrap;
-  }
-
-  .dropzone__details.dropzone__details--style {
-
   }
 
   .dropzone__file-size {
@@ -153,9 +151,5 @@
   }
   .dropzone__progress .dropzone__progress-bar {
     @apply bg-blue-500;
-  }
-
-  .spinner {
-    @apply border-2 border-dotted border-spacing-1 border-orange-400 w-5 h-5 rounded-full animate-spin-slow;
   }
 </style>

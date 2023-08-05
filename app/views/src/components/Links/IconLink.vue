@@ -2,16 +2,25 @@
   import { RouterLink } from "vue-router"
 
   const props = defineProps({
-    path: String,
+    to: Object,
     iconClass: String,
-    linkText: String
+    text: String,
+    inlineLink: Boolean,
+    animate: Boolean
   })
 </script>
 
 <template>
-  <RouterLink :to="props.path" class="icon-link">
-    <font-awesome-icon :icon="props.iconClass" class="icon" />
-    <div class="text">{{ props.linkText }}</div>
+  <RouterLink 
+    :to="to" 
+    :class="`
+      ${animate ? 'animate ' : ''}
+      ${inlineLink ? 'inline-link': 'icon-link'}
+    `"
+  >
+    <font-awesome-icon v-if="!inlineLink" :icon="iconClass" class="icon" />
+    {{ text }}
+    <font-awesome-icon v-if="inlineLink" :icon="iconClass" class="icon" />
   </RouterLink>
 </template>
 
@@ -26,5 +35,17 @@
 
   .icon-link .text {
     @apply text-xs;
+  }
+
+  .inline-link {
+    @apply ml-2 text-xs text-rose-500 hover:text-rose-500/90 transition-colors;
+  }
+
+  .inline-link .icon {
+    @apply text-xs;
+  }
+
+  .inline-link.animate:hover .icon {
+    @apply animate-bounce-x;
   }
 </style>
