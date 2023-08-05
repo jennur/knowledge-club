@@ -32,7 +32,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false
       },
       content: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(1000)
       },
       commonAncestorId: {
         type: Sequelize.STRING

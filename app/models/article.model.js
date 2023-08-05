@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(1000)
       },
       published: {
         type: Sequelize.BOOLEAN
