@@ -48,7 +48,55 @@
         </div>
       </div>
 
-      <div v-if="store.state?.books?.books" class="bg-slate-50 py-16">
+      <div class="bg-blue-100 py-16">
+        <div class="outer-content-wrapper">
+          <h2 class="">Featured categories</h2>
+        </div>
+        <div class="outer-content-wrapper px-2 py-8">
+          <div class="flex flex-wrap justify-between">
+            <BookList
+              :params="{
+                limit: 3,
+                order: JSON.stringify([['createdAt', 'DESC']]),
+                category: 'psychology'
+              }"
+              class="featured-book-list"
+              bookListClass="book-list"
+              bookWrapperBasisClass="book-container"
+              headline="Psychology"
+              :gatewayRoute="{ name: 'books', title: 'See all books' }"
+            />
+
+            <BookList
+              :params="{
+                limit: 3,
+                order: JSON.stringify([['createdAt', 'DESC']]),
+                category: 'chemistry'
+              }"
+              class="featured-book-list"
+              bookListClass="book-list"
+              bookWrapperBasisClass="book-container"
+              headline="Chemistry"
+              :gatewayRoute="{ name: 'books', title: 'See all books' }"
+            />
+
+            <BookList
+              :params="{
+                limit: 3,
+                order: JSON.stringify([['createdAt', 'DESC']]),
+                category: 'physics'
+              }"
+              class="featured-book-list hidden lg:flex"
+              bookListClass="book-list"
+              bookWrapperBasisClass="book-container"
+              headline="Physics"
+              :gatewayRoute="{ name: 'books', title: 'See all books' }"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 py-16">
         <BookList
           :params="{
             limit: 8,
@@ -59,6 +107,24 @@
           :gatewayRoute="{ name: 'books', title: 'See all books' }"
         />
       </div>
+
     </div>
   </div>
 </template>
+
+<style lang="postcss">
+
+  .featured-book-list {
+    @apply basis-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 flex flex-col grow w-full mb-4 lg:mb-0
+    sm:w-[49%] lg:w-[32%]
+    sm:max-w-[49%] lg:max-w-[32%] p-4 bg-blue-50 rounded;
+  }
+
+  .book-list {
+    @apply basis-full w-full flex items-baseline;
+  }
+
+  .book-container {
+    @apply basis-1/2 md:basis-1/3;
+  }
+</style>

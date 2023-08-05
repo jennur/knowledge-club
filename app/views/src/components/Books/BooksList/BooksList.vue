@@ -12,6 +12,14 @@
       params: Object,
       manager: Boolean,
       gatewayRoute: Object,
+      bookListClass: {
+        type: String,
+        default: "book-list"
+      },
+      bookWrapperBasisClass: {
+        type: String,
+        default: "book-wrapper"
+      },
   })
 
   const books = ref([]);
@@ -57,7 +65,7 @@
       <div  
         v-for="i in Array.from({length: params?.limit || 16})" 
         :key="i"
-        class="flex basis-1/2 sm:basis-1/4 lg:basis-1/8 mb-6"
+        :class="`flex mb-6 ${bookWrapperBasisClass}`"
       >
         <BookPlaceholder/>
       </div>
@@ -67,11 +75,11 @@
       No available books yet!
     </p>
 
-    <div v-else class="flex flex-wrap full-width">
+    <div v-else :class="bookListClass">
       <div 
         v-for="book in books"
         :key="book.title"
-        class="flex basis-1/2 sm:basis-1/4 lg:basis-1/8 mb-6"
+        :class="`flex ${bookWrapperBasisClass}`"
       >
         <Book :book="book" :manager="manager" @remove="getBookList"/>
       </div>
@@ -81,4 +89,12 @@
 
 
 <style lang="postcss" scoped>
+
+  .book-list {
+    @apply flex flex-wrap w-full;
+  }
+
+  .book-wrapper {
+    @apply basis-1/2 sm:basis-1/4 lg:basis-1/8;
+  }
 </style>
