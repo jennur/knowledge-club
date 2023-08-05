@@ -1,6 +1,7 @@
 <script setup>
   import httpCommon from "../../../http-common";
   import Book from "../Book/Book.vue";
+  import BookPlaceholder from "../Book/BookPlaceholder.vue";
   import Spinner from "@/components/Loading/Spinner.vue";
   import IconLink from "@/components/Links/IconLink.vue";
   import { RouterLink } from "vue-router"
@@ -41,6 +42,7 @@
       <h2 class="text-xs text-slate-500 uppercase font-semibold">
         {{ props.headline }}
       </h2>
+
       <IconLink
         v-if="gatewayRoute"
         :to="{ name: gatewayRoute.name }"
@@ -50,8 +52,17 @@
         animate
       />
     </div>
-    
-    <Spinner v-if="loading && !books.length" text="Loading books..." size="sm" class="ml-2 my-4" />
+
+    <div v-if="loading && !books.length" class="flex flex-wrap">
+      <div  
+        v-for="i in Array.from({length: params?.limit || 16})" 
+        :key="i"
+        class="flex basis-1/2 sm:basis-1/4 lg:basis-1/8 mb-6"
+      >
+        <BookPlaceholder/>
+      </div>
+    </div>
+
     <div class="flex flex-wrap">
       <div 
         v-for="book in books"
