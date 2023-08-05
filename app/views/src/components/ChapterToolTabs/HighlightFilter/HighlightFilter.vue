@@ -1,20 +1,21 @@
 <script setup>
   import Switch from "@/components/Inputs/Switch.vue";
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import store from "@/store/index";
 
+  const highlightsOn = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
+  
   function toggleAllHighlights(visible) {
     store.dispatch("chapters/toggleAllHighlights", visible);
+    localStorage.setItem("show-all-highlights", visible);
   }
-  const highlightsOn = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
-
 </script>
 
 <template>
   <div>
     <label class="flex items-center">
       <Switch class="mr-2" @switch="toggleAllHighlights" :checked="highlightsOn"/>
-      <span class="">Show all highlights</span>
+      <span class="text-sm">Show all highlights</span>
     </label>
   </div>
 </template>

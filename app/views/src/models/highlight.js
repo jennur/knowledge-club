@@ -17,7 +17,7 @@ export function highlight(range) {
   }
 }
 
-export function highlightDbObject(highlight) {
+export function highlightToDbObject(highlight) {
   const { startNode, endNode } = highlight;
   delete highlight.startNode;
   delete highlight.endNode;

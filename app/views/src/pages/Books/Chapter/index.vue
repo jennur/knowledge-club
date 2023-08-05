@@ -1,7 +1,7 @@
 <script setup>
   import store from "@/store/index"
   import { useRoute, RouterLink } from "vue-router";
-  import { computed, ref, watch, onMounted } from 'vue'
+  import { computed, onBeforeMount, ref, watch } from 'vue'
 
   import ChapterLayout from "@/layouts/ChapterLayout.vue";
   import ChapterToolTabs from "@/components/ChapterToolTabs/ChapterToolTabs.vue";
@@ -10,83 +10,99 @@
   import HighlightToolbar from "@/components/HighlightToolbar/HighlightToolbar.vue";
   import setHighlights from "@/helpers/highlightFunctions/getContainerWithHighlights";
   import highlightContainerFromRange from "@/helpers/highlightFunctions/highlightContainerFromRange";
-
   import {
     highlight as highlightModel,
-    highlightDbObject
+    highlightToDbObject
   } from "@/models/highlight";
 
   const route = useRoute();
   const { id: bookId, chapterNum } = route.params;
 
-  store.dispatch("chapters/getChapter", { bookId, chapterNum });
-  store.dispatch("chapters/getFocusedBook", bookId);
-
   const errorMsg = ref(null);
   const highlight = ref(null);
   const showingHighlightToolBar = ref(null);
   const textWithHighlights = ref(null);
-  const highlightedCC = ref(null)
   const toolbarPosition = ref(null);
+  const ccNode = ref(null);
+  const loading = ref(false);
 
-  const allHighlights = computed(() => store.state.chapters.focusedChapter.highlights);
   const user = computed(() => store.state.auth.user);
-  const chapterData = computed(() => store.state.chapters.focusedChapter);
-  const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
   const bookData = computed(() => store.state.chapters.focusedBook);
-  const ccNode = computed(() => document.getElementById("chapter-content"));
+  const chapterData = computed(() => store.state.chapters.focusedChapter);
+  const allHighlights = computed(() => store.state.chapters.focusedChapter.highlights);
+  const allHighlightsVisible = computed(() => store.state.chapters.focusedChapter?.visibleHighlights?.all);
+  const highlightedCC = computed(() => store.state.chapters.focusedChapter?.highlightedChapterContent);
 
-  function getHighLights() {
-    let ccCopy = ccNode.value.cloneNode(true);
-    if (ccCopy.hasChildNodes()) {
-      highlightedCC.value = setHighlights(ccCopy, allHighlights.value);
-    }
-  }
+  onBeforeMount(() => {
+    loading.value = true;
+    store.dispatch("chapters/getFocusedBook", bookId);
+    store.dispatch("chapters/getChapter", { bookId, chapterNum })
+      .then(() => {
+        loading.value = false;
+        if(allHighlightsVisible.value) toggleHighlights(true);
+      })
+      .catch(err => {
+        console.error("[Y]", err.message);
+      });
+  })
 
   function handleTextSelect() {
+    errorMsg.value = null;
     const selection = window.getSelection();
     if(selection.type === "Caret") {
       showHighlightToolBar(false);
       return;
     }
     const range = selection.getRangeAt(0);
-    const { top, height, left } = range.getBoundingClientRect();
-    highlight.value = highlightModel(range);
 
-    highlightContainerFromRange(ccNode.value, range);
-    toolbarPosition.value = { top: `${top + height}px`, left: `${left}px` };
+    if(range) {
+      const { top, height, left } = range.getBoundingClientRect();
+      const scrollX = window.scrollX || window.pageXOffset;
+      const scrollY = window.scrollY || window.pageYOffset;
 
-    showHighlightToolBar(true);
+      const adjustedTop = top + scrollY;
+      const adjustedLeft = left + scrollX;
+      highlight.value = highlightModel(range);
+
+      highlightContainerFromRange(ccNode.value, range);
+      toolbarPosition.value = { 
+        top: `${adjustedTop + height}px`, 
+        left: `${adjustedLeft}px`
+      };
+      showHighlightToolBar(true);
+    }
   }
 
   function storeSelectedText(highlightObj, note) {
     const { userId, username } = user.value;
   
     store.dispatch("chapters/postHighlight", {
-        ...highlightDbObject(highlightObj),
+        ...highlightToDbObject(highlightObj),
         bookId,
         chapterNum,
         fromUser: JSON.stringify({ userId, username }),
         note
       })
       .then((response) => {
-        if(response.articles) store.dispatch("chapters/openToolTab", "notes");
+        store.dispatch("chapters/openToolTab", "notes");
       })
       .catch(err => {
-        console.error(err.message);
-        errorMsg.value = err.message;
+        errorMsg.value = err.response.data.message || err.message;
       });
 
     showHighlightToolBar(false);
   }
 
-  function toggleHighlights(show) {
-    if(!highlightedCC.value) getHighLights();
-    textWithHighlights.value = show ?  highlightedCC.value : null;
+  function showHighlightToolBar(value) {
+    const selection = window.getSelection();
+    if(!value && selection && selection.type !== "Caret") {
+      value = true;
+    }
+    showingHighlightToolBar.value = value;
   }
 
-  function showHighlightToolBar(value) {
-    showingHighlightToolBar.value = value;
+  function toggleHighlights(show) {
+    textWithHighlights.value = show ?  highlightedCC.value : null;
   }
 
   watch(allHighlightsVisible, (newVal, oldVal) => {
@@ -103,6 +119,7 @@
         :bookId="bookId"
         :chapterNum="chapterNum"
         @saveNote="(note) => storeSelectedText(note.highlight, note.note)"
+        :savingError="errorMsg"
       />
     </template>
 
@@ -123,11 +140,16 @@
         </div>
 
         <h1 class="mt-8" v-html="chapterData?.chapterName"></h1>
-        <div id="chapter-content" class="chapter-content"
+        <div
+          v-if="!loading && chapterData.chapterContent" 
+          ref="ccNode" id="chapter-content" class="chapter-content"
           @mouseup="handleTextSelect"
           @keyup="handleTextSelect"
-          v-html="textWithHighlights || chapterData?.chapterContent"
+          v-html="textWithHighlights || chapterData.chapterContent"
         >
+        </div>
+        <div v-else-if="loading" class="text-xs text-orange-500 flex items-center">
+          <div class="spinner mr-2"></div> <p>Loading chapter...</p>
         </div>
 
         <HighlightToolbar 
@@ -164,5 +186,9 @@
   }
   .page-num::before {
     content: "Page ";
+  }
+
+  .spinner {
+    @apply border-2 border-dotted border-spacing-1 border-orange-400 w-5 h-5 rounded-full animate-spin-slow;
   }
 </style>

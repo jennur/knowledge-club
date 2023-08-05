@@ -8,8 +8,10 @@
 
   const props = defineProps({
     highlight: {
-      type: Object,
-      default: null
+      type: Object
+    }, 
+    savingError: {
+      type: String
     }
   })
 
@@ -20,10 +22,7 @@
   }
 
   function saveNote() {
-    emit("save", { 
-      note: markdown.value,
-      highlight: props.highlight
-    });
+    emit("save", { note: markdown.value, highlight: props.highlight });
   }
 </script>
 
@@ -41,7 +40,10 @@
     </div>
 
     <MarkdownEditor class="max-h-full" @markdown="setInput" />
-    <div class="self-end mt-2">
+    <div class="flex items-center justify-end mt-2">
+      <p v-if="savingError" class="text-red-700 bg-red-100 py-1 px-2 text-sm mr-2">
+        {{ savingError }}
+      </p>
       <SimpleButton :disabled="!highlight?.content" dark buttonText="Save" @click="saveNote" />
     </div>
   </div>

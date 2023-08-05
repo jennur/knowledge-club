@@ -44,7 +44,6 @@
     colorTheme.value = newColorTheme;
     localStorage.setItem("colorTheme", newColorTheme);
   }
-
 </script>
 
 <template>

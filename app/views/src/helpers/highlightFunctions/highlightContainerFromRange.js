@@ -1,6 +1,6 @@
 import { highlight } from "@/models/highlight";
 
-export default function highlightContainerFromRange(container, range) {
+export default function highlightContainerFromRange(container, range, highlightId) {
   const { 
     commonAncestorId,
     startNode,
@@ -10,31 +10,33 @@ export default function highlightContainerFromRange(container, range) {
   } = highlight(range);
 
   const commonAncestor = container.querySelector(`#${commonAncestorId}`);
-  const commonAncestorCopy = commonAncestor.cloneNode(true);
 
   if(endNode !== startNode) {
-    addHighlightToElement(startNode, startOffset, null);
-    addHighlightToElement(endNode, null, endOffset);
+    addHighlightToElement(startNode, startOffset, null, highlightId);
+    addHighlightToElement(endNode, null, endOffset, highlightId);
   } else {
-    addHighlightToElement(startNode, startOffset, endOffset);
+    addHighlightToElement(startNode, startOffset, endOffset, highlightId);
   }
+  const rangeTextNodes = extractTextNodesFromRange(range, commonAncestor);
 
-  const rangeTextNodes = extractTextNodesFromRange(range, commonAncestorCopy);
   if (rangeTextNodes.length > 2) {
     for(let i = 1; i < rangeTextNodes.length - 1; i++) {
       const textNode = rangeTextNodes[i];
-      addHighlightToElement(textNode);
+      addHighlightToElement(textNode, null, null, highlightId);
     }
   }
 }
 
-function addHighlightToElement(node, startOffset, endOffset) {
+function addHighlightToElement(node, startOffset, endOffset, idValue) {
   const nodeText = node.textContent;
   const nodeObj = { length: node.length, text: node.textContent };
   const nodeWrapper = document.createElement("span");
   const highLightWrapper = document.createElement("span");
   highLightWrapper.classList.add("highlight");
-
+  
+  if(idValue) {
+    highLightWrapper.classList.add(`highlight-${idValue}`);
+  }
 
   if(startOffset && endOffset){
     const { startSubstringNode, midSubstringNode, endSubstringNode } = getSubstringNodes(nodeObj, startOffset, endOffset)

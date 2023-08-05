@@ -1,9 +1,16 @@
+import highlightChapterContent from "../helpers/highlightFunctions/highlightChapterContent";
 import BookDataService from "../services/book.service";
 import HighlightService from "../services/highlight.service";
 
 function getCurrentToolTab() {
   const tooltab = localStorage.getItem("current-tool-tab");
   return tooltab || "notes";
+}
+
+function getVisibleHighlights() {
+  const all = JSON.parse(localStorage.getItem("show-all-highlights"));
+  const fromUser = null;
+  return { all, fromUser };
 }
 
 export const chapters = {
@@ -13,6 +20,10 @@ export const chapters = {
       focusedbook: {},
       focusedChapter: {
         chapterUUID: null,
+        chapterNumber: null,
+        chapterName: null,
+        chapterContent: null,
+        highlightedChapterContent: null,
         highlights: [],
         visibleHighlights: {
           all: false,
@@ -36,14 +47,16 @@ export const chapters = {
           })
       },
   
-      getFocusedBook({ commit }, bookId) {
-        BookDataService.getBookById(bookId)
-          .then(book => {
-            commit("setFocusedBook", book.data);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          })
+      getFocusedBook({ state, commit }, bookId) {
+        if(state.focusedBook?.bookUUID !== parseInt(bookId)) {
+          BookDataService.getBookById(bookId)
+            .then(book => {
+              commit("setFocusedBook", book.data);
+            })
+            .catch((err) => {
+              return Promise.reject(err);
+            })
+        }
       },
   
       async getChapter({ commit }, payload){
@@ -52,13 +65,7 @@ export const chapters = {
         try {
           const chapter = await BookDataService.getChapter(bookId, chapterNum);
           const highlights = await HighlightService.getAllHighlights(bookId, chapterNum);
-  
-          commit("setFocusedChapter", {
-            chapter: chapter.data,
-            highlights
-          });
-  
-          return { chapter: chapter.data, highlights };
+          commit("setFocusedChapter", { chapter: chapter.data, highlights });
         } 
         catch(err) {
           return Promise.reject(err);
@@ -113,21 +120,38 @@ export const chapters = {
       setFocusedBook(state, payload) {
         state.focusedBook = payload;
       },
-      setFocusedChapter(state, payload){
-          state.focusedChapter = payload.chapter;
-          state.focusedChapter["highlights"] = payload.highlights;
-          state.focusedChapter["currentToolTab"] = getCurrentToolTab();
+      setFocusedChapter(state, payload) {
+          const { chapter, highlights } = payload;
+          const visibleHighlights = getVisibleHighlights();
+          const chapterObj = {
+            ...chapter,
+            highlights,
+            currentToolTab: getCurrentToolTab(),
+            highlightedChapterContent: highlightChapterContent(
+              chapter.chapterContent, highlights
+            ),
+            visibleHighlights: {
+              all: visibleHighlights.all,
+              fromUser: visibleHighlights.fromUser
+            },
+          }
+
+          state.focusedChapter = chapterObj;
       },
       setHighlight(state, highlight) {
         state.focusedChapter.highlights.push(highlight);
       },
       setAllHighlightsVisibility(state, visible) {
+        const currentState = state.focusedChapter["visibleHighlights"];
         state.focusedChapter["visibleHighlights"] = {
+          ...currentState,
           all: visible
         };
       },
       setHighlightsVisibilityFromUser(state, payload) {
+        const currentState = state.focusedChapter["visibleHighlights"];
         state.focusedChapter["visibleHighlights"] = {
+          ...currentState,
           fromUser: {
             userId: payload.userId,
             visible: payload.visible

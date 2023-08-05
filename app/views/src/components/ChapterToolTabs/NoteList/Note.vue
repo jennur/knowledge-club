@@ -5,6 +5,7 @@
   
   const props = defineProps({
     highlightText: String,
+    highlightId: Number,
     articles: Array
   })
 
@@ -16,7 +17,7 @@
 
 <template>
   <div class="note">
-    <div v-if="highlightText" class="highlight-text">
+    <div v-if="highlightText" :class="`highlight-text highlight-${highlightId}`">
       <Quotes>{{ highlightText }}</Quotes>
     </div>
     <div v-for="article in articles" :key="article.articleId">

@@ -1,13 +1,14 @@
 import highlightContainerFromRange from "./highlightContainerFromRange";
 
-export default function getContainerWithHighlights(containerElem, highlights) {  
-  highlights && highlights.forEach(highlight => {
+export default function getContainerWithHighlights(containerElem, dbHighlights) {  
+  dbHighlights && dbHighlights.forEach(highlight => {
     const {
       commonAncestorId,
       startloc: startOffset,
       startNode: startNodeText,
       endloc: endOffset,
-      endNode: endNodeText
+      endNode: endNodeText,
+      highlightId: id,
     } = highlight;
 
     const pageElement = containerElem.querySelector(`#${commonAncestorId}`);
@@ -17,7 +18,7 @@ export default function getContainerWithHighlights(containerElem, highlights) {
       const { startNode, endNode } = rangeNodes;
       if(startNode && endNode) {
         const range = createRange(startNode, startOffset, endNode, endOffset);
-        highlightContainerFromRange(containerElem, range);
+        highlightContainerFromRange(containerElem, range, id);
       }
     }
   })

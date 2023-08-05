@@ -12,10 +12,11 @@
       required: true
     }
   })
-  const numChapters = computed(() => store.state.chapters.chapters.length);
+  
+  const numChapters = computed(() => store.state.chapters.focusedBook?.numChapters);
   const { bookId, chapterNum } = props;
-  const isFirstChapter = parseInt(chapterNum) - 1 < 0;
-  const isLastChapter = parseInt(chapterNum) + 1 === numChapters;
+  const isFirstChapter = parseInt(chapterNum) === 0;
+  const isLastChapter = parseInt(chapterNum) + 1 === numChapters.value;
 </script>
 
 <template>

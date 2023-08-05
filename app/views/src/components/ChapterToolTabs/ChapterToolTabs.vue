@@ -12,17 +12,17 @@
   const props = defineProps({
     bookId: String,
     chapterNum: String,
-    highlight: Object
+    highlight: Object,
+    savingError: String
   })
 
-  const { bookId, chapterNum } = props;
   const toolTab = computed(() => store.state.chapters.focusedChapter.currentToolTab);
   const highlight = computed(() => props.highlight);
 
   function setActiveTab(tab) {
     store.dispatch("chapters/openToolTab", tab)
     .catch((err) => {
-      console.error(err.message);
+      console.error("[Y]", err.message);
     })
   }
 
@@ -55,7 +55,11 @@
       <div v-if="toolTab === 'add-note'">
         <h2>New note</h2>
 
-        <NewNote :highlight="highlight" @save="note => emit('saveNote', note)" />
+        <NewNote 
+          :highlight="highlight" 
+          @save="note => emit('saveNote', note)"
+          :savingError="savingError"
+        />
       </div>
 
       <div v-if="toolTab === 'chat'" class="flex flex-col h-full">

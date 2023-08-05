@@ -15,7 +15,8 @@
     <Note 
       v-for="highlight in highlights"
       :key="highlight.highlightId"
-      :highlightText="highlight.content" 
+      :highlightText="highlight.content"
+      :highlightId="highlight.highlightId"
       :articles="highlight.articles"
     />
   </div>
