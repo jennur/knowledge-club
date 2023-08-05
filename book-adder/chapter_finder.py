@@ -15,7 +15,7 @@ from utils import get_sections,flatten_xml
 logging.basicConfig(level=logging.INFO)
 
 class Book():
-    def __init__(self, filename, nochapters, stats):
+    def __init__(self, filename, nochapters=False, category=None):
         self.filename = filename
         self.file_ext = os.path.splitext(filename)[1]
         self.date_uploaded = datetime.today()
@@ -23,6 +23,7 @@ class Book():
         self.updated_at = datetime.today()
         self.published = True
         self.nochapters = nochapters
+        self.category = category
         if self.isEPUB:
             self.process_epub()
         elif self.isPDF:
@@ -37,15 +38,9 @@ class Book():
 
         self.lines = -1 #Deal with this later
         self.title = self.book_.title
-        
-        # print("\n\nCOVER IMAGE:", self.cover_image)
-        # print("\nIDENTIFIER:", self.identifiers)
-        # print("\nLANGUAGE:", self.languages)
-        # print("\nTITLE:", self.title)
-
+    
         self.getEpubChaptersAndContents()
         self.getEpubCoverImage()
-        # self.num_chapters = len(self.chapters)
         self.stats = self.getStats()
 
     def process_pdf(self):

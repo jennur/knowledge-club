@@ -16,12 +16,15 @@ exports.create = (book) => {
 };
 
 // Retrieve all Books from the database.
-exports.findAll = (req, res) => {
-  const { order, limit } = req.query;
+exports.findAll = ({ order, limit, category }) => {
   const query = {
     order: order && JSON.parse(order),
-    limit: limit && parseInt(limit)
+    limit: limit && parseInt(limit),
   }
+  if(category) query["where"] = {
+    category: category
+  }
+  
   return Book.findAll(query)
     .then((books) => {
       return books

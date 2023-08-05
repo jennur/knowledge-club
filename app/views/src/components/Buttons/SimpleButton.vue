@@ -16,7 +16,8 @@
     },
     fluid: Boolean,
     dark: Boolean,
-    customColors: Boolean
+    customColors: Boolean,
+    disabled: Boolean
   });
   const { dark, fluid, size, customColors, disabled } = props;
   const colorClass = customColors ? "" : (dark && "bg-gray-700 hover:bg-gray-900/90 text-slate-100" || "border border-slate-200 hover:bg-slate-200 text-gray-700 hover:text-gray-900/90");
@@ -28,8 +29,18 @@
   <button
     :disabled="disabled"
     :type="props.type" 
-    :class="`${colorClass} ${widthClass} ${sizeClass} transition-colors px-4 py-1`"
+    :class="`button ${colorClass} ${widthClass} ${sizeClass}`"
   >
     {{ props.buttonText }}
   </button>
 </template>
+
+<style lang="postcss" scoped>
+  .button {
+    @apply rounded transition-colors px-4 py-1;
+  }
+
+  .button:disabled {
+    @apply bg-gray-400;
+  }
+</style>

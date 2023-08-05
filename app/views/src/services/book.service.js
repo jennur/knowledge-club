@@ -8,7 +8,7 @@ class BookDataService {
         return response;
       })
       .catch((err) => {
-        console.error("[Y]", err);
+        console.error("[Y]", err.response.data.message || err.message);
         return Promise.reject(err);
       });
   }

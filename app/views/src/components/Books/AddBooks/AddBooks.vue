@@ -1,31 +1,45 @@
 <script setup>
   import DropZone from 'dropzone-vue';
   import store from "../../../store/index"
-  import { ref } from "vue";
-  import SimpleButton from "../../Buttons/SimpleButton.vue";
+  import { ref, computed } from "vue";
+  import IconButton from "../../Buttons/IconButton.vue";
   import Spinner from "@/components/Loading/Spinner.vue";
+  import SelectDropdown from "@/components/Inputs/SelectDropdown.vue";
   import 'dropzone-vue/dist/dropzone-vue.common.css';
+  import categoryOptions from "./categoryOptions.js";
 
   const files = ref([]);
   const errorMsg = ref(null);
   const successMsg = ref(null);
   const isLoading = ref(false);
+  const selectedCategory = ref(null);
+
+  const computedCategoryOptions = computed(() => categoryOptions(selectedCategory));
 
   function onSelect(item) {
     errorMsg.value = null;
-    let file = new FormData();
-    file.append('file', item.file);
-    files.value = [...files.value, { file, id: item.id }];
+    let formData = new FormData();
+    formData.append('file', item.file);
+    files.value = [...files.value, { formData, id: item.id }];
   }
 
   function onSubmit() {
+    if(!selectedCategory.value) {
+      errorMsg.value = "You must select a category";
+      return;
+    }
     errorMsg.value = null;
     successMsg.value = null;
     isLoading.value = true
     
     if(files.value.length) {
       files.value.forEach(fileObj => {
-        store.dispatch("books/addBook", fileObj.file)
+
+        fileObj.formData.append("category", 
+          selectedCategory.value.value
+        );
+
+        store.dispatch("books/addBook", fileObj.formData)
           .then(response => {
             isLoading.value = false;
             errorMsg.value = null;
@@ -51,6 +65,7 @@
   }
 
   function onError(err) {
+    successMsg.value = null;
     let error = "";
     switch (err.error) {
       case "MAX_FILE":
@@ -67,8 +82,7 @@
   }
 
   const maxNumFiles = 5;
-  const maxFileSize = 1000000;
-
+  const maxFileSize = 5000000;
 </script>
 
 <template>
@@ -86,7 +100,7 @@
       </div>
       <div class="grow mt-2 md:mt-0">
         <DropZone 
-          class="min-w-full"
+          class="min-w-full rounded"
           :method="null"
           dropzoneClassName="p-16 bg-slate-200"
           :maxFiles="maxNumFiles"
@@ -103,17 +117,34 @@
             Drop files here or click to select
           </template>
         </DropZone>
-        <div class="flex">
-          <div class="grow mr-1">
-            <Spinner v-if="isLoading" text="Uploading book..." class="pt-1" />
-            <p v-if="successMsg" class="mt-2 text-xs text-green-600">
-              {{ successMsg }}
-            </p>
-            <p v-if="errorMsg" class="mt-2 text-xs text-red-500">
-              {{ errorMsg }}
-            </p>
+
+        <div class="flex justify-between mt-2">
+          <div class="flex items-center">
+            <SelectDropdown
+              :defaultText="selectedCategory?.name || 'Category'"
+              :defaultIcon="selectedCategory?.icon || 'box-open'"
+              :options="computedCategoryOptions"
+            />
+            <div class="mr-1">
+              <Spinner v-if="isLoading" text="Uploading book..." class="ml-2" />
+              <p v-if="successMsg" class="ml-2 px-4 py-2 text-xs bg-green-50 text-green-600">
+                <font-awesome-icon icon="check" class="mr-1" />
+                {{ successMsg }}
+              </p>
+              <p v-if="errorMsg" class="ml-2 px-4 py-2 text-xs bg-red-100 text-red-500">
+                <font-awesome-icon icon="circle-exclamation" class="mr-1" />
+                {{ errorMsg }}
+              </p>
+            </div>
           </div>
-          <SimpleButton class="mt-1" dark @click="onSubmit" buttonText="Upload"></SimpleButton>
+
+          <IconButton
+            dark
+            buttonText="Upload"
+            size="sm"
+            iconClass="upload"
+            @click="onSubmit"
+          />
         </div>
       </div>
     </div>

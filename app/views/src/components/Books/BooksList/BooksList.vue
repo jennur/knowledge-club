@@ -63,7 +63,11 @@
       </div>
     </div>
 
-    <div class="flex flex-wrap">
+    <p v-if="!books.length" class="text-sm px-2 py-4">
+      No available books yet!
+    </p>
+
+    <div v-else class="flex flex-wrap full-width">
       <div 
         v-for="book in books"
         :key="book.title"

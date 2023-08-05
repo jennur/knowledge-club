@@ -23,7 +23,8 @@
     fluid: Boolean,
     vertical: Boolean,
     dark: Boolean,
-    customColors: Boolean
+    customColors: Boolean,
+    disabled: Boolean
   });
   const { vertical, customColors, dark, size, fluid, iconClass, buttonText, type, ariaLabel } = props;
 
@@ -47,11 +48,16 @@
 
 <style lang="postcss" scoped>
   .icon-button {
-    @apply flex items-center justify-center transition-colors py-2 px-4;
+    @apply flex items-center justify-center rounded 
+    transition-colors py-2 px-4;
   }
 
   .icon-button.basic {
     @apply text-gray-700 hover:text-gray-900/90;
+  }
+
+  .icon-button:disabled {
+    @apply bg-gray-400;
   }
 
   /* Sizes */

@@ -8,7 +8,7 @@
 
 <template>
   <div id="notes-list">
-    <p v-if="!highlights.length" class="bg-emerald-100 text-slate-800 py-4 px-6 max-w-max">
+    <p v-if="!highlights.length" class="select-text-note">
       To start adding notes, select some text from the chapter!
     </p>
 
@@ -21,3 +21,9 @@
     />
   </div>
 </template>
+
+<style lang="postcss" scoped>
+  .select-text-note {
+    @apply bg-emerald-100 w-full text-slate-800 py-4 px-6 rounded;
+  }
+</style>

@@ -44,6 +44,9 @@ def hello_word():
 def add_book():
     if request.method == 'POST':
         F = request.files.get("file")
+        category = request.form.get("category")
+        print("File:", F)
+        print("Category:", category)
 
         if F.content_type in config.ALLOWED_TYPES:
             path_to_file = os.path.join(
@@ -52,7 +55,7 @@ def add_book():
                 secure_filename(F.filename)
             )
             F.save(path_to_file)
-            book = Book(path_to_file,False,False)
+            book = Book(path_to_file, category=category)
             transmit_book(book)
             remove_file_from_storage(path_to_file)
         else:

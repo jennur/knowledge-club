@@ -8,11 +8,11 @@ book_insert_query = (
     "INSERT INTO \"books\" ("
     "\"bookUUID\",\"title\",\"published\",\"fileType\","
     "\"numChapters\",\"metadata\",\"languages\",\"identifiers\",\"numPages\","
-    "\"coverImage\",\"createdAt\",\"updatedAt\") "
-    "VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING "
+    "\"coverImage\",\"category\",\"createdAt\",\"updatedAt\") "
+    "VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING "
     "\"bookUUID\",\"title\",\"published\",\"fileType\","
     "\"numChapters\",\"metadata\",\"languages\",\"identifiers\",\"numPages\","
-    "\"coverImage\",\"createdAt\",\"updatedAt\";"
+    "\"coverImage\",\"category\",\"createdAt\",\"updatedAt\";"
 )
 
 chapter_insert_query ="INSERT INTO \"chapters\" (\"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"chapterContent\",\"createdAt\",\"updatedAt\") VALUES (DEFAULT,%s,%s,%s,%s,%s,%s) RETURNING \"chapterUUID\",\"bookUUID\",\"chapterName\",\"chapterNumber\",\"chapterContent\",\"createdAt\",\"updatedAt\";"
@@ -40,6 +40,7 @@ def transmit_book(book):
             json.dumps(book.identifiers),
             book.num_pages,
             book.cover_image,
+            book.category,
             book.created_at,
             book.updated_at
         ]

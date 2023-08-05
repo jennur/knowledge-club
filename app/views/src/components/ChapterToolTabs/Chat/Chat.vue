@@ -72,25 +72,40 @@
 </script>
 
 <template>
-<div class="flex flex-col h-full">
-    <div v-if="usersOnline" class="text-xs text-gray-600 mb-1">
-      Users online: {{ usersOnline }}
-    </div>
-  <div id="chat-window" :class="`flex flex-col flex-grow justify-end bg-slate-200 p-2 ${heightClass}`">
-
-    <div id="chat-messages" class="flex flex-col overflow-scroll mx-2 my-4">
-      <div v-for="(message, index) in messages" :key="message" class="">
-        <Message 
-          :index="index" 
-          :message="message" 
-          :prevMessage="messages[index - 1]"
-          :user="user"
-        />
+  <div class="flex flex-col h-full">
+    <div id="chat-window" :class="`chat-window ${heightClass}`">
+      <div v-if="usersOnline" class="user-count">
+        Users online: {{ usersOnline }}
       </div>
+
+      <div id="chat-messages" class="chat-messages">
+        <div v-for="(message, index) in messages" :key="message" class="">
+          <Message 
+            :index="index" 
+            :message="message" 
+            :prevMessage="messages[index - 1]"
+            :user="user"
+          />
+        </div>
+      </div>
+
+      <CommentBox placeholder="Write to chapter chat room" @sendMessage="sendMessage"/>
+
     </div>
-
-    <CommentBox placeholder="Write to chapter chat room" @sendMessage="sendMessage"/>
-
   </div>
-</div>
 </template>
+
+<style lang="postcss" scoped>
+  .chat-window {
+    @apply relative flex flex-col flex-grow justify-end rounded bg-slate-200 p-2 pt-8;
+  }
+
+  .chat-window .user-count {
+    @apply absolute top-2 left-2 text-xs text-gray-600 mb-1;
+  }
+
+  .chat-messages {
+    @apply flex flex-col overflow-scroll mx-2 mb-2;
+  }
+</style>
+

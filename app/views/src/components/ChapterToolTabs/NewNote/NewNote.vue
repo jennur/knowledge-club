@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue'
   import MarkdownEditor from "../../Inputs/MarkdownEditor.vue";
-  import SimpleButton from "../../Buttons/SimpleButton.vue";
+  import IconButton from "../../Buttons/IconButton.vue";
   import Quotes from "../../Quotes/Quotes.vue";
 
   const emit = defineEmits(["save"]);
@@ -33,8 +33,8 @@
         <Quotes>{{ highlight.content }}</Quotes>
       </div>
     </div>
-    <div v-else>
-      <p class="bg-emerald-100 text-slate-800 py-4 px-6 max-w-max mb-2">
+    <div v-else class="select-text-note">
+      <p>
         Select some text to add a note!
       </p>
     </div>
@@ -44,18 +44,28 @@
       <p v-if="savingError" class="text-red-700 bg-red-100 py-1 px-2 text-sm mr-2">
         {{ savingError }}
       </p>
-      <SimpleButton :disabled="!highlight?.content" dark buttonText="Save" @click="saveNote" />
+      <IconButton 
+        :disabled="!highlight?.content"
+        dark
+        buttonText="Save"
+        size="sm"
+        iconClass="floppy-disk"
+        @click="saveNote" 
+      />
     </div>
   </div>
 </template>
 
 <style lang="postcss">
+  .select-text-note {
+    @apply bg-emerald-100 w-full text-slate-800 py-4 px-6 rounded-t;
+  }
 
   .new-note {
     @apply flex flex-col;
   }
 
   .new-note .highlight-text {
-    @apply p-2 bg-blue-100;
+    @apply py-4 px-6 bg-blue-100 rounded-t;
   }
 </style>

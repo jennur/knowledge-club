@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <div :class="`mt-1 text-blue-500 flex items-center ${size}`">
+  <div :class="`text-blue-500 flex items-center ${size}`">
     <div class="spinner mr-2"></div>
     <p class="text">{{ text }}</p>
   </div>

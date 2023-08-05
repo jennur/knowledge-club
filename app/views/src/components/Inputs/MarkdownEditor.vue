@@ -29,11 +29,11 @@
 
   .editor {
     @apply w-full min-h-[12rem] max-h-full p-4 focus:outline-none
-      border-slate-400 border-r-2 bg-slate-200;
+      border-slate-400 border-r-2 bg-slate-200 rounded-bl;
   }
 
   .compiled {
-    @apply p-4 bg-white max-h-full overflow-scroll;
+    @apply p-4 bg-white max-h-full overflow-scroll rounded-br;
   }
 
   .compiled h2 {

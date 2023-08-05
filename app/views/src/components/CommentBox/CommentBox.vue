@@ -25,12 +25,12 @@
 
 <template>
   <form class="flex w-full" @submit.prevent="sendMessage">
-    <div class="bg-slate-100 relative w-full h-10">
+    <div class="text-input-wrapper">
       <input
         type="text" 
         v-model="input"
         :placeholder="placeholder"
-        class="w-full text-gray-800 bg-inherit pt-2 pl-2 pb-2 pr-10 text-sm focus:outline-none"
+        class="text-input"
       />
 
       <!-- <DiscordPicker 
@@ -45,14 +45,19 @@
         dark
         ariaLabel="Send message" 
         iconClass="fas fa-paper-plane"
-        class="border-l border-white pl-3 pr-2"
+        class="pl-3 pr-2 rounded-tl-none rounded-bl-none"
       />
   </form>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
+  .text-input-wrapper {
+    @apply rounded-tl rounded-bl bg-slate-100 relative w-full h-10;
+  }
+  .text-input {
+    @apply w-full rounded-tl rounded-bl  text-gray-800 bg-inherit pt-2 pl-2 pb-2 pr-10 text-sm focus:outline-none;
+  }
+  .emoji-picker {
 
-.emoji-picker {
-
-}
+  }
 </style>
