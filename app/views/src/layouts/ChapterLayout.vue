@@ -48,7 +48,7 @@
 
 <template>
   <div id="chapter-layout" :class="colorTheme">
-    <div class="flex justify-between w-full md:hidden py-1 px-4">
+    <div class="flex justify-between w-full md:hidden py-1 px-4 border-b border-solid border-slate-100">
       <LeftMenu />
       <RightMenu />
     </div>
@@ -71,8 +71,8 @@
       </section>
 
       <div ref="mainContent" :style="{ flexBasis: mainContentBasis }">
-        <div class="flex items-center">
-          <label class="flex items-center text-xs ml-4">
+        <div class="flex items-center md:py-[.35rem] md:border-b md:border-solid md:border-slate-100">
+          <label class="flex items-center text-xs ml-4 mt-4 md:mt-0">
             <Switch @switch="toggleDarkMode" :checked="colorTheme === 'night'" />
             <span>Dark mode</span>
           </label>

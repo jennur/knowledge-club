@@ -1,9 +1,10 @@
 <script setup>
   import { ref } from "vue";
-  import Authenticate from "../components/Authenticate/Authenticate.vue";
-  import BookList from "../components/Books/BooksList/BooksList.vue";
-  import NumberedList from "../components/List/NumberedList/NumberedList.vue";
-  import store from "../store/index";
+  import Authenticate from "@/components/Authenticate/Authenticate.vue";
+  import BooksList from "@/components/Books/BooksList/BooksList.vue";
+  import CategoryBooksBlock from "@/components/Books/CategoryBooksBlock/CategoryBooksBlock.vue";
+  import NumberedList from "@/components/List/NumberedList/NumberedList.vue";
+  import store from "@/store/index";
 </script>
 
 <template>
@@ -54,50 +55,27 @@
         </div>
         <div class="outer-content-wrapper px-2 py-8">
           <div class="flex flex-wrap justify-between">
-            <BookList
-              :params="{
-                limit: 3,
-                order: JSON.stringify([['createdAt', 'DESC']]),
-                category: 'psychology'
-              }"
-              class="featured-book-list"
-              bookListClass="book-list"
-              bookWrapperBasisClass="book-container"
+            <CategoryBooksBlock
+              category="psychology"
               headline="Psychology"
-              :gatewayRoute="{ name: 'books', title: 'See all books' }"
             />
 
-            <BookList
-              :params="{
-                limit: 3,
-                order: JSON.stringify([['createdAt', 'DESC']]),
-                category: 'chemistry'
-              }"
-              class="featured-book-list"
-              bookListClass="book-list"
-              bookWrapperBasisClass="book-container"
+            <CategoryBooksBlock
+              category="chemistry"
               headline="Chemistry"
-              :gatewayRoute="{ name: 'books', title: 'See all books' }"
             />
 
-            <BookList
-              :params="{
-                limit: 3,
-                order: JSON.stringify([['createdAt', 'DESC']]),
-                category: 'physics'
-              }"
-              class="featured-book-list hidden lg:flex"
-              bookListClass="book-list"
-              bookWrapperBasisClass="book-container"
+            <CategoryBooksBlock
+              category="physics"
               headline="Physics"
-              :gatewayRoute="{ name: 'books', title: 'See all books' }"
+              class="hidden xl:flex"
             />
           </div>
         </div>
       </div>
 
       <div class="bg-slate-50 py-16">
-        <BookList
+        <BooksList
           :params="{
             limit: 8,
             order: JSON.stringify([['createdAt', 'DESC']])
@@ -114,10 +92,11 @@
 
 <style lang="postcss">
 
-  .featured-book-list {
-    @apply basis-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 flex flex-col grow w-full mb-4 lg:mb-0
-    sm:w-[49%] lg:w-[32%]
-    sm:max-w-[49%] lg:max-w-[32%] p-4 bg-blue-50 rounded;
+  /* .featured-book-list { */
+    /* @apply flex flex-col grow w-full mb-4 xl:mb-0
+    basis-full sm:basis-1/2 md:basis-1/2 xl:basis-1/3
+    sm:w-[49%] xl:w-[32%]
+    sm:max-w-[49%] xl:max-w-[32%] p-4 bg-blue-50 rounded;
   }
 
   .book-list {
@@ -125,6 +104,6 @@
   }
 
   .book-container {
-    @apply basis-1/2 md:basis-1/3;
-  }
+    @apply basis-1/2 max-w-[50%] md:basis-1/3 md:max-w-[33.33%] grow ;
+  } */
 </style>

@@ -46,14 +46,14 @@
 </script>
 <template>
   <div>
-    <div class="flex items-center ml-2 mb-4">
+    <div v-if="headline" class="flex items-center ml-2 mb-4">
       <h2 class="text-xs text-slate-500 uppercase font-semibold">
-        {{ props.headline }}
+        {{ headline }}
       </h2>
 
       <IconLink
         v-if="gatewayRoute"
-        :to="{ name: gatewayRoute.name }"
+        :to="{ name: gatewayRoute.name, params: gatewayRoute.params }"
         iconClass="fa-solid fa-angle-right"
         :text="gatewayRoute.title"
         inlineLink
@@ -71,8 +71,8 @@
       </div>
     </div>
 
-    <p v-if="!books.length" class="text-sm px-2 py-4">
-      No available books yet!
+    <p v-if="!books.length" class="text-sm text-gray-500 px-2 py-4">
+      No available books yet
     </p>
 
     <div v-else :class="bookListClass">
@@ -81,7 +81,12 @@
         :key="book.title"
         :class="`flex ${bookWrapperBasisClass}`"
       >
-        <Book :book="book" :manager="manager" @remove="getBookList"/>
+        <Book 
+          :book="book"
+          :category="params?.category"
+          :manager="manager"
+          @remove="getBookList"
+        />
       </div>
     </div>
   </div>
@@ -95,6 +100,7 @@
   }
 
   .book-wrapper {
-    @apply basis-1/2 sm:basis-1/4 lg:basis-1/8;
+    @apply basis-1/2 sm:basis-1/4 lg:basis-1/8  
+    max-w-[50%] sm:max-w-[25%] lg:max-w-[12.5%] grow;
   }
 </style>

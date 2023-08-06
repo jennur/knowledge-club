@@ -17,7 +17,7 @@
   } from "@/models/highlight";
 
   const route = useRoute();
-  const { id: bookId, chapterNum } = route.params;
+  const { category, id: bookId, chapterNum } = route.params;
 
   const errorMsg = ref(null);
   const highlight = ref(null);
@@ -131,14 +131,27 @@
           <Breadcrumbs :routes="[
               { title: 'Home', name: 'home' }, 
               { title: 'Books', name: 'books' }, 
-              { title: bookData?.title, name: 'book', params: { id: bookId } }
+              { 
+                title: category, 
+                name: 'category',
+                params: { category }
+              },
+              { 
+                title: bookData?.title,
+                name: 'category-book',
+                params: { id: bookId, category } 
+              }
             ]"
             :current-route="chapterData?.chapterName"
           />
         </div>
 
         <div class="sticky-container flex justify-center mt-10">
-          <ChapterNavigation :bookId="bookId" :chapterNum="chapterNum" />
+          <ChapterNavigation
+            :bookId="bookId"
+            :chapterNum="chapterNum"
+            :category="category"
+          />
         </div>
 
         <h1 class="mt-8" v-html="chapterData?.chapterName"></h1>

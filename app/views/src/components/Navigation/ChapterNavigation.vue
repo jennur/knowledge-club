@@ -10,6 +10,10 @@
     chapterNum: {
       type: String,
       required: true
+    },
+    category: {
+      type: String,
+      default: "no-category"
     }
   })
   
@@ -24,7 +28,14 @@
     <span v-if="!isFirstChapter">
       <font-awesome-icon :icon="['fas', 'caret-left']" />
       <RouterLink 
-        :to="{ name: 'chapter', params: { id: bookId, chapterNum: parseInt(chapterNum) - 1 }}"
+        :to="{
+          name: 'category-chapter',
+          params: {
+            id: bookId,
+            chapterNum: parseInt(chapterNum) - 1,
+            category
+          }
+        }"
         class="hover:underline ml-1"
       >Previous chapter</RouterLink>
     </span>
@@ -33,7 +44,14 @@
 
     <span v-if="!isLastChapter">
       <RouterLink 
-        :to="{ name: 'chapter', params: { id: bookId, chapterNum: parseInt(chapterNum) + 1 }}"
+        :to="{
+          name: 'category-chapter',
+          params: {
+            id: bookId, 
+            chapterNum: parseInt(chapterNum) + 1,
+            category
+          }
+        }"
         class="hover:underline mr-1"
       >Next chapter</RouterLink>
       <font-awesome-icon :icon="['fas', 'caret-right']" />

@@ -5,8 +5,10 @@
 
   import BookCover from "@/components/Books/Book/BookCover.vue";
   import Breadcrumbs from "@/components/Navigation/Breadcrumbs.vue";
+  import Spinner from "@/components/Loading/Spinner.vue";
   const route = useRoute();
   const bookId = route.params.id;
+  const category = route.params.category;
 
   store.dispatch("chapters/getAllChapters", bookId);
   store.dispatch("chapters/getFocusedBook", bookId);
@@ -22,7 +24,8 @@
       class="mb-16"
       :routes="[
         { title: 'Home', name: 'home'},
-        { title: 'Books', name: 'books'}
+        { title: 'Books', name: 'books'},
+        { title: category, name: 'category', params: { category }}
       ]"
       :current-route="book?.title"
     />
@@ -63,11 +66,19 @@
       <div class="basis-full sm:basis-2/3 md:basis-3/4 lg:basis-4/5 sm:pl-8 md:pl-8 lg:pl-16 pt-16 sm:pt-0">
         <h1 class="">{{ book?.title }}</h1>
         <h2 class="mt-6 uppercase text-sm text-gray-400">Pages</h2>
+        <Spinner v-if="!chapters.length" text="Loading chapters" class="mt-4" />
+        
         <div class="ml-4 mt-4">
           <RouterLink 
             v-for="chapter in chapters" 
             :key="chapter"
-            :to="{ name: 'chapter', params: { id: bookId, chapterNum: chapter.chapterNumber }}"
+            :to="{
+              name: 'category-chapter',
+              params: {
+                category,
+                id: bookId,
+                chapterNum: chapter.chapterNumber
+              }}"
             class="flex items-center max-w-max text-black-500 group mb-2"
             >
             <span class="w-12 text-xl font-thin group-hover:font-bold">

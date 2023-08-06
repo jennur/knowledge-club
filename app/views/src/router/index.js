@@ -21,10 +21,35 @@ const router = createRouter({
       component: () => import("../pages/SignUp/index.vue")
     },
     {
+      path: "/account",
+      name: "account",
+      component: () => import("../pages/Account/index.vue")
+    },
+    {
+      path: "/chat",
+      name: "chat",
+      component: () => import("../pages/Chat/index.vue")
+    },
+    {
       path: "/books",
       alias: "/books",
       name: "books",
       component: () => import("../pages/Books/index.vue")
+    },
+    {
+      path: "/books/:category",
+      name: "category",
+      component: () => import("../pages/Books/Category/_category.vue")
+    },
+    {
+      path: "/books/:category/:id/chapters",
+      name: "category-chapters",
+      component: () => import("../pages/Books/Chapters/index.vue")
+    },
+    {
+      path: "/books/:category/:id",
+      name: "category-book",
+      component: () => import("../pages/Books/_id.vue")
     },
     {
       path: "/books/:id",
@@ -37,19 +62,16 @@ const router = createRouter({
       component: () => import("../pages/Chat/index.vue")
     },
     {
-      path: "/account",
-      name: "account",
-      component: () => import("../pages/Account/index.vue")
-    },
-    {
-      path: "/chat",
-      name: "chat",
-      component: () => import("../pages/Chat/index.vue")
-    },
-    {
       path: "/books/:id/chapters",
       name: "chapters",
       component: () => import("../pages/Books/Chapters/index.vue")
+    },
+    {
+      path: "/books/:category/:id/chapters/:chapterNum",
+      name: "category-chapter",
+      meta: { layout: "CustomLayout" },
+      component: () => import("../pages/Books/Chapter/index.vue"),
+      props: route => ({ key: route.fullPath }),
     },
     {
       path: "/books/:id/chapters/:chapterNum",

@@ -13,10 +13,14 @@
   const removeHover = ref(false);
   const errorMsg = ref(null);
 
-  const { book, manager } = defineProps({
+  const { book, category, manager } = defineProps({
     book: {
       type: Object,
       required: true
+    },
+    category: {
+      type: String,
+      default: "no-category"
     },
     manager: Boolean
   })
@@ -60,13 +64,19 @@
     </Modal>
 
     <component :is="!userAuthenticated && 'span' || 'RouterLink'"
-      :to="{ name: 'book', params: { id: book.bookUUID }}"
+      :to="{ 
+        name: 'category-book', 
+        params: { 
+          id: book.bookUUID, 
+          category
+        }
+      }"
       :role="!userAuthenticated ? 'button' : ''"
       :aria-label="`Book title: ${book.title}`"
       :aria-expanded="modalOpen"
       :aria-controls="bookAccessModalId"
       aria-haspopup="dialog"
-      class="block box-border text-gray-600 text-sm min-w-full p-2 cursor-pointer"
+      class="book"
       @click.stop="authenticate"
     >
 
@@ -97,5 +107,9 @@
 
 <style lang="postcss" scoped>
 
+.book {
+  @apply block box-border text-gray-600 text-sm min-w-full 
+  p-2 cursor-pointer hover:scale-105 transition-all;
+}
 
 </style>
