@@ -1,0 +1,42 @@
+{
+    "engineering": {
+      "name": "Engineering",
+      "value": "engineering",
+      "icon": "screwdriver-wrench"
+    },
+    "mathematics":{
+      "name": "Mathematics",
+      "value": "mathematics",
+      "icon": "square-root-variable"
+    },
+    "physics": {
+      "name": "Physics",
+      "value": "physics",
+      "icon": "atom"
+    },
+    "chemistry": {
+      "name": "Chemistry",
+      "value": "chemistry",
+      "icon": "flask-vial"
+    },
+    "biology": {
+      "name": "Biology",
+      "value": "biology",
+      "icon": "dna"
+    },
+    "medicine": {
+      "name": "Medicine",
+      "value": "medicine",
+      "icon": "stethoscope"
+    },
+    "psychology": {
+      "name": "Psychology",
+      "value": "psychology",
+      "icon": "brain"
+    },
+    "religion": {
+      "name": "Religion",
+      "value": "religion",
+      "icon": "hands-praying"
+    }
+}

@@ -23,7 +23,20 @@ const router = createRouter({
     {
       path: "/account",
       name: "account",
+      meta: { layout: "AccountLayout" },
       component: () => import("../pages/Account/index.vue")
+    },
+    {
+      path: "/account/settings",
+      name: "account-settings",
+      meta: { layout: "AccountLayout" },
+      component: () => import("../pages/Account/Settings/index.vue")
+    },
+    {
+      path: "/account/saved-books",
+      name: "account-saved-books",
+      meta: { layout: "AccountLayout" },
+      component: () => import("../pages/Account/SavedBooks/index.vue")
     },
     {
       path: "/chat",

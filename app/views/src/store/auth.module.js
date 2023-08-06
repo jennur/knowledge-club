@@ -1,7 +1,13 @@
 import AuthService from '../services/auth.service';
+import UserService from '../services/user.service';
 import { userModel } from "../models/user";
 import router from "../router";
 import store from '.';
+
+function saveUserToLocalStorage(user) {
+  const userObj = JSON.stringify(userModel(user));
+  localStorage.setItem("user", userObj);
+}
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = user
@@ -15,8 +21,12 @@ export const auth = {
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {
-          const userObj = JSON.stringify(userModel(user));
-          localStorage.setItem("user", userObj);
+          const { favoriteCategories } = user;
+          if(favoriteCategories) {
+            user.favoriteCategories = JSON.parse(favoriteCategories);
+          }
+          saveUserToLocalStorage(user);
+          user = userModel(user);
           commit('loginSuccess', user);
           return user;
         },
@@ -65,7 +75,34 @@ export const auth = {
         err => {
           return Promise.reject(err)
         });
-    }
+    },
+    updateUsername({ commit }, { username, userId }) {
+      return UserService.updateUsername(username, userId)
+        .then(response => {
+          commit("setUsername", response.data);
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        })
+    },
+    updateBiography({ commit }, { biography, userId }) {
+      return UserService.updateBiography(biography, userId)
+        .then(response => {
+          commit("setBiography", response.data);
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        })
+    },
+    updateFavoriteCategories({ commit }, { categories, userId }) {
+      return UserService.updateFavoriteCategories(categories, userId)
+        .then(response => {
+          commit("setFavoriteCategories", response.data);
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        })
+    },
   },
   mutations: {
     loginSuccess(state, user) {
@@ -85,6 +122,26 @@ export const auth = {
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+    },
+    setUsername(state, username) {
+      user.username = username;
+      saveUserToLocalStorage(user);
+      state.user.username = username;
+    },
+    setEmail(state, email) {
+      user.email = email;
+      saveUserToLocalStorage(email);
+      state.user.email = email;
+    },
+    setBiography(state, biography) {
+      user.biography = biography;
+      saveUserToLocalStorage(user);
+      state.user.biography = biography;
+    },
+    setFavoriteCategories(state, favoriteCategories) {
+      user.favoriteCategories = favoriteCategories;
+      saveUserToLocalStorage(user);
+      state.user.favoriteCategories = favoriteCategories;
     }
   }
 };

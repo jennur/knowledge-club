@@ -28,7 +28,10 @@ exports.findById = (userId) => {
     return {
       id: user.userId,
       username: user.username,
-      email: user.email
+      email: user.email,
+      biography: user.biography,
+      favoriteCategories: user.favoriteCategories,
+      roles: user.roles
     };
   })
   .catch((err) => {
@@ -38,25 +41,49 @@ exports.findById = (userId) => {
 };
 
 // Update a user's username
-exports.updateUsername = (newUsername, userId) => {
-  const user = User.findOne({ where: { id: userId }});
-  user.username = newUsername;
-  user.save()
-    .then(response => response)
+exports.updateUsername = async (username, userId) => {
+  const user = await User.findOne({ where: { userId }});
+  user.username = username;
+  return user.save()
+    .then(user => user.username)
     .catch((err) => {
       console.log(">> Error saving new username:", err.message);
       return Promise.reject({ message: err.message });
     });
 };
 
-// Update a User by the id in the request
-exports.updateBiography = (newBiography, userId) => {
-  const user = User.findOne({ where: { id: userId }});
-  user.biography = newBiography;
-  user.save()
-    .then(response => response)
+// Update a user's email
+exports.updateEmail = async (email, userId) => {
+  const user = await User.findOne({ where: { userId }});
+  user.email = email;
+  return user.save()
+    .then(user => user.email)
+    .catch((err) => {
+      console.log(">> Error saving new email:", err.message);
+      return Promise.reject({ message: err.message });
+    });
+};
+
+// Update a user's biography
+exports.updateBiography = async (biography, userId) => {
+  const user = await User.findOne({ where: { userId }});
+  user.biography = biography;
+  return user.save()
+    .then(user => user.biography)
     .catch((err) => {
       console.log(">> Error saving new biography:", err.message);
+      return Promise.reject({ message: err.message });
+    });
+};
+
+// Update a user's favorite categories
+exports.updateFavoriteCategories = async (favoriteCategories, userId) => {
+  const user = await User.findOne({ where: { userId }});
+  user.favoriteCategories = favoriteCategories;
+  return user.save()
+    .then(user => user.favoriteCategories)
+    .catch((err) => {
+      console.log(">> Error saving new favorite categories:", err.message);
       return Promise.reject({ message: err.message });
     });
 };

@@ -1,4 +1,5 @@
 import http from '../http-common';
+import { userModel } from "@/models/user.js";
 
 class AuthService {
   login(user) {
@@ -8,12 +9,8 @@ class AuthService {
       })
       .then(response => {
         const user = response.data;
-        localStorage.setItem('user', JSON.stringify({
-            userId: user.userId,
-            username: user.username,
-            email: user.email,
-            roles: user.roles
-        }));
+        const userObj = JSON.stringify(userModel(user));
+        localStorage.setItem("user", userObj);
         return user;
       })
       .catch(err => {

@@ -1,12 +1,12 @@
 <script setup>
   import DropZone from 'dropzone-vue';
-  import store from "../../../store/index"
+  import store from "@/store/index"
   import { ref, computed } from "vue";
   import IconButton from "../../Buttons/IconButton.vue";
   import Spinner from "@/components/Loading/Spinner.vue";
   import SelectDropdown from "@/components/Inputs/SelectDropdown.vue";
   import 'dropzone-vue/dist/dropzone-vue.common.css';
-  import categoryOptions from "./categoryOptions.js";
+  import categoryOptions from "@/helpers/categoryOptions/categoryOptions.js";
 
   const files = ref([]);
   const errorMsg = ref(null);
@@ -14,7 +14,9 @@
   const isLoading = ref(false);
   const selectedCategory = ref(null);
 
-  const computedCategoryOptions = computed(() => categoryOptions(selectedCategory));
+  const computedCategoryOptions = computed(() => 
+    categoryOptions(selectedCategory)
+  );
 
   function onSelect(item) {
     errorMsg.value = null;
@@ -121,9 +123,9 @@
         <div class="flex justify-between mt-2">
           <div class="flex items-center">
             <SelectDropdown
-              :defaultText="selectedCategory?.name || 'Category'"
-              :defaultIcon="selectedCategory?.icon || 'box-open'"
-              :options="computedCategoryOptions"
+              :defaultText="computedCategoryOptions.default.text"
+              :defaultIcon="computedCategoryOptions.default.icon"
+              :options="computedCategoryOptions.options"
             />
             <div class="mr-1">
               <Spinner v-if="isLoading" text="Uploading book..." class="ml-2" />

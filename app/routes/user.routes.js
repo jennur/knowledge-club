@@ -21,12 +21,21 @@ module.exports = function(app) {
   });
 
   app.post("/api/user/update/username", [authJwt.verifyToken], (req, res) => {
-    const { newUsername, userId } = req.body;
-    userController.updateUsername(newUsername, userId)
-      .then(() => {
-        return res.status(200).send({
-          message: "Your username was successfully updated!"
-        });
+    const { username, userId } = req.body;
+    userController.updateUsername(username, userId)
+      .then((username) => {
+        return res.status(200).send(username);
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: err.message });
+      })
+  });
+
+  app.post("/api/user/update/email", [authJwt.verifyToken], (req, res) => {
+    const { email, userId } = req.body;
+    userController.updateEmail(email, userId)
+      .then((email) => {
+        return res.status(200).send(email);
       })
       .catch((err) => {
         return res.status(500).send({ message: err.message });
@@ -34,12 +43,21 @@ module.exports = function(app) {
   });
 
   app.post("/api/user/update/biography", [authJwt.verifyToken], (req, res) => {
-    const { newBiography, userId } = req.body;
-    userController.updateBiography(newBiography, userId)
-      .then(() => {
-        return res.status(200).send({ 
-          message: "Your biography was successfully updated!"
-        });
+    const { biography, userId } = req.body;
+    userController.updateBiography(biography, userId)
+      .then((biography) => {
+        return res.status(200).send(biography);
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: err.message });
+      })
+  });
+
+  app.post("/api/user/update/favorite-categories", [authJwt.verifyToken], (req, res) => {
+    const { favoriteCategories, userId } = req.body;
+    userController.updateFavoriteCategories(favoriteCategories, userId)
+      .then((favoriteCategories) => {
+        return res.status(200).send(favoriteCategories);
       })
       .catch((err) => {
         return res.status(500).send({ message: err.message });

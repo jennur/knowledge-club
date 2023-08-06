@@ -66,6 +66,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     biography: {
       type: Sequelize.STRING
+    },
+    favoriteCategories: {
+      type: Sequelize.STRING
     }
   });
   return User;

@@ -1,6 +1,9 @@
 <script setup>
   import CategoryBooksBlock from "../../components/Books/CategoryBooksBlock/CategoryBooksBlock.vue"
-  import categories from "./categories";
+  import categoriesJSON from "@/config/categories.json";
+
+  const categories = Object.values(categoriesJSON);
+
 </script>
 <template>
   <div>
@@ -13,10 +16,10 @@
        <div class="outer-content-wrapper px-0 md:px-2 py-8">
           <div class="flex flex-wrap justify-between">
             <CategoryBooksBlock
-              v-for="category in categories()"
+              v-for="category in categories"
               :key="category.value"
               :category="category.value"
-              :headline="category.title"
+              :headline="category.name"
               class="mb-[2%]"
             />
           </div>

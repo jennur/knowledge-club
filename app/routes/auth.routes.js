@@ -16,7 +16,9 @@ module.exports = function(app) {
       verifySignUp.checkDuplicateUsernameOrEmail,
       verifySignUp.checkRolesExisted
     ], (req, res) => {
+
     const { username, email, password, roles } = req.body;
+
     authController.signup(username, email, password, roles)
       .then((roles) => {
         res.status(200).send({ 
@@ -43,6 +45,8 @@ module.exports = function(app) {
             userId: user.userId,
             username: user.username,
             email: user.email,
+            biography: user.biography,
+            favoriteCategories: user.favoriteCategories,
             roles: authorities,
             accessToken: token
           });
