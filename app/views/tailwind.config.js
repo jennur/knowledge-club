@@ -12,7 +12,11 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',
-        'bounce-x': 'bounceX .7s infinite'
+        'bounce-x': 'bounceX .7s infinite',
+        'pop-in': 'popIn .3s',
+        'pop-out': 'popOut .3s',
+        'pop-down': 'popDown .2s',
+        'pop-up': 'popUp .2s'
       },
       flexBasis: {
         '1/7': `${1/7*100}%`,

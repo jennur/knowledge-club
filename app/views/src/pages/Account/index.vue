@@ -161,6 +161,6 @@
 
   .category-pill {
     @apply inline-flex items-center text-sm border border-blue-300 hover:border-blue-400
-    rounded-full px-1 py-1 mr-2 my-1;
+    rounded-full px-1 py-1 mr-2 my-1 animate-pop-in;
   }
 </style>

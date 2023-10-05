@@ -30,7 +30,11 @@
       </div>
       <font-awesome-icon icon="fa-solid fa-caret-down" class="icon ml-2 text-xs" />
     </div>
-    <div v-if="showOptions" v-click-outside="hideOptions" class="select-options">
+    <div 
+      v-if="showOptions"
+      v-click-outside="hideOptions"
+      :class="`select-options ${showOptions ? 'animate-pop-down' : 'animate-pop-up'}`"
+    >
       <component
         role="option"
         v-for="option in options" 
